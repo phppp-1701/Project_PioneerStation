@@ -1,0 +1,99 @@
+/* CSS chung cho ứng dụng */
+.root {
+    -fx-background-color: #f5f7fa;
+    -fx-font-family: "Tahoma", Arial, sans-serif;
+}
+
+/* Tiêu đề */
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #2b2d42;
+    -fx-padding: 0 0 20 0;
+}
+
+/* Hướng dẫn */
+.instruction-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4a4e69;
+    -fx-wrap-text: true;
+    -fx-max-width: 350px;
+    -fx-padding: 0 0 20 0;
+}
+
+/* Nhãn input */
+.input-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2b2d42;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Ô nhập liệu */
+.input-field {
+    -fx-pref-height: 35px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+}
+
+.input-field:focused {
+    -fx-border-color: #3a86ff;
+    -fx-effect: dropshadow(gaussian, rgba(58, 134, 255, 0.3), 10, 0, 0, 0);
+}
+
+/* Nút chính */
+.primary-button {
+    -fx-background-color: #3a86ff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #2667cc;
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1a4d99;
+}
+
+/* Nút phụ */
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3a86ff;
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5px;
+}
+
+.secondary-button:hover {
+    -fx-text-fill: #2667cc;
+    -fx-underline: true;
+}
+
+/* Thông báo */
+.message-label {
+    -fx-font-size: 13px;
+    -fx-padding: 10px 0;
+    -fx-max-width: 350px;
+}
+
+.error-message {
+    -fx-text-fill: #d90429;
+}
+
+.success-message {
+    -fx-text-fill: #2d6a4f;
+}
+
+.info-message {
+    -fx-text-fill: #3a86ff;
+}
