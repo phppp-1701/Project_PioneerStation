@@ -20,8 +20,4 @@ public class Home_GUI extends Application {
         System.out.println("Top-Left Y: " + bounds.getMinY());
 
     }
-
-    public static void main(String[] args) {
-        launch(args); // Khởi chạy JavaFX
-    }
 }

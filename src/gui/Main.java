@@ -1,29 +1,16 @@
 package gui;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("../gui/resource/DangNhap_GUI.fxml"));
-            Scene scene = new Scene(root);
-            
-            Image icon = new Image("file:image/icon.png");
-            primaryStage.getIcons().add(icon);
-            
-            primaryStage.setTitle("PIONEER STATION");
-            
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        // Tạo và hiển thị màn hình đăng nhập
+        new DangNhap_GUI(primaryStage);
     }
 
+    public static void main(String[] args) {
+        launch(args); // Khởi chạy JavaFX
+    }
 }

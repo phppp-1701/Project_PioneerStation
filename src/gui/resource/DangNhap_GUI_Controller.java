@@ -9,6 +9,8 @@ import javafx.event.ActionEvent; // Sửa import từ java.awt sang javafx
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import gui.QuenMatKhau_GUI;
+
 public class DangNhap_GUI_Controller {
     @FXML private TextField txtUsername;
     @FXML private PasswordField txtPassword;
@@ -30,22 +32,21 @@ public class DangNhap_GUI_Controller {
     @FXML
     private void handleForgotPassword(ActionEvent event) {
         try {
-            // Sửa thành đường dẫn tuyệt đối từ classpath root
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/resource/QuenMatKhau_GUI.fxml"));
-            Parent root = loader.load();
+            // Lấy stage hiện tại từ control
+            Stage currentStage = (Stage) lnkQMK.getScene().getWindow();
             
-            Stage stage = (Stage) lnkQMK.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            // Tạo instance mới của QuenMatKhau_GUI và truyền dữ liệu
+            new QuenMatKhau_GUI(currentStage, txtUsername.getText());
             
-            QuenMatKhau_GUI_Controller controller = loader.getController();
-            controller.setEmail(txtUsername.getText());
-            
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Lỗi", "Không thể mở màn hình quên mật khẩu");
             
-            // Debug - in ra đường dẫn thực tế
-            System.err.println("Đường dẫn thử tải: " + getClass().getResource("/gui/resource/QuenMatKhau_GUI.fxml"));
+            // Hiển thị thông báo lỗi
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Không thể mở màn hình quên mật khẩu");
+            alert.showAndWait();
         }
     }
     

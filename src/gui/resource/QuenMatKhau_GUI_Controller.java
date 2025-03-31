@@ -1,5 +1,6 @@
 package gui.resource;
 
+import gui.DangNhap_GUI;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,13 +36,22 @@ public class QuenMatKhau_GUI_Controller {
     @FXML
     private void handleQuayLai() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/resource/DangNhap_GUI.fxml"));
-            Parent root = loader.load();
+            // Lấy stage hiện tại từ component nào đó trong scene
+            Stage currentStage = (Stage) txtEmail.getScene().getWindow();
             
-            Stage stage = (Stage) txtEmail.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            // Tạo mới instance DangNhap_GUI và truyền stage hiện tại
+            new DangNhap_GUI(currentStage);
+            
         } catch (Exception e) {
+            System.err.println("Lỗi khi quay lại màn hình đăng nhập: " + e.getMessage());
             e.printStackTrace();
+            
+            // Hiển thị thông báo lỗi cho người dùng
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi Hệ Thống");
+            alert.setHeaderText(null);
+            alert.setContentText("Không thể quay lại màn hình đăng nhập");
+            alert.showAndWait();
         }
     }
     
