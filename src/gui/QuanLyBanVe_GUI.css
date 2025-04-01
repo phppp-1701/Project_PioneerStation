@@ -1,0 +1,18 @@
+/* Áp dụng cho Label có class="menu-label" */
+.menu-label {
+    -fx-background-color: #66CCCC;  /* Màu nền mặc định */
+    -fx-background-insets: 0;       /* Quan trọng: loại bỏ khoảng cách thừa */
+    -fx-padding: 0 10px 0 0;       /* Căn lề phải (tuỳ chỉnh theo bố cục) */
+}
+
+/* Hiệu ứng hover */
+.menu-label:hover {
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;                        /* Biến chuột thành bàn tay */
+}
+
+.now-label {
+	-fx-background-color: #2E7D32;
+	-fx-background-insets: 0;     
+    -fx-padding: 0 10px 0 0;
+}

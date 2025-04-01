@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.File;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,22 +13,24 @@ public class DangNhap_GUI {
         try {
             // Sửa đường dẫn FXML - cách 1: dùng getResourceAsStream
             FXMLLoader loader = new FXMLLoader();
-            Parent root = loader.load(getClass().getResourceAsStream("resource/DangNhap_GUI.fxml"));
+            Parent root = loader.load(getClass().getResource("/gui/DangNhap_GUI.fxml"));
             
             // Hoặc cách 2: nếu dùng getResource() thông thường
             // Parent root = FXMLLoader.load(getClass().getResource("/gui/resource/DangNhap_GUI.fxml"));
             
             Scene scene = new Scene(root);
             
-            // Thiết lập icon (sửa đường dẫn)
             try {
-                Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
+                // Sử dụng đường dẫn tương đối từ thư mục gốc dự án
+                File iconFile = new File("image/icon.png");
+                Image icon = new Image(iconFile.toURI().toString());
                 primaryStage.getIcons().add(icon);
             } catch (Exception e) {
-                System.out.println("Không tải được icon: " + e.getMessage());
+                System.err.println("Không tải được icon: " + e.getMessage());
+                e.printStackTrace();
             }
             
-            primaryStage.setTitle("PIONEER STATION");
+            primaryStage.setTitle("PIONEER STATION - Đăng nhập");
             primaryStage.setScene(scene);
             primaryStage.show();
             
@@ -36,7 +40,7 @@ public class DangNhap_GUI {
             
             // Debug đường dẫn
             System.out.println("Đường dẫn thực tế tới FXML: " + 
-                getClass().getResource("resource/DangNhap_GUI.fxml"));
+                getClass().getResource("/gui/DangNhap_GUI.fxml"));
         }
     }
 }

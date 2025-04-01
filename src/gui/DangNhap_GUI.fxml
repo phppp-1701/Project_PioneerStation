@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane id="nen" fx:id="nen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="341.0" prefWidth="645.0" 
-            fx:controller="gui.resource.DangNhap_GUI_Controller" stylesheets="@/gui/resource/DangNhap_GUI.css" 
+            fx:controller="gui.DangNhap_GUI_Controller" stylesheets="@/gui/DangNhap_GUI.css" 
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="341.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true" styleClass="background-image">

@@ -1,6 +1,6 @@
 package gui;
 
-import gui.resource.QuenMatKhau_GUI_Controller;
+import gui.QuenMatKhau_GUI_Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +11,7 @@ public class QuenMatKhau_GUI {
     // Constructor thay thế cho phương thức static show
     public QuenMatKhau_GUI(Stage currentStage, String username) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("resource/QuenMatKhau_GUI.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/QuenMatKhau_GUI.fxml"));
             Parent root = loader.load();
             
             // Thiết lập scene mới
@@ -28,7 +28,7 @@ public class QuenMatKhau_GUI {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Lỗi khi tải màn hình quên mật khẩu:");
-            System.err.println("Đường dẫn thử tải: " + getClass().getResource("resource/QuenMatKhau_GUI.fxml"));
+            System.err.println("Đường dẫn thử tải: " + getClass().getResource("/gui/QuenMatKhau_GUI.fxml"));
             
             // Hiển thị thông báo lỗi
             Alert alert = new Alert(Alert.AlertType.ERROR);

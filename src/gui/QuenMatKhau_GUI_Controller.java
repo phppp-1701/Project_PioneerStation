@@ -1,4 +1,4 @@
-package gui.resource;
+package gui;
 
 import gui.DangNhap_GUI;
 import javafx.fxml.FXML;

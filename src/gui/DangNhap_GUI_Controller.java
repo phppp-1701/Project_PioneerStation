@@ -1,4 +1,4 @@
-package gui.resource;
+package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
