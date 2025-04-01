@@ -9,9 +9,9 @@ public class Main extends Application {
     	// Tạo và hiển thị màn hình đăng nhập
 //    	new DangNhap_GUI(primaryStage);
     	//Tạo và hiển thị màn hình chính (Home) thay vì màn hình đăng nhập
-//    	new Home_GUI(primaryStage);
+    	new Home_GUI(primaryStage);
     	
-    	//Tạo và hiển thị màn hình quản lý bán vé
+//    	Tạo và hiển thị màn hình quản lý bán vé
     	new QuanLyBanVe_GUI(primaryStage);
 
     }
