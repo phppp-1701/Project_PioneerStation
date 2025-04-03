@@ -16,3 +16,8 @@ git init
 git add.   
 git commit-m"Thông điệp, lời nhắc"  
 git push origin main  
+
+# Lệnh kiểm tra các branch có trên project  
+git fetch origin  
+git branch -r
+
