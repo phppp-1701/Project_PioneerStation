@@ -1,3 +1,4 @@
+
 /* Áp dụng cho Label có class="menu-label" */
 .menu-label {
     -fx-background-color: #66CCCC;  /* Màu nền mặc định */
@@ -7,7 +8,7 @@
 }
 
 /* Hiệu ứng hover */
-.menu-label:hover {
+.menu-label:hover, .now-label:hover {
     -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
     -fx-cursor: hand;                        /* Biến chuột thành bàn tay */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.5, 0, 2);
@@ -26,4 +27,13 @@
     /* Xóa các thuộc tính bo góc nếu có */
     -fx-arc-width: 0;
     -fx-arc-height: 0;
+}
+
+.rec-thongTin{
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.scr-gioVe {
+    -fx-hbar-policy: never; /* Ẩn thanh cuộn ngang */
+    -fx-vbar-policy: as-needed; /* Hiện thanh cuộn dọc khi cần */
 }

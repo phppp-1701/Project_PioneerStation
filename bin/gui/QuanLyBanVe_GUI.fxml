@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -10,6 +11,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="pnHome" fx:id="pnHome" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -138,28 +140,65 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <ComboBox id="cboDiemDi" fx:id="cboDiemDi" layoutX="318.0" layoutY="52.0" prefHeight="30.0" prefWidth="200.0" />
-      <Label id="lblDiemDi" fx:id="lblDiemDi" layoutX="250.0" layoutY="57.0" text="Điểm đi:">
+      <ComboBox id="cboDiemDi" fx:id="cboDiemDi" layoutX="340.0" layoutY="86.0" prefHeight="30.0" prefWidth="200.0" />
+      <Label id="lblDiemDi" fx:id="lblDiemDi" layoutX="250.0" layoutY="91.0" text="Điểm đi:">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Label>
-      <Label id="lblDiemDen" fx:id="lblDiemDen" layoutX="608.0" layoutY="57.0" text="Điểm đến: ">
+      <Label id="lblDiemDen" fx:id="lblDiemDen" layoutX="250.0" layoutY="141.0" text="Điểm đến: ">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Label>
-      <ComboBox id="cboDiemDen" fx:id="cboDiemDen" layoutX="687.0" layoutY="52.0" prefHeight="30.0" prefWidth="200.0" />
-      <Label id="lblThoiGian" fx:id="lblThoiGian" layoutX="973.0" layoutY="57.0" text="Thời gian: ">
+      <ComboBox id="cboDiemDen" fx:id="cboDiemDen" layoutX="340.0" layoutY="136.0" prefHeight="30.0" prefWidth="200.0" />
+      <Label id="lblThoiGianDi" fx:id="lblThoiGianDi" layoutX="559.0" layoutY="91.0" text="Thời gian đi: ">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Label>
-      <DatePicker id="dpThoiGian" fx:id="dpThoiGian" layoutX="1050.0" layoutY="52.0" prefHeight="30.0" prefWidth="200.0" />
-      <CheckBox id="ckcKhuHoi" fx:id="ckcKhuHoi" layoutX="1340.0" layoutY="56.0" mnemonicParsing="false" text="Khứ hồi">
+      <DatePicker id="dpThoiGianDi" fx:id="dpThoiGianDi" layoutX="731.0" layoutY="85.0" prefHeight="30.0" prefWidth="200.0" />
+      <CheckBox id="ckcKhuHoi" fx:id="ckcKhuHoi" layoutX="955.0" layoutY="89.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="94.0" text="Khứ hồi">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </CheckBox>
+      <Button layoutX="955.0" layoutY="135.0" mnemonicParsing="false" prefWidth="90.0" text="Tìm">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="250.0" layoutY="55.0" text="--Thông tin hành trình--">
+         <font>
+            <Font name="Tahoma" size="18.0" />
+         </font>
+      </Label>
+      <Label id="lblThoiGianVe" fx:id="lblThoiGianVe" layoutX="559.0" layoutY="141.0" text="Thời gian về (nếu có):">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <DatePicker id="dpThoiGianVe" fx:id="dpThoiGianVes" layoutX="731.0" layoutY="135.0" prefHeight="30.0" prefWidth="200.0" />
+      <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" layoutX="1070.0" layoutY="28.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="471.0" />
+      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../image/Menu_NhanVien.png" />
+         </image>
+      </ImageView>
+      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="46.0" text="Mã nhân viên: " textFill="WHITE">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="77.0" text="Tên nhân viên: " textFill="WHITE">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <Label id="lblChucVu" fx:id="lblChucVu" layoutX="1190.0" layoutY="109.0" text="Chức vụ:" textFill="WHITE">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

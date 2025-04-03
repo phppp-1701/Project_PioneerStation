@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -34,7 +38,7 @@
                   <Image url="@../../image/Menu_QuanLyBanVe.png" />
                </image>
             </ImageView>
-            <Label id="lblTrangChu" fx:id="lblTrangChu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Trang chủ                 " textFill="WHITE">
+            <Label id="lblTrangChu" fx:id="lblTrangChu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Trang chủ                 " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -114,7 +118,7 @@
                   <Image url="@../../image/Menu_ThongKe.png" />
                </image>
             </ImageView>
-            <Label id="lblQuanLyTaiKhoan" fx:id="lblQuanLyTaiKhoan" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="629.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý tài khoản    " textFill="WHITE">
+            <Label id="lblQuanLyTaiKhoan" fx:id="lblQuanLyTaiKhoan" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="629.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Quản lý tài khoản    " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -136,10 +140,47 @@
             </ImageView>
          </children>
       </AnchorPane>
-      
-      <!-- Phần mới thêm -->
+      <ComboBox id="cboDiemDi" fx:id="cboDiemDi" layoutX="340.0" layoutY="86.0" prefHeight="30.0" prefWidth="200.0" />
+      <Label id="lblDiemDi" fx:id="lblDiemDi" layoutX="250.0" layoutY="91.0" text="Điểm đi:">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <Label id="lblDiemDen" fx:id="lblDiemDen" layoutX="250.0" layoutY="141.0" text="Điểm đến: ">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <ComboBox id="cboDiemDen" fx:id="cboDiemDen" layoutX="340.0" layoutY="136.0" prefHeight="30.0" prefWidth="200.0" />
+      <Label id="lblThoiGianDi" fx:id="lblThoiGianDi" layoutX="559.0" layoutY="91.0" text="Thời gian đi: ">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <DatePicker id="dpThoiGianDi" fx:id="dpThoiGianDi" layoutX="731.0" layoutY="85.0" prefHeight="30.0" prefWidth="200.0" />
+      <CheckBox id="ckcKhuHoi" fx:id="ckcKhuHoi" layoutX="955.0" layoutY="89.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="94.0" text="Khứ hồi">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </CheckBox>
+      <Button layoutX="955.0" layoutY="135.0" mnemonicParsing="false" prefWidth="90.0" text="Tìm">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="250.0" layoutY="55.0" text="--Thông tin hành trình--">
+         <font>
+            <Font name="Tahoma" size="18.0" />
+         </font>
+      </Label>
+      <Label id="lblThoiGianVe" fx:id="lblThoiGianVe" layoutX="559.0" layoutY="141.0" text="Thời gian về (nếu có):">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Label>
+      <DatePicker id="dpThoiGianVe" fx:id="dpThoiGianVes" layoutX="731.0" layoutY="135.0" prefHeight="30.0" prefWidth="200.0" />
       <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" layoutX="1070.0" layoutY="28.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="471.0" />
-      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../image/Menu_NhanVien.png" />
          </image>
