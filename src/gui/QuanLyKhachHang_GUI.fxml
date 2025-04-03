@@ -214,6 +214,8 @@
       </TableView>
       <AnchorPane id="pnTt" fx:id="pnTt" layoutX="345.0" layoutY="484.0" prefHeight="273.0" prefWidth="486.0" style="-fx-background-color: #C0C0C0;">
          <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="278.0" layoutY="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="486.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutY="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="486.0" />
             <Label layoutX="28.0" layoutY="60.0" text="Mã khách hàng: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
@@ -239,9 +241,9 @@
                   <Font name="Tahoma" size="14.0" />
                </font></Label>
             <ComboBox id="cboKH" fx:id="cboKH" layoutX="139.0" layoutY="215.0" prefHeight="26.0" prefWidth="234.0" />
-            <Label layoutX="164.0" layoutY="14.0" prefHeight="26.0" prefWidth="188.0" text="Thông tin khách hàng">
+            <Label layoutX="164.0" layoutY="14.0" prefHeight="26.0" prefWidth="188.0" text="Thông tin khách hàng" textFill="WHITE">
                <font>
-                  <Font name="Tahoma" size="18.0" />
+                  <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
          </children>
