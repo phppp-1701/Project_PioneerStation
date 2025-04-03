@@ -20,6 +20,7 @@ public class Home_GUI {
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/gui/Home_GUI.css").toExternalForm());
             primaryStage.setScene(scene);
+            
             try {
                 // Sử dụng đường dẫn tương đối từ thư mục gốc dự án
                 File iconFile = new File("image/icon.png");
@@ -29,7 +30,15 @@ public class Home_GUI {
                 System.err.println("Không tải được icon: " + e.getMessage());
                 e.printStackTrace();
             }
+            
             primaryStage.setTitle("PIONEER STATION - Trang chủ");
+            
+            // Đặt cửa sổ ở chế độ Maximized (full màn hình + giữ thanh tiêu đề)
+            primaryStage.setMaximized(true);
+            
+            // Tùy chọn: Ngăn người dùng thay đổi kích thước cửa sổ
+            // primaryStage.setResizable(false);
+            
             primaryStage.show();
             
         } catch (IOException e) {
