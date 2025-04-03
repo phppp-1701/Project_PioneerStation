@@ -1,0 +1,80 @@
+
+
+/* Áp dụng cho Label có class="menu-label" */
+.menu-label {
+    -fx-background-color: #66CCCC;  /* Màu nền mặc định */
+    -fx-background-insets: 0;       /* Quan trọng: loại bỏ khoảng cách thừa */
+    -fx-padding: 0 10px 0 0;       /* Căn lề phải (tuỳ chỉnh theo bố cục) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 1);
+}
+
+/* Hiệu ứng hover */
+.menu-label:hover , .now-label:hover {
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;                        /* Biến chuột thành bàn tay */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.5, 0, 2);
+}
+
+.now-label {
+    -fx-background-color: #2E7D32;
+    -fx-background-insets: 0;     
+    -fx-padding: 0 10px 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 1);
+}
+
+.recThongTinNhanVien {
+    -fx-fill: #66CCCC;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
+    /* Xóa các thuộc tính bo góc nếu có */
+    -fx-arc-width: 0;
+    -fx-arc-height: 0;
+}
+
+.menu-danhSachChuyenTau {
+    -fx-vbar-policy: never;
+    -fx-hbar-policy: always;
+}
+
+.pn-choNgoi {
+    -fx-background-color: #F3F3F3; /* Màu nền */
+    -fx-background-radius: 10px;   /* Bo góc 10px */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0, 0); /* Hiệu ứng shadow */
+}
+
+.menu-danhSachToa {
+    -fx-vbar-policy: never;
+    -fx-hbar-policy: always;
+}
+
+.lbl-GioVe {
+    /* Background */
+    -fx-background-color: #2e7d32;       /* Màu nền xanh lá đậm */
+
+    /* Hiệu ứng shadow cho background */
+    -fx-effect: dropshadow(
+        gaussian,                        /* Kiểu shadow mờ */
+        rgba(0, 0, 0, 0.3),             /* Màu shadow (đen, 30% opacity) */
+        5,                              /* Bán kính blur */
+        0.5,                            /* Độ lan rộng */
+        0, 1                            /* Offset (x, y) */
+    );
+
+    /* Text (giữ nguyên, không chỉnh) */
+    -fx-text-fill: white;               /* Màu chữ trắng để tương phản */ 	
+}
+
+.scr-GioVe{
+	-fx-vbar-policy: always;
+    -fx-hbar-policy: never;
+}
+
+.lbl-TongTienTamTinh{
+	-fx-background-color: #2e7d32; 
+	-fx-effect: dropshadow(
+        gaussian,                        /* Kiểu shadow mờ */
+        rgba(0, 0, 0, 0.3),             /* Màu shadow (đen, 30% opacity) */
+        5,                              /* Bán kính blur */
+        0.5,                            /* Độ lan rộng */
+        0, 1                            /* Offset (x, y) */
+    );
+}

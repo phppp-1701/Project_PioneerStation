@@ -9,7 +9,9 @@ public class Main extends Application {
         // Khởi tạo
         new QuanLyBanVe_GUI(primaryStage);
 //    	new Home_GUI(primaryStage);
-        
+
+//    	new QuanLyBanVe_GUI(primaryStage);
+    	new ThanhToan_GUI(primaryStage);
         // Hiển thị cửa sổ
         primaryStage.show();
     }
