@@ -273,30 +273,55 @@
                         </AnchorPane>
                         <AnchorPane layoutY="209.0" prefHeight="87.0" prefWidth="1359.0">
                            <children>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1310.0" />
-                              <Label layoutX="82.0" layoutY="54.0" text="Tổng doanh thu">
+                              <Rectangle fx:id="imageDoanhThuThucNhan" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1310.0" />
+                              <ImageView id="imageDoanhThu" fx:id="imageDoanhThu" fitHeight="60.0" fitWidth="80.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/doanh_thu.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="82.0" layoutY="44.0" text="Tổng doanh thu">
                                  <font>
                                     <Font name="Tahoma" size="16.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="338.0" layoutY="54.0" text="Số lượng vé bán">
+                              <ImageView id="imageVe" fx:id="imageVe" fitHeight="60.0" fitWidth="80.0" layoutX="269.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                              	<image>
+                  					<Image url="@../../image/ve_ban.png" />
+               					</image>
+                              </ImageView>
+                              <Label layoutX="340.0" layoutY="44.0" text="Số lượng vé bán">
                                  <font>
                                     <Font name="Tahoma" size="16.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="590.0" layoutY="51.0" text="Số vé hủy">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="810.0" layoutY="51.0" text="Khuyến mãi">
+                              <ImageView id="imageVeHuy" fx:id="imageVeHuy" fitHeight="60.0" fitWidth="80.0" layoutX="523.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/ve_huy.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="595.0" layoutY="44.0" text="Số vé hủy">
                                  <font>
                                     <Font name="Tahoma" size="16.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1012.0" layoutY="48.0" text="Doanh thu thực nhận ">
+                              <ImageView id="imageKhuyenMai" fx:id="imageKhuyenMai" fitHeight="60.0" fitWidth="80.0" layoutX="754.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/khuyen_mai.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="832.0" layoutY="44.0" text="Khuyến mãi">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView id="imageDoanhThuThucNhan" fx:id="imageDoanhThuThucNhan" fitHeight="60.0" fitWidth="80.0" layoutX="1010.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/doanh_thu_thuc_nhan.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="1087.0" layoutY="44.0" text="Doanh thu thực nhận ">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
                                  </font>
                               </Label>
                            </children>
