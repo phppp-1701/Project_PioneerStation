@@ -15,7 +15,7 @@ public class Main extends Application {
 
         
         // Hiển thị giao diện quản lý bán vé
-        new ThongKe_GUI(primaryStage);
+        new QuanLyTaiKhoan_GUI(primaryStage);
 
 
         // Hiển thị cửa sổ

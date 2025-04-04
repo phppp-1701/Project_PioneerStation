@@ -144,8 +144,8 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Rectangle id="recThongKe" fx:id="recThongKe" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" layoutX="237.0" layoutY="109.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongKe" width="832.0" />
-      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien1" layoutX="571.0" layoutY="116.0" text="THỐNG KÊ" textFill="WHITE">
+      <Rectangle id="recThongKe" fx:id="recThongKe" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" layoutX="245.0" layoutY="71.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongKe" width="815.0" />
+      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien1" layoutX="558.0" layoutY="78.0" text="THỐNG KÊ" textFill="WHITE">
          <font>
             <Font name="Tahoma Bold" size="36.0" />
          </font>
