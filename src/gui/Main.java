@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
-    	new QuanLyKhachHang_GUI(primaryStage);
+    	new QuanLyTaiKhoan_GUI(primaryStage);
         primaryStage.show();
     }
 

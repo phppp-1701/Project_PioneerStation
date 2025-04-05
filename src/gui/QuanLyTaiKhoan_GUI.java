@@ -29,7 +29,7 @@ public class QuanLyTaiKhoan_GUI {
                 System.err.println("Không tải được icon: " + e.getMessage());
                 e.printStackTrace();
             }
-            primaryStage.setTitle("PIONEER STATION - Quản lý tài khoản");
+            primaryStage.setTitle("PIONEER STATION - Quản Lý Tài Khoản");
             primaryStage.show();
             
         } catch (IOException e) {
