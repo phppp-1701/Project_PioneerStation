@@ -43,9 +43,14 @@ public class Main extends Application {
 		// Hiển thị cửa sổ
 		primaryStage.show();
 	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
+//    @Override
+//    public void start(Stage primaryStage) {
+//    	new QuanLyTaiKhoan_GUI(primaryStage);
+//        primaryStage.show();
+//    }
+//
+//	public static void main(String[] args) {
+//		launch(args);
+//	}
 
 }

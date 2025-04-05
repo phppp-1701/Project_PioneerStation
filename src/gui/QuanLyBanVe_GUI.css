@@ -28,7 +28,6 @@
     /* Xóa các thuộc tính bo góc nếu có */
     -fx-arc-width: 0;
     -fx-arc-height: 0;
-<<<<<<< HEAD
 }
 
 .menu-danhSachChuyenTau {
@@ -123,6 +122,4 @@
 .btn-tiepTheo:hover{
     -fx-background-color: #FFD700; /* Màu nền khi hover */
     -fx-cursor: hand; 	
-=======
->>>>>>> origin/Tuan
 }

@@ -35,3 +35,48 @@
 .rec-thongTin{
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 1);
 }
+
+.btn-tim{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-tim:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-themAnh{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-themAnh:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-themNhanVien{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-themNhanVien:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-capNhatNhanVien{
+	-fx-background-color: #2E7D32;
+}
+
+.btn-capNhatNhanVien:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-xuatDanhSach{
+	-fx-background-color: #2E7D32;
+}
+
+.btn-xuatDanhSach:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}

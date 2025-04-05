@@ -181,27 +181,6 @@
          </font>
       </Label>
       <DatePicker id="dpThoiGianVe" fx:id="dpThoiGianVes" layoutX="731.0" layoutY="135.0" prefHeight="30.0" prefWidth="200.0" />
-      <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" layoutX="1070.0" layoutY="28.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="471.0" />
-      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../image/Menu_NhanVien.png" />
-         </image>
-      </ImageView>
-      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="46.0" text="Mã nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="77.0" text="Tên nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblChucVu" fx:id="lblChucVu" layoutX="1190.0" layoutY="109.0" text="Chức vụ:" textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
       <Label layoutX="280.0" layoutY="186.0" text="Danh sách chuyến tàu">
          <font>
             <Font name="Tahoma Bold" size="18.0" />
@@ -842,14 +821,14 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="1070.0" layoutY="186.0" prefHeight="540.0" prefWidth="471.0">
+      <AnchorPane layoutX="1070.0" layoutY="113.0" prefHeight="613.0" prefWidth="471.0">
          <children>
             <Label alignment="CENTER" prefHeight="60.0" prefWidth="471.0" styleClass="lbl-GioVe" text="Giỏ vé">
                <font>
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
-            <ScrollPane layoutY="60.0" prefHeight="338.0" prefWidth="471.0" styleClass="scr-GioVe">
+            <ScrollPane layoutY="60.0" prefHeight="419.0" prefWidth="471.0" styleClass="scr-GioVe">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="470.0" style="-fx-background-color: #FFFFFF;" />
               </content>
@@ -877,6 +856,33 @@
             <Label id="lblTongTienTamTinh" fx:id="lblTongTienTamTinh" layoutX="14.0" layoutY="78.0" text="Tổng tiền tạm tính: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
+         <children>
+            
+            <!-- Phần mới thêm -->
+            <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_NhanVien.png" />
+               </image>
+            </ImageView>
+            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="25.0" text="Tên nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="11.0" />
+               </font>
+            </Label>
+            <Label id="lblChucVu" fx:id="lblChucVu" layoutX="70.0" layoutY="42.0" text="Chức vụ:" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
                </font>
             </Label>
          </children>
