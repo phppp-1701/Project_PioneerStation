@@ -27,3 +27,39 @@
     -fx-arc-width: 0;
     -fx-arc-height: 0;
 }
+
+.btn-tim{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-tim:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-inHoaDon{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-inHoaDon:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-voHieuHoa{
+	-fx-background-color: #CD3700;
+}
+
+.btn-voHieuHoa:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-capNhat{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-capNhat:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
