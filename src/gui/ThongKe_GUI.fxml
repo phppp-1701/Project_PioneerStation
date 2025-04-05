@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -174,76 +177,168 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="580.0" prefWidth="1310.0" stylesheets="@ThongKe_GUI.css">
                      <children>
-                        <Button id="btnThoiGian" fx:id="btnThoiGian" layoutX="194.0" layoutY="12.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Thời gian">
-                           <font>
-                              <Font name="Tahoma Bold" size="14.0" />
-                           </font>
-                        </Button>
-                        <Button id="btnNhanVien" fx:id="btnNhanVien" layoutX="325.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" styleClass="btnBC" text="Nhân viên">
-                           <font>
-                              <Font name="Tahoma Bold" size="14.0" />
-                           </font>
-                        </Button>
-                        <Button id="btnChuyenTau" fx:id="btnChuyenTau" layoutX="457.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" styleClass="btnBC" text="Chuyến tàu">
-                           <font>
-                              <Font name="Tahoma Bold" size="14.0" />
-                           </font>
-                        </Button>
-                        <Button id="btnTheoCa" fx:id="btnTheoCa" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Theo ca">
-                           <font>
-                              <Font name="Tahoma Bold" size="14.0" />
-                           </font>
-                        </Button>
-                        <Label id="lblLoaiThoiGian" fx:id="lblLoaiThoiGian" layoutX="473.0" layoutY="298.0" text="Loại thời gian">
-                           <font>
-                              <Font name="Tahoma" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label id="lblLoc" fx:id="lblLoc" layoutX="681.0" layoutY="279.0" text="Lọc tất cả">
-                           <font>
-                              <Font name="Tahoma" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label id="lblNgayBatDau" fx:id="lblNgayBatDau" layoutX="264.0" layoutY="298.0" text="Ngày bắt đầu">
-                           <font>
-                              <Font name="Tahoma" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label id="lblNgayKetThuc" fx:id="lblNgayKetThuc" layoutX="312.0" layoutY="183.0" text="Ngày kết thúc">
-                           <font>
-                              <Font name="Tahoma" size="16.0" />
-                           </font>
-                        </Label>
-                        <ComboBox id="cboLoai" fx:id="cboLoai" layoutX="543.0" layoutY="140.0" prefHeight="26.0" prefWidth="175.0" promptText="Báo cáo theo ngày" />
-                        <ComboBox id="cboLoc" fx:id="cboLoc" layoutX="98.0" layoutY="106.0" prefHeight="26.0" prefWidth="175.0" promptText="Lọc tất cả" />
-                        <DatePicker id="dpNgayBatDau" fx:id="dpNgayBatDau" layoutX="98.0" layoutY="180.0" />
-                        <DatePicker id="dpNgayKetThuc" fx:id="dpNgayKetThuc" layoutX="325.0" layoutY="106.0" />
-                        <Button id="btnThongKe" fx:id="btnThongKe" layoutX="770.0" layoutY="170.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="175.0" text="Thống kê">
-                           <font>
-                              <Font name="Tahoma Bold" size="24.0" />
-                           </font>
-                        </Button>
-                        <Label layoutX="500.0" layoutY="176.0" text="Tổng doanh thu" />
-                        <Label layoutX="127.0" layoutY="153.0" text="Số lượng vé bán" />
-                        <Label layoutX="597.0" layoutY="289.0" text="Số vé hủy" />
-                        <Label layoutX="592.0" layoutY="233.0" text="Khuyến mãi" />
-                        <Label layoutX="623.0" layoutY="162.0" text="Doanh thu thực nhận " />
-                        <AnchorPane layoutX="14.0" layoutY="53.0" prefHeight="200.0" prefWidth="688.0" />
-                        <AnchorPane prefHeight="60.0" prefWidth="832.0">
+                        <AnchorPane prefHeight="46.0" prefWidth="1310.0">
                            <children>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="832.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1310.0" />
                               <Label layoutX="14.0" layoutY="16.0" text="Báo cáo doanh thu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
+                              <Button id="btnThoiGian" fx:id="btnThoiGian" layoutX="190.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Thời gian">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                              <Button id="btnNhanVien" fx:id="btnNhanVien" layoutX="321.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" styleClass="btnBC" text="Nhân viên">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                              <Button id="btnChuyenTau" fx:id="btnChuyenTau" layoutX="478.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" styleClass="btnBC" text="Chuyến tàu">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                              <Button id="btnTheoCa" fx:id="btnTheoCa" layoutX="621.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Theo ca">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                              <AnchorPane layoutX="6.0" layoutY="8.0" prefHeight="46.0" prefWidth="1320.0">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="60.0" layoutX="-9.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1319.0" />
+                                    <Label layoutX="14.0" layoutY="16.0" text="Báo cáo doanh thu">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Button id="btnThoiGian" fx:id="btnThoiGian1" layoutX="190.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Thời gian">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button id="btnNhanVien" fx:id="btnNhanVien1" layoutX="321.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" styleClass="btnBC" text="Nhân viên">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button id="btnChuyenTau" fx:id="btnChuyenTau1" layoutX="478.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" styleClass="btnBC" text="Chuyến tàu">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button id="btnTheoCa" fx:id="btnTheoCa1" layoutX="621.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="106.0" styleClass="btnBC" text="Theo ca">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
+                        <AnchorPane layoutY="86.0" prefHeight="122.0" prefWidth="1359.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="121.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1310.0" />
+                              <Label id="lblLoaiThoiGian" fx:id="lblLoaiThoiGian" layoutX="19.0" layoutY="26.0" text="Loại thời gian">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label id="lblLoc" fx:id="lblLoc" layoutX="431.0" layoutY="22.0" text="Lọc tất cả">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox id="cboLoai" fx:id="cboLoai" layoutX="138.0" layoutY="19.0" prefHeight="26.0" prefWidth="175.0" promptText="Báo cáo theo ngày" />
+                              <ComboBox id="cboLoc" fx:id="cboLoc" layoutX="548.0" layoutY="23.0" prefHeight="26.0" prefWidth="175.0" promptText="Lọc tất cả" />
+                              <Label id="lblNgayKetThuc" fx:id="lblNgayKetThuc" layoutX="431.0" layoutY="67.0" text="Ngày kết thúc">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker id="dpNgayKetThuc" fx:id="dpNgayKetThuc" layoutX="548.0" layoutY="64.0" />
+                              <DatePicker id="dpNgayBatDau" fx:id="dpNgayBatDau" layoutX="138.0" layoutY="72.0" />
+                              <Label id="lblNgayBatDau" fx:id="lblNgayBatDau" layoutX="25.0" layoutY="75.0" text="Ngày bắt đầu">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Button id="btnThongKe" fx:id="btnThongKe" layoutX="775.0" layoutY="25.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="175.0" text="Thống kê">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="209.0" prefHeight="87.0" prefWidth="1359.0">
+                           <children>
+                              <Rectangle fx:id="imageDoanhThuThucNhan" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-button" width="1310.0" />
+                              <ImageView id="imageDoanhThu" fx:id="imageDoanhThu" fitHeight="60.0" fitWidth="80.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/doanh_thu.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="82.0" layoutY="44.0" text="Tổng doanh thu">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView id="imageVe" fx:id="imageVe" fitHeight="60.0" fitWidth="80.0" layoutX="269.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                              	<image>
+                  					<Image url="@../../image/ve_ban.png" />
+               					</image>
+                              </ImageView>
+                              <Label layoutX="340.0" layoutY="44.0" text="Số lượng vé bán">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView id="imageVeHuy" fx:id="imageVeHuy" fitHeight="60.0" fitWidth="80.0" layoutX="523.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/ve_huy.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="595.0" layoutY="44.0" text="Số vé hủy">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView id="imageKhuyenMai" fx:id="imageKhuyenMai" fitHeight="60.0" fitWidth="80.0" layoutX="754.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/khuyen_mai.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="832.0" layoutY="44.0" text="Khuyến mãi">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView id="imageDoanhThuThucNhan" fx:id="imageDoanhThuThucNhan" fitHeight="60.0" fitWidth="80.0" layoutX="1010.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../image/doanh_thu_thuc_nhan.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="1087.0" layoutY="44.0" text="Doanh thu thực nhận ">
+                                 <font>
+                                    <Font name="Tahoma" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <BarChart layoutX="3.0" layoutY="291.0" prefHeight="309.0" prefWidth="1298.0" title="DOANH THU BÁN VÉ THEO THỜI GIAN">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Thống kê lượt khách">
+          <Tab text="Báo cáo">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
