@@ -78,6 +78,11 @@ public class NhanVien {
         quanLy,
         banVe
     }
+    public enum TrangThaiNhanVien {
+        hoatDong,
+        voHieu
+    }
+
     @Override
 	public int hashCode() {
 		return Objects.hash(maNhanVien);

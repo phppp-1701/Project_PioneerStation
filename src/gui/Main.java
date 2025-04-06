@@ -19,7 +19,7 @@ public class Main extends Application {
 //    	new ThanhToan_GUI(primaryStage);
 
 		// Hiển thị giao diện quản lý bán vé
-		new ThongKe_GUI(primaryStage);
+		new QuanLyNhanVien_GUI(primaryStage);
 		// Lấy kích thước màn hình
 		Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
@@ -43,14 +43,5 @@ public class Main extends Application {
 		// Hiển thị cửa sổ
 		primaryStage.show();
 	}
-//    @Override
-//    public void start(Stage primaryStage) {
-//    	new QuanLyTaiKhoan_GUI(primaryStage);
-//        primaryStage.show();
-//    }
-//
-//	public static void main(String[] args) {
-//		launch(args);
-//	}
 
 }

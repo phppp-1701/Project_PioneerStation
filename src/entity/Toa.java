@@ -2,6 +2,7 @@ package entity;
 
 import java.util.Objects;
 
+
 public class Toa {
     private String maToa;
     private String tenToa;

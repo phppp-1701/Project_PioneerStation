@@ -1,7 +1,6 @@
 package entity;
 
 import java.util.Objects;
-
 public class ChoNgoi {
     private String maCho;
     private String tenCho;
