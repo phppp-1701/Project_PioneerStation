@@ -9,7 +9,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+<<<<<<< HEAD
     	new QuanLyKhachHang_GUI(primaryStage);
+=======
+    	new QuanLyBanVe_GUI(primaryStage);
+>>>>>>> origin/Tuan
         primaryStage.show();
     }
 
