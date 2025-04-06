@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="pnHome" fx:id="pnHome" prefHeight="795.0" prefWidth="1540.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pnHome" fx:id="pnHome" prefHeight="795.0" prefWidth="1540.0" stylesheets="@Home_GUI.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar id="menuBar" fx:id="menuBar" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="1540.0">
         <menus>
@@ -136,28 +136,32 @@
             </ImageView>
          </children>
       </AnchorPane>
-      
-      <!-- Phần mới thêm -->
-      <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" layoutX="1070.0" layoutY="28.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="471.0" />
-      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../image/Menu_NhanVien.png" />
-         </image>
-      </ImageView>
-      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="46.0" text="Mã nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="77.0" text="Tên nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblChucVu" fx:id="lblChucVu" layoutX="1190.0" layoutY="109.0" text="Chức vụ:" textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
+      <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
+         <children>
+            
+            <!-- Phần mới thêm -->
+            <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_NhanVien.png" />
+               </image>
+            </ImageView>
+            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="25.0" text="Tên nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="11.0" />
+               </font>
+            </Label>
+            <Label id="lblChucVu" fx:id="lblChucVu" layoutX="70.0" layoutY="42.0" text="Chức vụ:" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

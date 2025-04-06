@@ -37,3 +37,39 @@
     -fx-hbar-policy: never; /* Ẩn thanh cuộn ngang */
     -fx-vbar-policy: as-needed; /* Hiện thanh cuộn dọc khi cần */
 }
+
+.btn-tim{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-tim:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}
+
+.btn-themKhachHang{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-themKhachHang:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}
+
+.btn-xoaRong{
+	-fx-background-color: #EE9A00;
+}
+
+.btn-xoaRong:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}
+
+.btn-banVe{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-banVe:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}

@@ -33,7 +33,6 @@
 }
 
 .recThongKe {
-    -fx-fill: #66CCCC;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
     -fx-arc-width: 0;
     -fx-arc-height: 0;
@@ -62,7 +61,7 @@
 }
 
 .btnBC:hover{
-	-fx-background-color: #FF9800 !important;
+	-fx-background-color: #FFD700 !important;
 	
 }
 
