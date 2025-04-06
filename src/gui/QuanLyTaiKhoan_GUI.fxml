@@ -146,29 +146,6 @@
             </ImageView>
          </children>
       </AnchorPane>
-      
-      <!-- Phần mới thêm -->
-      <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" layoutX="1070.0" layoutY="28.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="471.0" />
-      <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="110.0" fitWidth="110.0" layoutX="1070.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../image/Menu_NhanVien.png" />
-         </image>
-      </ImageView>
-      <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="46.0" text="Mã nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="1190.0" layoutY="77.0" text="Tên nhân viên: " textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
-      <Label id="lblChucVu" fx:id="lblChucVu" layoutX="1190.0" layoutY="109.0" text="Chức vụ:" textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Label>
       <Label layoutX="508.0" layoutY="270.0">
          <font>
             <Font name="Tahoma" size="13.0" />
@@ -204,7 +181,7 @@
                   <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Làm mới" />
                </children>
             </HBox>
-                  <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien31" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" layoutX="10.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="774.0" />
+                  <Rectangle fx:id="recThongTinNhanVien31" arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="70.0" layoutX="10.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" width="774.0" />
                   <Label layoutX="307.0" layoutY="36.0" text="Danh sách tài khoản" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="20.0" />
@@ -213,7 +190,7 @@
                </children></AnchorPane>
             <AnchorPane layoutX="848.0" layoutY="67.0" prefHeight="362.0" prefWidth="444.0">
                <children>
-                  <Rectangle fx:id="recThongTinNhanVien1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="352.0" layoutX="7.0" layoutY="6.0" stroke="TRANSPARENT" strokeType="INSIDE" width="430.0" />
+                  <Rectangle fx:id="recThongTinNhanVien1" arcHeight="5.0" arcWidth="5.0" fill="#f2e8e8" height="352.0" layoutX="7.0" layoutY="6.0" stroke="TRANSPARENT" strokeType="INSIDE" width="430.0" />
             
             <!-- Form thông tin tài khoản -->
             <GridPane hgap="10.0" layoutX="34.0" layoutY="103.0" prefHeight="144.0" prefWidth="375.0" vgap="10.0">
@@ -249,7 +226,7 @@
                   <Button fx:id="btnHuy" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Hủy" />
                </children>
             </HBox>
-                  <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien311" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" layoutX="9.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="421.0" />
+                  <Rectangle fx:id="recThongTinNhanVien311" arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutX="9.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" width="421.0" />
                   <Label layoutX="129.0" layoutY="31.0" text="Thông tin tài khoản" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="20.0" />
@@ -259,12 +236,40 @@
             </AnchorPane>
    </children>
 </AnchorPane>
-      <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" layoutX="246.0" layoutY="67.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="814.0" />
+      <Rectangle fx:id="recThongTinNhanVien3" arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutX="246.0" layoutY="67.0" stroke="TRANSPARENT" strokeType="INSIDE" width="814.0" />
       <Label layoutX="587.0" layoutY="79.0" text="QUẢN LÝ TÀI KHOẢN" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="24.0" />
          </font>
       </Label>
+      
+      <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
+         <children>
+            
+            <!-- Phần mới thêm -->
+            <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_NhanVien.png" />
+               </image>
+            </ImageView>
+            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="25.0" text="Tên nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="11.0" />
+               </font>
+            </Label>
+            <Label id="lblChucVu" fx:id="lblChucVu" layoutX="70.0" layoutY="42.0" text="Chức vụ:" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
       
    </children>
 </AnchorPane>

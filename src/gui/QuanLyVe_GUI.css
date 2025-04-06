@@ -1,0 +1,84 @@
+/* Áp dụng cho Label có class="menu-label" */
+.menu-label {
+    -fx-background-color: #66CCCC;  /* Màu nền mặc định */
+    -fx-background-insets: 0;       /* Quan trọng: loại bỏ khoảng cách thừa */
+    -fx-padding: 0 10px 0 0;       /* Căn lề phải (tuỳ chỉnh theo bố cục) */
+}
+
+/* Hiệu ứng hover */
+.menu-label:hover {
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;                        /* Biến chuột thành bàn tay */
+}
+
+.now-label {
+	-fx-background-color: #2E7D32;
+	-fx-background-insets: 0;     
+    -fx-padding: 0 10px 0 0;
+}
+
+.rec-thongTin{
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.rec-nen{
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.recThongTinNhanVien{
+	-fx-background-color: #66CCCC;	
+}
+
+.btn-quetMa{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-quetMa:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-tim{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-tim:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-inVe{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-inVe:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-doiVe{
+	-fx-background-color: #EE9A00;
+}
+
+.btn-doiVe:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}
+
+.btn-capNhat{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-capNhat:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-huyHoanVe{
+	-fx-background-color: #CD3700;
+}
+
+.btn-huyHoanVe:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
