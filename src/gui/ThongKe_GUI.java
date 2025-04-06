@@ -29,7 +29,7 @@ public class ThongKe_GUI {
                 System.err.println("Không tải được icon: " + e.getMessage());
                 e.printStackTrace();
             }
-            primaryStage.setTitle("PIONEER STATION - Quản lý tài khoản");
+            primaryStage.setTitle("PIONEER STATION - Thống Kê");
             primaryStage.show();
             
         } catch (IOException e) {
