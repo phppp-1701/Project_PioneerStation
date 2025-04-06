@@ -165,7 +165,7 @@
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font></Label>
-            <Label id="lblTTNV" fx:id="lblTTNV" alignment="CENTER" layoutX="381.0" layoutY="17.0" prefHeight="26.0" prefWidth="214.0" text="Thông tin nhân viên" textFill="WHITE">
+            <Label id="lblTTNV" fx:id="lblTTNV" alignment="CENTER" layoutX="381.0" layoutY="17.0" prefHeight="26.0" prefWidth="214.0" text="Thông tin khách hàng" textFill="WHITE">
                <font>
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
