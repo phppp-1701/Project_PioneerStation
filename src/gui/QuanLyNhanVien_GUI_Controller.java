@@ -103,7 +103,7 @@ public class QuanLyNhanVien_GUI_Controller {
                 String displayValue = "";
                 if (trangThaiNhanVien == TrangThaiNhanVien.hoatDong) {
                     displayValue = "hoatDong";
-                } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieu) {
+                } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieuHoa) {
                     displayValue = "voHieu";
                 }
                 return new SimpleStringProperty(displayValue);

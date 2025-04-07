@@ -11,102 +11,115 @@ public class NhanVien {
     private String cccd_HoChieu;
     private ChucVu chucVu;
     private TrangThaiNhanVien trangThaiNhanVien;
+    private String soDienThoai;
+    private String email;
 
-	public NhanVien() {
-    }
 
-    public NhanVien(String maNhanVien, String tenNhanVien, LocalDate ngaySinh, GioiTinh gioiTinh, String cccd_HoChieu, ChucVu chucVu) {
-        this.maNhanVien = maNhanVien;
-        this.tenNhanVien = tenNhanVien;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
-        this.cccd_HoChieu = cccd_HoChieu;
-        this.chucVu = chucVu;
-    }
+    public NhanVien() {
 
-    public String getMaNhanVien() {
-        return maNhanVien;
-    }
-
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
-    }
-
-    public String getTenNhanVien() {
-        return tenNhanVien;
-    }
-
-    public void setTenNhanVien(String tenNhanVien) {
-        this.tenNhanVien = tenNhanVien;
-    }
-
-    public LocalDate getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(LocalDate ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public GioiTinh getGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(GioiTinh gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-
-    public String getCccd_HoChieu() {
-        return cccd_HoChieu;
-    }
-
-    public void setCccd_HoChieu(String cccd_HoChieu) {
-        this.cccd_HoChieu = cccd_HoChieu;
-    }
-
-    public ChucVu getChucVu() {
-        return chucVu;
-    }
-
-    public void setChucVu(ChucVu chucVu) {
-        this.chucVu = chucVu;
-    }
+	}
     
-    public TrangThaiNhanVien getTrangThaiNhanVien() {
+    
+	public NhanVien(String maNhanVien, String tenNhanVien, LocalDate ngaySinh, GioiTinh gioiTinh, String cccd_HoChieu,
+			ChucVu chucVu, TrangThaiNhanVien trangThaiNhanVien, String soDienThoai, String email) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.tenNhanVien = tenNhanVien;
+		this.ngaySinh = ngaySinh;
+		this.gioiTinh = gioiTinh;
+		this.cccd_HoChieu = cccd_HoChieu;
+		this.chucVu = chucVu;
+		this.trangThaiNhanVien = trangThaiNhanVien;
+		this.soDienThoai = soDienThoai;
+		this.email = email;
+	}
+
+
+	public String getMaNhanVien() {
+		return maNhanVien;
+	}
+
+	public void setMaNhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
+	}
+
+	public String getTenNhanVien() {
+		return tenNhanVien;
+	}
+
+	public void setTenNhanVien(String tenNhanVien) {
+		this.tenNhanVien = tenNhanVien;
+	}
+
+	public LocalDate getNgaySinh() {
+		return ngaySinh;
+	}
+
+	public void setNgaySinh(LocalDate ngaySinh) {
+		this.ngaySinh = ngaySinh;
+	}
+
+	public GioiTinh getGioiTinh() {
+		return gioiTinh;
+	}
+
+	public void setGioiTinh(GioiTinh gioiTinh) {
+		this.gioiTinh = gioiTinh;
+	}
+
+	public String getCccd_HoChieu() {
+		return cccd_HoChieu;
+	}
+
+	public void setCccd_HoChieu(String cccd_HoChieu) {
+		this.cccd_HoChieu = cccd_HoChieu;
+	}
+
+	public ChucVu getChucVu() {
+		return chucVu;
+	}
+
+	public void setChucVu(ChucVu chucVu) {
+		this.chucVu = chucVu;
+	}
+
+	public TrangThaiNhanVien getTrangThaiNhanVien() {
 		return trangThaiNhanVien;
 	}
 
 	public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
 		this.trangThaiNhanVien = trangThaiNhanVien;
 	}
-    
+
+	public String getSoDienThoai() {
+		return soDienThoai;
+	}
+
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
 	public enum GioiTinh {
-	    nam, nu;
-
-	    @Override
-	    public String toString() {
-	        return this == nam ? "nam" : "nu";
-	    }
-	}
-
-	public enum ChucVu {
-	    quanLy, banVe;
-
-	    @Override
-	    public String toString() {
-	        return this == quanLy ? "quanLy" : "banVe";
-	    }
-	}
-
-	public enum TrangThaiNhanVien {
-	    hoatDong, voHieu;
-
-	    @Override
-	    public String toString() {
-	        return this == hoatDong ? "hoatDong" : "voHieu";
-	    }
-	}
-
+        nam,
+        nu
+    }
+    public enum ChucVu {
+        quanLy,
+        banVe
+    }
+    public enum TrangThaiNhanVien {
+        hoatDong,
+        voHieuHoa
+    }
 
     @Override
 	public int hashCode() {

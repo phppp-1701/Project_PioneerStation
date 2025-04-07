@@ -36,23 +36,10 @@ CREATE TABLE NhanVien (
     gioiTinh VARCHAR(5) CHECK (gioiTinh IN ('nam', 'nu')),
     CCCD_HoChieu VARCHAR(20) UNIQUE NOT NULL,
     chucVu VARCHAR(20) CHECK (chucVu IN ('quanLy', 'banVe')),
-    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieu'))
+    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieuHoa'))
 );
 go
 
-INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien)
-VALUES
-('2024NV000001', N'Nguyễn Văn An', '1985-05-15', 'nam', '001085123456', 'quanLy', 'hoatDong'),
-('2024NV000002', N'Trần Thị Bình', '1990-08-22', 'nu', '002190654321', 'quanLy', 'hoatDong'),
-('2024NV000003', N'Lê Văn Cường', '1995-03-10', 'nam', '003095987654', 'banVe', 'hoatDong'),
-('2024NV000004', N'Phạm Minh Đức', '1992-11-25', 'nam', '004092456789', 'banVe', 'hoatDong'),
-('2024NV000005', N'Hoàng Văn Em', '1993-07-18', 'nam', '005093789123', 'banVe', 'voHieu'),
-('2024NV000006', N'Vũ Thị Phương', '1994-09-30', 'nu', '006194321654', 'banVe', 'hoatDong'),
-('2024NV000007', N'Đặng Thị Quỳnh', '1996-02-14', 'nu', '007196987321', 'banVe', 'hoatDong'),
-('2024NV000008', N'Bùi Thị Hương', '1991-12-05', 'nu', '008191654987', 'banVe', 'hoatDong'),
-('2024NV000009', N'Mai Thị Lan', '1997-04-20', 'nu', '009197321456', 'banVe', 'voHieu'),
-('2024NV000010', N'Ngô Thị Mai', '1989-06-08', 'nu', '010189789654', 'banVe', 'hoatDong');
-go
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
     tenTau NVARCHAR(100) NOT NULL,

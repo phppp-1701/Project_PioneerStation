@@ -154,7 +154,7 @@
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font></Label>
-            <TextField id="txtMa" fx:id="txtMa" layoutX="216.0" layoutY="86.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtMaKhachHang" disable="true" editable="false" layoutX="216.0" layoutY="86.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font></TextField>
@@ -181,17 +181,17 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField id="txtMa" fx:id="txtMa1" layoutX="603.0" layoutY="87.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtTenKhachHang" layoutX="603.0" layoutY="87.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <TextField id="txtMa" fx:id="txtMa2" layoutX="216.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtCCCD_HoChieu" layoutX="216.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <TextField id="txtMa" fx:id="txtMa21" layoutX="216.0" layoutY="180.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtEmail" layoutX="216.0" layoutY="180.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -201,18 +201,23 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField id="txtMa" fx:id="txtMa212" layoutX="603.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtSoDienThoai" layoutX="603.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <ComboBox layoutX="603.0" layoutY="182.0" prefHeight="26.0" prefWidth="234.0" />
+            <ComboBox fx:id="cboLoaiKhachHang" layoutX="603.0" layoutY="182.0" prefHeight="26.0" prefWidth="234.0" />
             <Label layoutX="102.0" layoutY="232.0" text="Trạng thái:">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <ComboBox layoutX="216.0" layoutY="228.0" prefHeight="26.0" prefWidth="234.0" />
+            <ComboBox fx:id="cboTrangThai" layoutX="216.0" layoutY="228.0" prefHeight="26.0" prefWidth="234.0" />
+            <Button fx:id="btnLamRong" layoutX="505.0" layoutY="227.0" mnemonicParsing="false" onAction="#btnLamRongClicked" styleClass="btn-lamRong" text="Làm rỗng" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">

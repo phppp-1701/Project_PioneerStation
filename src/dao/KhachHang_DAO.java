@@ -158,6 +158,55 @@ public class KhachHang_DAO {
         return dsKhachHang;
     }
     
+    public List<KhachHang> timKhachHangTheoTenVaSoDienThoai(String tenKhachHang, String soDienThoai) {
+        List<KhachHang> dsKhachHang = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhachHang WHERE tenKhachHang LIKE ? AND soDienThoai LIKE ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + tenKhachHang + "%");
+            stmt.setString(2, "%" + soDienThoai + "%");
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                KhachHang kh = new KhachHang();
+                kh.setMaKhachHang(rs.getString("maKhachHang"));
+                kh.setTenKhachHang(rs.getString("tenKhachHang"));
+                kh.setCCCD_HoChieu(rs.getString("CCCD_HoChieu"));
+                kh.setSoDienThoai(rs.getString("soDienThoai"));
+                kh.setEmail(rs.getString("email"));
+                
+                // Xử lý enum LoaiThanhVien
+                String loaiTV = rs.getString("loaiThanhVien");
+                kh.setLoaiThanhVien("vip".equals(loaiTV) ? LoaiThanhVien.vip : LoaiThanhVien.thanThiet);
+                
+                // Xử lý enum TrangThaiKhachHang
+                String trangThai = rs.getString("trangThaiKhachHang");
+                kh.setTrangThaiKhachHang("voHieuHoa".equals(trangThai) 
+                    ? TrangThaiKhachHang.voHieuHoa 
+                    : TrangThaiKhachHang.hoatDong);
+                
+                dsKhachHang.add(kh);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return dsKhachHang;
+    }
+    
     //Them khach hang
     public boolean themKhachHang(KhachHang khachHang) {
         Connection con = null;
@@ -229,35 +278,6 @@ public class KhachHang_DAO {
         
         return thanhCong;
     }
-    
- // Phương thức kiểm tra trùng mã khách hàng
-    public boolean kiemTraMaKhachHang(String maKhachHang) {
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            con = ConnectDB.getConnection();
-            String sql = "SELECT COUNT(*) FROM KhachHang WHERE maKhachHang = ?";
-            stmt = con.prepareStatement(sql);
-            stmt.setString(1, maKhachHang);
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
 
     // Phương thức kiểm tra trùng CCCD/Hộ chiếu
     public boolean kiemTraCCCD(String cccd) {
@@ -286,5 +306,51 @@ public class KhachHang_DAO {
             }
         }
         return false;
+    }
+    
+    public KhachHang timKhachHangTheoMa(String maKhachHang) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        KhachHang kh = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhachHang WHERE maKhachHang = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKhachHang);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                kh = new KhachHang();
+                kh.setMaKhachHang(rs.getString("maKhachHang"));
+                kh.setTenKhachHang(rs.getString("tenKhachHang"));
+                kh.setCCCD_HoChieu(rs.getString("CCCD_HoChieu"));
+                kh.setSoDienThoai(rs.getString("soDienThoai"));
+                kh.setEmail(rs.getString("email"));
+                
+                // Xử lý enum LoaiThanhVien
+                String loaiTV = rs.getString("loaiThanhVien");
+                kh.setLoaiThanhVien("vip".equals(loaiTV) ? LoaiThanhVien.vip : LoaiThanhVien.thanThiet);
+                
+                // Xử lý enum TrangThaiKhachHang
+                String trangThai = rs.getString("trangThaiKhachHang");
+                kh.setTrangThaiKhachHang("voHieuHoa".equals(trangThai) 
+                    ? TrangThaiKhachHang.voHieuHoa 
+                    : TrangThaiKhachHang.hoatDong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return kh;
     }
 }

@@ -51,7 +51,7 @@ public class NhanVien_DAO {
                 if ("hoatDong".equals(trangThaiNhanVien)) {
                     nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
                 } else {
-                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieu);
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
                 }
                 
                 dsNhanVien.add(nv);
@@ -304,7 +304,7 @@ public class NhanVien_DAO {
         if ("hoatDong".equals(trangThaiNhanVien)) {
             nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
         } else {
-            nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieu);
+            nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
         }
         
         return nv;

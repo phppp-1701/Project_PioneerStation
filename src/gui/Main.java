@@ -1,5 +1,6 @@
 package gui;
 
+import entity.KhachHang;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -9,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-    	new QuanLyNhanVien_GUI(primaryStage);
+    	new QuanLyKhachHang_GUI(primaryStage);
         primaryStage.show();
     }
 
