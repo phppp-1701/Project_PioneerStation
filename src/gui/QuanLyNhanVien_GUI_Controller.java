@@ -12,6 +12,7 @@ import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -83,7 +84,7 @@ public class QuanLyNhanVien_GUI_Controller {
             colNgaySinh.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNgaySinh().toString()));
             colGioiTinh.setCellValueFactory(cellData -> {
                 GioiTinh gioiTinh = cellData.getValue().getGioiTinh();
-                String displayValue = gioiTinh == GioiTinh.nam ? "Nam" : "Nữ";
+                String displayValue = gioiTinh == GioiTinh.nam ? "nam" : "nu";
                 return new SimpleStringProperty(displayValue);
             });
             colCCCD.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCccd_HoChieu()));
@@ -91,9 +92,9 @@ public class QuanLyNhanVien_GUI_Controller {
                 ChucVu chucVu = cellData.getValue().getChucVu();
                 String displayValue = "";
                 if (chucVu == ChucVu.quanLy) {
-                    displayValue = "Quản lý";
+                    displayValue = "quanLy";
                 } else if (chucVu == ChucVu.banVe) {
-                    displayValue = "Bán vé";
+                    displayValue = "banVe";
                 }
                 return new SimpleStringProperty(displayValue);
             });
@@ -101,9 +102,9 @@ public class QuanLyNhanVien_GUI_Controller {
                 TrangThaiNhanVien trangThaiNhanVien = cellData.getValue().getTrangThaiNhanVien();
                 String displayValue = "";
                 if (trangThaiNhanVien == TrangThaiNhanVien.hoatDong) {
-                    displayValue = "Hoạt động";
+                    displayValue = "hoatDong";
                 } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieu) {
-                    displayValue = "Vô hiệu hóa";
+                    displayValue = "voHieu";
                 }
                 return new SimpleStringProperty(displayValue);
             });
@@ -359,35 +360,26 @@ public class QuanLyNhanVien_GUI_Controller {
                 return;
             }
 
-            // Cập nhật giới tính từ form, chuyển "Nam" -> GioiTinh.nam và "Nữ" -> GioiTinh.nu
-            String gioiTinhForm = nv.getGioiTinh().toString();
-            if ("Nam".equals(gioiTinhForm)) {
-                nv.setGioiTinh(GioiTinh.nam);
-            } else if ("Nữ".equals(gioiTinhForm)) {
-                nv.setGioiTinh(GioiTinh.nu);
-            }
-
-            // Cập nhật chức vụ từ form, chuyển "Quản lý" -> ChucVu.quanLy và "Bán vé" -> ChucVu.banVe
-            String chucVuForm = nv.getChucVu().toString();
-            if ("Quản lý".equals(chucVuForm)) {
-                nv.setChucVu(ChucVu.quanLy);
-            } else if ("Bán vé".equals(chucVuForm)) {
-                nv.setChucVu(ChucVu.banVe);
-            }
-
-            // Cập nhật trạng thái nhân viên từ form, chuyển "Hoạt động" -> TrangThaiNhanVien.hoatDong và "Vô hiệu hóa" -> TrangThaiNhanVien.voHieu
-            String trangThaiForm = nv.getTrangThaiNhanVien().toString();
-            if ("Hoạt động".equals(trangThaiForm)) {
-                nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
-            } else if ("Vô hiệu hóa".equals(trangThaiForm)) {
-                nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieu);
-            }
+            // Cập nhật thông tin từ form (trực tiếp sử dụng enum)
+            nv.setGioiTinh(cboGioiTinh.getValue()); // Dùng giá trị trực tiếp từ ComboBox
+            nv.setChucVu(cboChucVu.getValue()); // Dùng giá trị trực tiếp từ ComboBox
+            nv.setTrangThaiNhanVien(cboTrangThaiNhanVien.getValue()); // Dùng giá trị trực tiếp từ ComboBox
 
             // Cập nhật nhân viên vào cơ sở dữ liệu
             NhanVien_DAO dao = new NhanVien_DAO();
             if (dao.capNhatNhanVien(nv)) {
                 showInformationAlert("Cập nhật nhân viên thành công!");
-                btnXuatDanhSachClicked();
+
+                // Cập nhật trực tiếp vào TableView
+                // Tìm nhân viên trong List và thay thế
+                for (int i = 0; i < tbDanhSachNhanVien.getItems().size(); i++) {
+                    NhanVien current = tbDanhSachNhanVien.getItems().get(i);
+                    if (current.getMaNhanVien().equals(nv.getMaNhanVien())) {
+                        // Cập nhật nhân viên đã thay đổi trong danh sách
+                        tbDanhSachNhanVien.getItems().set(i, nv);
+                        break;
+                    }
+                }
             } else {
                 showErrorAlert("Cập nhật nhân viên thất bại!");
             }
@@ -396,7 +388,6 @@ public class QuanLyNhanVien_GUI_Controller {
             showErrorAlert("Lỗi khi cập nhật nhân viên: " + e.getMessage());
         }
     }
-
     // Kiểm tra dữ liệu hợp lệ
     private boolean kiemTraHopLe(NhanVien nv) {
         if (nv.getMaNhanVien().isEmpty() || nv.getTenNhanVien().isEmpty() || 
