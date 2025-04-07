@@ -229,4 +229,62 @@ public class KhachHang_DAO {
         
         return thanhCong;
     }
+    
+ // Phương thức kiểm tra trùng mã khách hàng
+    public boolean kiemTraMaKhachHang(String maKhachHang) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE maKhachHang = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKhachHang);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    // Phương thức kiểm tra trùng CCCD/Hộ chiếu
+    public boolean kiemTraCCCD(String cccd) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE CCCD_HoChieu = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, cccd);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 }
