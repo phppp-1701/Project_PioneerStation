@@ -14,12 +14,36 @@ public class KhachHang {
 	
 	// Các thuộc tính enum:
 	public enum LoaiThanhVien {
-		thanThiet, vip
-    }
+	    thanThiet("Thân thiết"), 
+	    vip("VIP");
+	    
+	    private String displayName;
+	    
+	    private LoaiThanhVien(String displayName) {
+	        this.displayName = displayName;
+	    }
+	    
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
+	}
 	
 	public enum TrangThaiKhachHang {
-		hoatDong, voHieuHoa
-    }
+	    hoatDong("Hoạt động"), 
+	    voHieuHoa("Vô hiệu hóa");
+	    
+	    private String displayName;
+	    
+	    private TrangThaiKhachHang(String displayName) {
+	        this.displayName = displayName;
+	    }
+	    
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
+	}
 
 	public String getMaKhachHang() {
 		return maKhachHang;

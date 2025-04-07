@@ -103,8 +103,10 @@ public class QuanLyNhanVien_GUI_Controller {
                 String displayValue = "";
                 if (trangThaiNhanVien == TrangThaiNhanVien.hoatDong) {
                     displayValue = "Hoạt Động";
-                } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieu) {
+                } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieuHoa) {
                     displayValue = "Vô Hiệu Hóa";
+                    
+
                 }
                 return new SimpleStringProperty(displayValue);
             });
