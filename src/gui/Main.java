@@ -9,7 +9,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-    	new QuanLyKhachHang_GUI(primaryStage);
+    	new QuanLyNhanVien_GUI(primaryStage);
         primaryStage.show();
     }
 

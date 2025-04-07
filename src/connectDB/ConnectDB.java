@@ -18,7 +18,7 @@ public class ConnectDB {
         if (con == null || con.isClosed()) { // Check if the connection is closed
             String url = "jdbc:sqlserver://localhost:1433;databaseName=pioneer_station";
             String user = "sa";
-            String password = "sapassword";
+            String password = "123";
             con = DriverManager.getConnection(url, user, password);
         }
     }
