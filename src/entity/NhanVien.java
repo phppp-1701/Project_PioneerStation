@@ -10,8 +10,9 @@ public class NhanVien {
     private GioiTinh gioiTinh;
     private String cccd_HoChieu;
     private ChucVu chucVu;
+    private TrangThaiNhanVien trangThaiNhanVien;
 
-    public NhanVien() {
+	public NhanVien() {
     }
 
     public NhanVien(String maNhanVien, String tenNhanVien, LocalDate ngaySinh, GioiTinh gioiTinh, String cccd_HoChieu, ChucVu chucVu) {
@@ -70,18 +71,42 @@ public class NhanVien {
     public void setChucVu(ChucVu chucVu) {
         this.chucVu = chucVu;
     }
-    public enum GioiTinh {
-        nam,
-        nu
-    }
-    public enum ChucVu {
-        quanLy,
-        banVe
-    }
-    public enum TrangThaiNhanVien {
-        hoatDong,
-        voHieu
-    }
+    
+    public TrangThaiNhanVien getTrangThaiNhanVien() {
+		return trangThaiNhanVien;
+	}
+
+	public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
+		this.trangThaiNhanVien = trangThaiNhanVien;
+	}
+    
+	public enum GioiTinh {
+	    nam, nu;
+
+	    @Override
+	    public String toString() {
+	        return this == nam ? "nam" : "nu";
+	    }
+	}
+
+	public enum ChucVu {
+	    quanLy, banVe;
+
+	    @Override
+	    public String toString() {
+	        return this == quanLy ? "quanLy" : "banVe";
+	    }
+	}
+
+	public enum TrangThaiNhanVien {
+	    hoatDong, voHieu;
+
+	    @Override
+	    public String toString() {
+	        return this == hoatDong ? "hoatDong" : "voHieu";
+	    }
+	}
+
 
     @Override
 	public int hashCode() {

@@ -79,7 +79,7 @@
                   <Image url="@../../image/Menu_HoaDon.png" />
                </image>
             </ImageView>
-            <Label id="lblQuanLyKhachHang" fx:id="lblQuanLyKhachHang" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="349.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý khách hàng " textFill="WHITE">
+            <Label id="lblQuanLyKhachHang" fx:id="lblQuanLyKhachHang" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="349.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Quản lý khách hàng " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -89,7 +89,7 @@
                   <Image url="@../../image/Menu_KhachHang.png" />
                </image>
             </ImageView>
-            <Label id="lblQuanLyNhanVien" fx:id="lblQuanLyNhanVien" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="419.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" stylesheets="@QuanLyBanVe_GUI.css" text="Quản lý nhân viên    " textFill="WHITE">
+            <Label id="lblQuanLyNhanVien" fx:id="lblQuanLyNhanVien" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="419.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" stylesheets="@QuanLyBanVe_GUI.css" text="Quản lý nhân viên    " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>

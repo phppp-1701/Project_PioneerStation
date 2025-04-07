@@ -63,6 +63,15 @@
     -fx-cursor: hand;  
 }
 
+.btn-xoaNhanVien{
+	-fx-background-color: #d40c0c;
+}
+
+.btn-xoaNhanVien:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
 .btn-capNhatNhanVien{
 	-fx-background-color: #2E7D32;
 }
