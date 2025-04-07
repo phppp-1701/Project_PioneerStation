@@ -84,7 +84,7 @@ public class QuanLyNhanVien_GUI_Controller {
             colNgaySinh.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNgaySinh().toString()));
             colGioiTinh.setCellValueFactory(cellData -> {
                 GioiTinh gioiTinh = cellData.getValue().getGioiTinh();
-                String displayValue = gioiTinh == GioiTinh.nam ? "nam" : "nu";
+                String displayValue = gioiTinh == GioiTinh.nam ? "Nam" : "Nữ";
                 return new SimpleStringProperty(displayValue);
             });
             colCCCD.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCccd_HoChieu()));
@@ -92,9 +92,9 @@ public class QuanLyNhanVien_GUI_Controller {
                 ChucVu chucVu = cellData.getValue().getChucVu();
                 String displayValue = "";
                 if (chucVu == ChucVu.quanLy) {
-                    displayValue = "quanLy";
+                    displayValue = "Quản Lý";
                 } else if (chucVu == ChucVu.banVe) {
-                    displayValue = "banVe";
+                    displayValue = "Bán Vé";
                 }
                 return new SimpleStringProperty(displayValue);
             });
@@ -102,9 +102,9 @@ public class QuanLyNhanVien_GUI_Controller {
                 TrangThaiNhanVien trangThaiNhanVien = cellData.getValue().getTrangThaiNhanVien();
                 String displayValue = "";
                 if (trangThaiNhanVien == TrangThaiNhanVien.hoatDong) {
-                    displayValue = "hoatDong";
+                    displayValue = "Hoạt Động";
                 } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieu) {
-                    displayValue = "voHieu";
+                    displayValue = "Vô Hiệu Hóa";
                 }
                 return new SimpleStringProperty(displayValue);
             });
