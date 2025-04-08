@@ -281,8 +281,8 @@
       </AnchorPane>
       <AnchorPane layoutX="1077.0" layoutY="146.0" prefHeight="162.0" prefWidth="447.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="161.0" layoutX="7.0" layoutY="-4.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="438.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutX="7.0" layoutY="6.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="438.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="156.0" layoutX="7.0" layoutY="1.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="438.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutX="7.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-thongTin" width="438.0" />
             <Label id="lblTTNV" fx:id="lblTTNV1" alignment="CENTER" contentDisplay="CENTER" layoutX="137.0" layoutY="17.0" prefHeight="26.0" prefWidth="214.0" text="Tra cứu nhân viên" textFill="WHITE">
                <font>
                   <Font name="Tahoma Bold" size="18.0" />
@@ -293,7 +293,11 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
+<<<<<<< HEAD
             <Label layoutX="45.0" layoutY="122.0" text="Số điện thoại">
+=======
+            <Label layoutX="42.0" layoutY="122.0" text="Số điện thoại">
+>>>>>>> edf6443d6d5b27d00ed4e5891d8b78b7d093601d
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
