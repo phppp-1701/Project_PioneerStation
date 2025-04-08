@@ -13,12 +13,10 @@
 //    private double giaVe;
 //
 //    private HoaDon maHoaDon;
-//    private TuyenTau maTuyenTau;
-//    private Tau maTau;
-//    private LichTrinh maLichTrinh;
+//    private ChuyenTau maChuyenTau;
 //
 //    public Ve(String maVe, Date ngayTaoVe, String trangThaiVe, String tenKhachHang, String CCCD_HoChieu,
-//              String loaiKhachHang, double giaVe, HoaDon maHoaDon, TuyenTau maTuyenTau, Tau maTau, LichTrinh maLichTrinh) {
+//              String loaiKhachHang, double giaVe, HoaDon maHoaDon, ChuyenTau maChuyenTau) {
 //        this.maVe = maVe;
 //        this.ngayTaoVe = ngayTaoVe;
 //        this.trangThaiVe = trangThaiVe;
@@ -27,9 +25,7 @@
 //        this.loaiKhachHang = loaiKhachHang;
 //        this.giaVe = giaVe;
 //        this.maHoaDon = maHoaDon;
-//        this.maTuyenTau = maTuyenTau;
-//        this.maTau = maTau;
-//        this.maLichTrinh = maLichTrinh;
+//        this.maChuyenTau = maChuyenTau;
 //    }
 //
 //    public String getMaVe() {
@@ -96,29 +92,14 @@
 //        this.maHoaDon = maHoaDon;
 //    }
 //
-//    public TuyenTau getMaTuyenTau() {
-//        return maTuyenTau;
+//    public ChuyenTau getMaTuyenTau() {
+//        return maChuyenTau;
 //    }
 //
-//    public void setMaTuyenTau(TuyenTau maTuyenTau) {
-//        this.maTuyenTau = maTuyenTau;
+//    public void setMaTuyenTau(ChyenTau maChuyenTau) {
+//        this.maChuyenTau = maTuyenTau;
 //    }
 //
-//    public Tau getMaTau() {
-//        return maTau;
-//    }
-//
-//    public void setMaTau(Tau maTau) {
-//        this.maTau = maTau;
-//    }
-//
-//    public ChuyenTau getMaLichTrinh() {
-//        return maLichTrinh;
-//    }
-//
-//    public void setMaLichTrinh(ChuyenTau maLichTrinh) {
-//        this.maLichTrinh = maLichTrinh;
-//    }
 //
 //    @Override
 //    public int hashCode() {

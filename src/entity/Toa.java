@@ -7,14 +7,16 @@ public class Toa {
     private String maToa;
     private String tenToa;
     private LoaiToa loaiToa;
+    private Tau maTau;
 
     public Toa() {
     }
 
-    public Toa(String maToa, String tenToa, LoaiToa loaiToa) {
+    public Toa(String maToa, String tenToa, LoaiToa loaiToa, Tau maTau) {
         this.maToa = maToa;
         this.tenToa = tenToa;
         this.loaiToa = loaiToa;
+        this.maTau = maTau;
     }
 
     public String getMaToa() {

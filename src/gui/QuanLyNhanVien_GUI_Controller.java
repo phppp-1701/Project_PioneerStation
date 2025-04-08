@@ -336,6 +336,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	        String email = txtEmail.getText();
 	        ChucVu chucVu = cboChucVu.getValue();
 	        TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
+	        
 
 	        if (nhanVien_DAO.kiemTraCCCD(cccd)) {
 	            Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -366,7 +367,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	        }
 
 	        // Tạo đối tượng nhân viên
-	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email);
+	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email, email);
 
 	        try {
 				if (nhanVien_DAO.themNhanVien(nv)) {
@@ -485,7 +486,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	        TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
 
 	        // Tạo đối tượng nhân viên mới
-	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email);
+	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email, email);
 
 	        // Xác nhận cập nhật
 	        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
