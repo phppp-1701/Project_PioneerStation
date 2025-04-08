@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dao.KhachHang_DAO;
 import entity.KhachHang;
@@ -14,7 +17,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,6 +50,9 @@ public class QuanLyKhachHang_GUI_Controller {
 	
 	@FXML 
 	private TableColumn<KhachHang, String> colLoaiKhachHang;
+	
+	@FXML
+	private TableColumn<KhachHang, String> colTrangThaiKhachHang;
 	
 	@FXML
 	private void btnXuatDanhSachClicked() {
@@ -81,6 +89,16 @@ public class QuanLyKhachHang_GUI_Controller {
 	                displayValue = "Thân thiết";
 	            } else if (loai == LoaiThanhVien.vip) {
 	                displayValue = "VIP";
+	            }
+	            return new SimpleStringProperty(displayValue);
+	        });
+	        colTrangThaiKhachHang.setCellValueFactory(cellData -> {
+	            TrangThaiKhachHang trangThaiKhachHang = cellData.getValue().getTrangThaiKhachHang();
+	            String displayValue = "";
+	            if (trangThaiKhachHang == TrangThaiKhachHang.hoatDong) {
+	                displayValue = "Hoạt động";
+	            } else if (trangThaiKhachHang == TrangThaiKhachHang.voHieuHoa) {
+	                displayValue = "Vô hiệu hóa";
 	            }
 	            return new SimpleStringProperty(displayValue);
 	        });
@@ -215,6 +233,16 @@ public class QuanLyKhachHang_GUI_Controller {
 		            }
 		            return new SimpleStringProperty(displayValue);
 		        });
+		        colTrangThaiKhachHang.setCellValueFactory(cellData -> {
+		            TrangThaiKhachHang trangThaiKhachHang = cellData.getValue().getTrangThaiKhachHang();
+		            String displayValue = "";
+		            if (trangThaiKhachHang == TrangThaiKhachHang.hoatDong) {
+		                displayValue = "Hoạt động";
+		            } else if (trangThaiKhachHang == TrangThaiKhachHang.voHieuHoa) {
+		                displayValue = "Vô hiệu hóa";
+		            }
+		            return new SimpleStringProperty(displayValue);
+		        });
 		        
 		    } catch (Exception e) {
 		        e.printStackTrace();
@@ -285,6 +313,16 @@ public class QuanLyKhachHang_GUI_Controller {
 		                displayValue = "Thân thiết";
 		            } else if (loai == LoaiThanhVien.vip) {
 		                displayValue = "VIP";
+		            }
+		            return new SimpleStringProperty(displayValue);
+		        });
+		        colTrangThaiKhachHang.setCellValueFactory(cellData -> {
+		            TrangThaiKhachHang trangThaiKhachHang = cellData.getValue().getTrangThaiKhachHang();
+		            String displayValue = "";
+		            if (trangThaiKhachHang == TrangThaiKhachHang.hoatDong) {
+		                displayValue = "Hoạt động";
+		            } else if (trangThaiKhachHang == TrangThaiKhachHang.voHieuHoa) {
+		                displayValue = "Vô hiệu hóa";
 		            }
 		            return new SimpleStringProperty(displayValue);
 		        });
@@ -361,6 +399,16 @@ public class QuanLyKhachHang_GUI_Controller {
 		            }
 		            return new SimpleStringProperty(displayValue);
 		        });
+		        colTrangThaiKhachHang.setCellValueFactory(cellData -> {
+		            TrangThaiKhachHang trangThaiKhachHang = cellData.getValue().getTrangThaiKhachHang();
+		            String displayValue = "";
+		            if (trangThaiKhachHang == TrangThaiKhachHang.hoatDong) {
+		                displayValue = "Hoạt động";
+		            } else if (trangThaiKhachHang == TrangThaiKhachHang.voHieuHoa) {
+		                displayValue = "Vô hiệu hóa";
+		            }
+		            return new SimpleStringProperty(displayValue);
+		        });
 		        
 		    } catch (Exception e) {
 		        e.printStackTrace();
@@ -427,13 +475,11 @@ public class QuanLyKhachHang_GUI_Controller {
 	
 	@FXML
 	private void initialize() {
-	    // Load dữ liệu cho ComboBox loại khách hàng
-	    cboLoaiKhachHang.getItems().setAll(LoaiThanhVien.values());
-	    cboLoaiKhachHang.setValue(LoaiThanhVien.thanThiet); // Giá trị mặc định
+		cboLoaiKhachHang.getItems().setAll(LoaiThanhVien.values());
+	    cboLoaiKhachHang.setValue(LoaiThanhVien.thanThiet); 
 	    
-	    // Load dữ liệu cho ComboBox trạng thái
 	    cboTrangThai.getItems().setAll(TrangThaiKhachHang.values());
-	    cboTrangThai.setValue(TrangThaiKhachHang.hoatDong); // Giá trị mặc định
+	    cboTrangThai.setValue(TrangThaiKhachHang.hoatDong);
 	    
 	    cboTrangThai.setEditable(false);
 	    cboTrangThai.setDisable(true);
@@ -465,4 +511,359 @@ public class QuanLyKhachHang_GUI_Controller {
 	
 	@FXML
 	private Button btnThemKhachHang;
+	
+	@FXML
+	private void btnThemKhachHangClicked() {
+		if(!txtMaKhachHang.getText().toString().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Bạn đang chọn một khách hàng, vui lòng làm rỗng để thêm!");
+	        File file = new File("image/canhBao.png");
+	        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(file.toURI().toString()));
+            System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+	        alert.showAndWait();
+	        return;
+		}
+		if(kiemTraTxt()) {
+			KhachHang_DAO khachHang_DAO = new KhachHang_DAO();
+			String maKhachHang = khachHang_DAO.taoMaKhachHangMoi();
+			String tenKhachHang = txtTenKhachHang.getText();
+			String CCCD_HoChieu = txtCCCD_HoChieu.getText();
+			String soDienThoai = txtSoDienThoai.getText();
+			String email = txtEmail.getText();
+			
+			if(khachHang_DAO.kiemTraCCCD(CCCD_HoChieu)) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("CCCD/Hộ chiếu đã tồn tại, có thể khách hàng đã là thành viên trước đó!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		        txtCCCD_HoChieu.requestFocus();
+		        txtCCCD_HoChieu.selectAll();
+		        List<KhachHang> danhSachKhachHang = khachHang_DAO.timKhachHangTheoCCCD_HoChieu(CCCD_HoChieu);
+		     // Xóa dữ liệu cũ trong table (nếu có)
+		        tbDanhSachKhachHang.getItems().clear();
+		        
+		        // Thêm dữ liệu mới vào table
+		        tbDanhSachKhachHang.getItems().addAll(danhSachKhachHang);
+		        
+		        // Thiết lập giá trị cho các cột
+		        colStt.setCellValueFactory(cellData -> 
+		            new SimpleStringProperty(String.valueOf(tbDanhSachKhachHang.getItems().indexOf(cellData.getValue()) + 1)));
+		        colMaKhachHang.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaKhachHang()));
+		        colTen.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenKhachHang()));
+		        colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
+		        colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+		        colLoaiKhachHang.setCellValueFactory(cellData -> {
+		            LoaiThanhVien loai = cellData.getValue().getLoaiThanhVien();
+		            String displayValue = "";
+		            if (loai == LoaiThanhVien.thanThiet) {
+		                displayValue = "Thân thiết";
+		            } else if (loai == LoaiThanhVien.vip) {
+		                displayValue = "VIP";
+		            }
+		            return new SimpleStringProperty(displayValue);
+		        });
+		        return;
+			}
+			
+			TrangThaiKhachHang trangThai = cboTrangThai.getValue();
+			LoaiThanhVien loaiKhachHang = cboLoaiKhachHang.getValue();
+			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiKhachHang, trangThai);
+			if(khachHang_DAO.themKhachHang(kh)) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		        alert.setTitle("Thông báo");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Thêm khách hàng thành công!\nKhách hàng có mã: "+maKhachHang+"\nTên: "+tenKhachHang);
+		        File file = new File("image/thanhCong.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	            stage.getIcons().add(new Image(file.toURI().toString()));
+	            System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		    
+    			txtMaKhachHang.setText(kh.getMaKhachHang());
+    			txtTenKhachHang.setText(kh.getTenKhachHang());
+    			txtCCCD_HoChieu.setText(kh.getCCCD_HoChieu());
+    			txtSoDienThoai.setText(kh.getSoDienThoai());
+    			txtEmail.setText(kh.getEmail());
+    			cboTrangThai.setValue(kh.getTrangThaiKhachHang());
+    			cboLoaiKhachHang.setValue(kh.getLoaiThanhVien());
+    			cboTrangThai.setEditable(true);
+    			cboTrangThai.setDisable(false);
+    			cboLoaiKhachHang.setEditable(true);
+    			cboLoaiKhachHang.setDisable(false);
+			}else {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Lỗi khi thêm khách hàng!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	            stage.getIcons().add(new Image(file.toURI().toString()));
+	            System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+			}
+		}
+	}
+	
+	@FXML
+	private boolean kiemTraTxt() {
+		String tenKhachHang = txtTenKhachHang.getText();
+		String CCCD_HoChieu = txtCCCD_HoChieu.getText();
+		String soDienThoai = txtSoDienThoai.getText();
+		String email = txtEmail.getText();
+		
+		String regexTen = "^[A-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬĐÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ][a-zàáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]*(?: [A-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬĐÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ][a-zàáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]*)+$";
+		String regexCCCD_HoChieu = "^(\\d{12}|[A-Z]\\d{7})$";
+		String regexSoDienThoai = "^(0|\\+84)(3|5|7|8|9)\\d{8}$";
+		String regexEmail = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$";
+
+		if(tenKhachHang.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Tên khách hàng không được rỗng");
+	        File file = new File("image/canhBao.png");
+	        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(file.toURI().toString()));
+            System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+	        alert.showAndWait();
+	        txtTenKhachHang.requestFocus();
+	        return false;
+		}else {
+			Pattern pt = Pattern.compile(regexTen);
+			Matcher mc = pt.matcher(tenKhachHang);
+			if(!mc.matches()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Tên khách hàng phải có ít nhất 2 từ, viết hoa chữ đầu; không chứa kí tự đặc biệt hoặc số!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		        txtTenKhachHang.requestFocus();
+		        txtTenKhachHang.selectAll();
+		        return false;
+			}
+		}
+		
+		
+		if(CCCD_HoChieu.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText(null);
+	        alert.setContentText("CCCD/Hộ chiếu của khách hàng không được rỗng");
+	        File file = new File("image/canhBao.png");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(file.toURI().toString()));
+            System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+	        alert.showAndWait();
+	        txtCCCD_HoChieu.requestFocus();
+	        return false;
+		}else {
+			Pattern pt = Pattern.compile(regexCCCD_HoChieu);
+			Matcher mc = pt.matcher(CCCD_HoChieu);
+			if(!mc.matches()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("CCCD phải là 12 chữ số, Hộ chiếu phải là 8 kí tự trong đó 1 kí tự viết hoa kết hợp với 7 chữ số!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		        txtCCCD_HoChieu.requestFocus();
+		        txtCCCD_HoChieu.selectAll();
+		        return false;
+			}	
+		}
+		
+		if(soDienThoai.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Số điện thoại của khách hàng không được rỗng");
+	        File file = new File("image/canhBao.png");
+	        if (file.exists()) {
+	            try {
+	                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	                stage.getIcons().add(new Image(file.toURI().toString()));
+	                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+	            } catch (Exception e1) {
+	                System.err.println("Lỗi khi tải ảnh: " + e1.getMessage());
+	            }
+	        } else {
+	            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+	        }
+	        alert.showAndWait();
+	        txtSoDienThoai.requestFocus();
+	        return false;
+		}else {
+			Pattern pt = Pattern.compile(regexSoDienThoai);
+			Matcher mc = pt.matcher(soDienThoai);
+			if(!mc.matches()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Số điện thoại bắt đầu bằng 0 hoặc +84, sau đó là 1 trong các số sau: 3, 5, 7, 8, 9; cuối cùng là 8 kí tự số!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		        txtSoDienThoai.requestFocus();
+		        txtSoDienThoai.selectAll();
+		        return false;
+			}
+		}
+		
+		if(email.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Email của khách hàng không được rỗng");
+	        File file = new File("image/canhBao.png");
+	        if (file.exists()) {
+	            try {
+	                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	                stage.getIcons().add(new Image(file.toURI().toString()));
+	                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+	            } catch (Exception e1) {
+	                System.err.println("Lỗi khi tải ảnh: " + e1.getMessage());
+	            }
+	        } else {
+	            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+	        }
+	        alert.showAndWait();
+	        txtEmail.requestFocus();
+	        return false;
+		}else {
+			Pattern pt = Pattern.compile(regexEmail);
+			Matcher mc = pt.matcher(email);
+			if(!mc.matches()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Email không hợp lệ!");
+		        File file = new File("image/canhBao.png");
+		        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
+		        alert.showAndWait();
+		        txtEmail.requestFocus();
+		        txtEmail.selectAll();
+		        return false;
+			}
+		}
+		return true;
+	}
+	
+	@FXML
+	private Button btnCapNhat;
+	
+	@FXML
+	private void btnCapNhatClicked() {
+	    if (kiemTraTxt()) {
+	        KhachHang_DAO khachHang_DAO = new KhachHang_DAO();
+	        String maKhachHang = txtMaKhachHang.getText();
+	        String tenKhachHang = txtTenKhachHang.getText();
+	        String CCCD_HoChieu = txtCCCD_HoChieu.getText();
+	        String soDienThoai = txtSoDienThoai.getText();
+	        String email = txtEmail.getText();
+
+	        // Xử lý cboTrangThai
+	        TrangThaiKhachHang trangThai;
+	        Object trangThaiValue = cboTrangThai.getValue();
+	        if (trangThaiValue instanceof TrangThaiKhachHang) {
+	            // Nếu getValue() trả về enum
+	            trangThai = (TrangThaiKhachHang) trangThaiValue;
+	        } else {
+	            // Nếu getValue() trả về String (toString() của enum)
+	            String trangThaiStr = trangThaiValue != null ? trangThaiValue.toString().trim() : "hoatDong";
+	            if (trangThaiStr.equals("Vô hiệu hóa")) {
+	                trangThai = TrangThaiKhachHang.voHieuHoa;
+	            } else {
+	                trangThai = TrangThaiKhachHang.hoatDong;
+	            }
+	        }
+
+	        // Xử lý cboLoaiKhachHang
+	        LoaiThanhVien loaiKhachHang;
+	        Object loaiKhachHangValue = cboLoaiKhachHang.getValue();
+	        if (loaiKhachHangValue instanceof LoaiThanhVien) {
+	            // Nếu getValue() trả về enum
+	            loaiKhachHang = (LoaiThanhVien) loaiKhachHangValue;
+	        } else {
+	            // Nếu getValue() trả về String (toString() của enum)
+	            String loaiKhachHangStr = loaiKhachHangValue != null ? loaiKhachHangValue.toString().trim() : "thanThiet";
+	            if (loaiKhachHangStr.equals("VIP")) {
+	                loaiKhachHang = LoaiThanhVien.vip;
+	            } else {
+	                loaiKhachHang = LoaiThanhVien.thanThiet;
+	            }
+	        }
+
+	        KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiKhachHang, trangThai);
+
+	        // Hiển thị hộp thoại xác nhận
+	        Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+	        confirmAlert.setTitle("Xác nhận cập nhật");
+	        confirmAlert.setHeaderText("Bạn có chắc chắn muốn cập nhật khách hàng này?");
+	        confirmAlert.setContentText("Mã khách hàng: " + kh.getMaKhachHang() + "\nTên: " + kh.getTenKhachHang());
+
+	        File confirmFile = new File("image/canhBao.png");
+	        if (confirmFile.exists()) {
+	            Stage confirmStage = (Stage) confirmAlert.getDialogPane().getScene().getWindow();
+	            confirmStage.getIcons().add(new Image(confirmFile.toURI().toString()));
+	            System.out.println("Đã tải icon từ: " + confirmFile.getAbsolutePath());
+	        }
+
+	        Optional<ButtonType> result = confirmAlert.showAndWait();
+
+	        if (result.isPresent() && result.get() == ButtonType.OK) {
+	            if (khachHang_DAO.capNhatKhachHang(kh)) {
+	                Alert successAlert = new Alert(AlertType.INFORMATION);
+	                successAlert.setTitle("Thông báo");
+	                successAlert.setHeaderText(null);
+	                successAlert.setContentText("Cập nhật thành công!");
+	                File successFile = new File("image/thanhCong.png");
+	                Stage successStage = (Stage) successAlert.getDialogPane().getScene().getWindow();
+	                successStage.getIcons().add(new Image(successFile.toURI().toString()));
+	                System.out.println("Đã tải icon từ: " + successFile.getAbsolutePath());
+	                successAlert.showAndWait();
+
+	                KhachHang selectedKhachHang = tbDanhSachKhachHang.getSelectionModel().getSelectedItem();
+	                if (selectedKhachHang != null) {
+	                    int selectedIndex = tbDanhSachKhachHang.getSelectionModel().getSelectedIndex();
+	                    selectedKhachHang.setTenKhachHang(kh.getTenKhachHang());
+	                    selectedKhachHang.setCCCD_HoChieu(kh.getCCCD_HoChieu());
+	                    selectedKhachHang.setSoDienThoai(kh.getSoDienThoai());
+	                    selectedKhachHang.setEmail(kh.getEmail());
+	                    selectedKhachHang.setLoaiThanhVien(kh.getLoaiThanhVien());
+	                    selectedKhachHang.setTrangThaiKhachHang(kh.getTrangThaiKhachHang());
+	                    tbDanhSachKhachHang.getItems().set(selectedIndex, selectedKhachHang);
+	                }
+	            } else {
+	                Alert errorAlert = new Alert(AlertType.ERROR);
+	                errorAlert.setTitle("Lỗi");
+	                errorAlert.setHeaderText(null);
+	                errorAlert.setContentText("Lỗi khi cập nhật khách hàng!");
+	                File errorFile = new File("image/canhBao.png");
+	                Stage errorStage = (Stage) errorAlert.getDialogPane().getScene().getWindow();
+	                errorStage.getIcons().add(new Image(errorFile.toURI().toString()));
+	                System.out.println("Đã tải icon từ: " + errorFile.getAbsolutePath());
+	                errorAlert.showAndWait();
+	            }
+	        }
+	    }
+	}
 }

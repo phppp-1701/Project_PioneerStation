@@ -294,11 +294,12 @@
             <TableView fx:id="tbDanhSachKhachHang" layoutY="60.0" prefHeight="291.0" prefWidth="762.0" styleClass="tbDS">
               <columns>
                 <TableColumn fx:id="colStt" prefWidth="41.5999755859375" text="STT" />
-                  <TableColumn fx:id="colMaKhachHang" prefWidth="124.00003051757812" text="Mã khách hàng" />
-                  <TableColumn fx:id="colTen" prefWidth="154.40005493164062" text="Tên" />
-                  <TableColumn fx:id="colSoDienThoai" prefWidth="168.79998779296875" text="Số điện thoại" />
-                  <TableColumn fx:id="colEmail" prefWidth="156.800048828125" text="Email" />
-                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="116.800048828125" text="Loại khách hàng" />
+                  <TableColumn fx:id="colMaKhachHang" prefWidth="92.0" text="Mã khách hàng" />
+                  <TableColumn fx:id="colTen" prefWidth="164.79995727539062" text="Tên" />
+                  <TableColumn fx:id="colSoDienThoai" prefWidth="104.0" text="Số điện thoại" />
+                  <TableColumn fx:id="colEmail" prefWidth="183.20001220703125" text="Email" />
+                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="92.00006103515625" text="Loại" />
+                  <TableColumn fx:id="colTrangThaiKhachHang" prefWidth="85.5999755859375" text="Trạng thái" />
               </columns>
             </TableView>
          </children>
@@ -308,12 +309,12 @@
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button layoutX="1290.0" layoutY="449.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="171.0" styleClass="btn-themKhachHang" text="Thêm khách hàng" textFill="WHITE">
+      <Button fx:id="btnThemKhachHang" layoutX="1290.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnThemKhachHangClicked" prefHeight="31.0" prefWidth="171.0" styleClass="btn-themKhachHang" text="Thêm khách hàng" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button layoutX="1290.0" layoutY="500.0" mnemonicParsing="false" styleClass="btn-capNhatKhachHang" text="Cập nhật khách hàng" textFill="WHITE">
+      <Button fx:id="btnCapNhat" layoutX="1290.0" layoutY="500.0" mnemonicParsing="false" onAction="#btnCapNhatClicked" styleClass="btn-capNhatKhachHang" text="Cập nhật khách hàng" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
