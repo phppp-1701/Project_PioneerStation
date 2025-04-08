@@ -119,17 +119,52 @@ public class NhanVien {
 
 
 	public enum GioiTinh {
-        nam,
-        nu
-    }
-    public enum ChucVu {
-        quanLy,
-        banVe
-    }
-    public enum TrangThaiNhanVien {
-        hoatDong,
-        voHieuHoa
-    }
+	    nam("Nam"),
+	    nu("Nữ");
+
+	    private String displayName;
+
+	    private GioiTinh(String displayName) {
+	        this.displayName = displayName;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
+	}
+	
+	public enum ChucVu {
+	    quanLy("Quản lý"),
+	    banVe("Bán vé");
+
+	    private String displayName;
+
+	    private ChucVu(String displayName) {
+	        this.displayName = displayName;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
+	}
+	
+	public enum TrangThaiNhanVien {
+	    hoatDong("Hoạt động"),
+	    voHieuHoa("Vô hiệu hóa");
+
+	    private String displayName;
+
+	    private TrangThaiNhanVien(String displayName) {
+	        this.displayName = displayName;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
+	}
 
     @Override
 	public int hashCode() {
