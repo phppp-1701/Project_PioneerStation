@@ -3,6 +3,7 @@ GO
 
 USE pioneer_station;
 GO
+
 CREATE TABLE KhachHang (
     maKhachHang VARCHAR(20) PRIMARY KEY,
     tenKhachHang NVARCHAR(100) NOT NULL,
@@ -33,12 +34,31 @@ CREATE TABLE NhanVien (
     maNhanVien VARCHAR(20) PRIMARY KEY,
     tenNhanVien NVARCHAR(100) NOT NULL,
     ngaySinh DATE NOT NULL,
+    soDienThoai VARCHAR(15) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     gioiTinh VARCHAR(5) CHECK (gioiTinh IN ('nam', 'nu')),
     CCCD_HoChieu VARCHAR(20) UNIQUE NOT NULL,
     chucVu VARCHAR(20) CHECK (chucVu IN ('quanLy', 'banVe')),
-    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieuHoa'))
+    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieuHoa')),
+    linkAnh VARCHAR(255)  
 );
 go
+
+INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, soDienThoai, email, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien, linkAnh)
+ VALUES
+ ('2022NV000001', N'Phạm Trương Hoàng Phương', '2004-01-17', '0947991755', 'hphuong17@gmail.com', 'nam', '083204007207', 'quanLy', 'hoatDong','image/phuong.jpg'),
+ ('2022NV000002', N'Phạm Viết Quân', '2004-09-29', '0987654321', 'pvquan29@gmail.com', 'nam', '002190654321', 'quanLy', 'hoatDong','image/quan.jpg'),
+ ('2022NV000003', N'Bùi Tấn Quang Trung', '2004-08-10', '0978123456', 'trinhbuc08@gmail.com', 'nam', '003095987654', 'quanLy', 'hoatDong','image/trung.jpg'),
+ ('2022NV000004', N'Trần Minh Tuấn', '2004-09-18', '0965432187', 'tuantran18@gmail.com', 'nam', '004092456789', 'quanLy', 'hoatDong','image/tuan.jpg'),
+ ('2023NV000001',N'Nguyễn Thị Trinh','2006-03-24', '0932342234','trinhwork24@gmail.com','nu','029323131234','banVe','hoatDong','image/trinh.jpg');
+ go
+
+ CREATE TABLE TaiKhoan(
+ 	tenTaiKhoan VARCHAR(20),
+ 	matKhau NVARCHAR(100),
+ 	maNhanVien VARCHAR(20) FOREIGN KEY REFERENCES NhanVien(maNhanVien)
+ )
+ go
 
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,

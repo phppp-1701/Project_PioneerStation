@@ -13,15 +13,15 @@ public class NhanVien {
     private TrangThaiNhanVien trangThaiNhanVien;
     private String soDienThoai;
     private String email;
+    private String linkAnh;
 
 
     public NhanVien() {
 
 	}
-    
-    
+
 	public NhanVien(String maNhanVien, String tenNhanVien, LocalDate ngaySinh, GioiTinh gioiTinh, String cccd_HoChieu,
-			ChucVu chucVu, TrangThaiNhanVien trangThaiNhanVien, String soDienThoai, String email) {
+			ChucVu chucVu, TrangThaiNhanVien trangThaiNhanVien, String soDienThoai, String email, String linkAnh) {
 		super();
 		this.maNhanVien = maNhanVien;
 		this.tenNhanVien = tenNhanVien;
@@ -32,8 +32,8 @@ public class NhanVien {
 		this.trangThaiNhanVien = trangThaiNhanVien;
 		this.soDienThoai = soDienThoai;
 		this.email = email;
+		this.linkAnh = linkAnh;
 	}
-
 
 	public String getMaNhanVien() {
 		return maNhanVien;
@@ -106,6 +106,16 @@ public class NhanVien {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getLinkAnh() {
+		return linkAnh;
+	}
+
+	public void setLinkAnh(String linkAnh) {
+		this.linkAnh = linkAnh;
+	}
+
+
 
 
 	public enum GioiTinh {
