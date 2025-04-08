@@ -12,6 +12,7 @@ import dao.KhachHang_DAO;
 import entity.KhachHang;
 import entity.KhachHang.LoaiThanhVien;
 import entity.KhachHang.TrangThaiKhachHang;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -159,10 +160,6 @@ public class QuanLyKhachHang_GUI_Controller {
 	                // Cách 1: Dùng đường dẫn file
 	                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 	                stage.getIcons().add(new Image(file.toURI().toString()));
-	                
-	                // Hoặc Cách 2: Dùng InputStream
-	                // Image image = new Image(new FileInputStream(file));
-	                // stage.getIcons().add(image);
 	                
 	                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
 	            } catch (Exception e) {
@@ -485,6 +482,10 @@ public class QuanLyKhachHang_GUI_Controller {
 	    cboTrangThai.setDisable(true);
 		cboLoaiKhachHang.setEditable(false);
 		cboLoaiKhachHang.setDisable(true);
+		
+		Platform.runLater(() -> {
+	        txtTimTenKhachHang.requestFocus();
+	    });
 	    
 	    tbDanhSachKhachHang.setOnMouseClicked(event -> {
 	    	if(event.getClickCount() == 1) {

@@ -1,8 +1,14 @@
 package gui;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +24,7 @@ import entity.KhachHang.TrangThaiKhachHang;
 import entity.NhanVien.ChucVu;
 import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +40,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class QuanLyNhanVien_GUI_Controller {
@@ -52,9 +61,6 @@ public class QuanLyNhanVien_GUI_Controller {
     private TableColumn<NhanVien, String> colTenNV;
     
     @FXML
-    private TableColumn<NhanVien, String> colNgaySinh;
-    
-    @FXML
     private TableColumn<NhanVien, String> colSoDienThoai;
     
     @FXML
@@ -62,9 +68,6 @@ public class QuanLyNhanVien_GUI_Controller {
     
     @FXML 
     private TableColumn<NhanVien, String> colGioiTinh;
-    
-    @FXML 
-    private TableColumn<NhanVien, String> colCCCD;
     
     @FXML 
     private TableColumn<NhanVien, String> colChucVu;
@@ -96,7 +99,6 @@ public class QuanLyNhanVien_GUI_Controller {
                 new SimpleStringProperty(String.valueOf(tbDanhSachNhanVien.getItems().indexOf(cellData.getValue()) + 1)));
             colMaNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaNhanVien()));
             colTenNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenNhanVien()));
-            colNgaySinh.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNgaySinh().toString()));
             colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
             colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
             colGioiTinh.setCellValueFactory(cellData -> {
@@ -104,7 +106,6 @@ public class QuanLyNhanVien_GUI_Controller {
                 String displayValue = gioiTinh == GioiTinh.nam ? "Nam" : "Nữ";
                 return new SimpleStringProperty(displayValue);
             });
-            colCCCD.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCccd_HoChieu()));
             colChucVu.setCellValueFactory(cellData -> {
                 ChucVu chucVu = cellData.getValue().getChucVu();
                 String displayValue = "";
@@ -149,8 +150,17 @@ public class QuanLyNhanVien_GUI_Controller {
         
         // Kiểm tra nếu cả hai trường đều trống
         if (tenNhanVien.isEmpty() && soDienThoai.isEmpty()) {
-            showWarningAlert("Vui lòng nhập tên nhân viên hoặc số điện thoại để tìm kiếm!");
-            return;
+        	Alert alert = new Alert(Alert.AlertType.WARNING);
+	        alert.setTitle("Cảnh báo");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Vui lòng nhập tên khách hàng hoặc số điện thoại để tìm kiếm!");
+	        
+	        File file = new File("image/canhBao.png");
+	        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(file.toURI().toString()));
+            alert.showAndWait();
+            txtTimTenNhanVien.requestFocus();
+	        txtTimTenNhanVien.selectAll();
         }
         
         try {
@@ -254,16 +264,25 @@ public class QuanLyNhanVien_GUI_Controller {
     private ComboBox<TrangThaiNhanVien> cboTrangThaiNhanVien;  // ComboBox cho trạng thái nhân viên
 
     @FXML
+    private ImageView imgNhanVien;
+    
+    @FXML
     private void initialize() {
+    	txtTimTenNhanVien.requestFocus();
         // Thiết lập ComboBox chức vụ và trạng thái nhân viên
     	cboGioiTinh.getItems().setAll(GioiTinh.values());
-    	cboTrangThaiNhanVien.setDisable(true);
+    	cboGioiTinh.setValue(GioiTinh.nam);
     	
         cboChucVu.getItems().setAll(ChucVu.values());
         cboChucVu.setValue(ChucVu.banVe); 
-        cboChucVu.setEditable(false);
-        cboChucVu.setDisable(true);
-
+        
+        txtMaNV.setDisable(true);
+        txtMaNV.setEditable(false);
+        
+		Platform.runLater(() -> {
+	        txtTimTenNhanVien.requestFocus();
+	    });
+        
         cboTrangThaiNhanVien.getItems().setAll(TrangThaiNhanVien.values());
         cboTrangThaiNhanVien.setValue(TrangThaiNhanVien.hoatDong);
         cboTrangThaiNhanVien.setEditable(false);
@@ -284,10 +303,19 @@ public class QuanLyNhanVien_GUI_Controller {
                     cboGioiTinh.setValue(selectedItem.getGioiTinh());
                     cboChucVu.setValue(selectedItem.getChucVu());
                     cboTrangThaiNhanVien.setValue(selectedItem.getTrangThaiNhanVien());
+                    
+                    // Load ảnh từ đường dẫn file
+                    String imagePath = selectedItem.getLinkAnh();  
+                    Image image = new Image("file:" + imagePath);
+
+                    // Gán ảnh vào ImageView
+                    imgNhanVien.setImage(image);
+                    
                     cboChucVu.setEditable(true);
                     cboChucVu.setDisable(false);
                     cboTrangThaiNhanVien.setEditable(true);
                     cboTrangThaiNhanVien.setDisable(false);
+                    linkAnh = selectedItem.getLinkAnh();
                 }
             }
         });
@@ -297,158 +325,306 @@ public class QuanLyNhanVien_GUI_Controller {
 	private Button btnThemNhanVien;
 	
 	@FXML
-	private void btnThemNhanVienClicked() {
-	    if (!txtMaNV.getText().trim().isEmpty()) {
-	        Alert alert = new Alert(Alert.AlertType.ERROR);
-	        alert.setTitle("Lỗi");
-	        alert.setHeaderText(null);
-	        alert.setContentText("Bạn đang chọn một nhân viên, vui lòng làm rỗng để thêm!");
-	        File file = new File("image/canhBao.png");
-	        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	        stage.getIcons().add(new Image(file.toURI().toString()));
-	        alert.showAndWait();
-	        return;
-	    }
+	private void btnThemNhanVienClicked() throws SQLException {
+		NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+		if(!txtMaNV.getText().toString().isEmpty()) {
+			showErrorAlert("Hãy nhấn làm rỗng nếu muốn thêm nhân viên mới!");
+			return;
+		}
+		if(nhanVien_DAO.kiemTraCCCD(txtCCCD.getText().toString())) {
+			showErrorAlert("CCCD/Hộ chiếu đã tồn tại!");
+			txtCCCD.requestFocus();
+			txtCCCD.selectAll();
+			List<NhanVien> danhSachNhanVien = nhanVien_DAO.timNhanVienTheoCCCD_HoChieu(txtCCCD.getText().toString());
+		     // Xóa dữ liệu cũ trong table (nếu có)
+		        tbDanhSachNhanVien.getItems().clear();
+		        
+		        // Thêm dữ liệu mới vào table
+		        tbDanhSachNhanVien.getItems().addAll(danhSachNhanVien);
+		        
+		        // Thiết lập giá trị cho các cột
+		        colStt.setCellValueFactory(cellData -> 
+		            new SimpleStringProperty(String.valueOf(tbDanhSachNhanVien.getItems().indexOf(cellData.getValue()) + 1)));
+		        colMaNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaNhanVien()));
+		        colTenNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenNhanVien()));
+		        colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
+		        colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+		        colGioiTinh.setCellValueFactory(cellData -> {
+		        	GioiTinh gioiTinh = cellData.getValue().getGioiTinh();
+		        	String displayValue = "";
+		        	if (gioiTinh == GioiTinh.nam) {
+		        	    displayValue = "Nam";
+		        	} else if (gioiTinh == GioiTinh.nu) {
+		        	    displayValue = "Nữ";
+		        	}
+		        	return new SimpleStringProperty(displayValue);
+		        });
+		        colChucVu.setCellValueFactory(cellData -> {
+		        	ChucVu chucVu = cellData.getValue().getChucVu();
+		        	String displayValue = "";
+		        	if (chucVu == ChucVu.banVe) {
+		        	    displayValue = "Bán vé";
+		        	} else if (chucVu == ChucVu.quanLy) {
+		        	    displayValue = "Quản lý";
+		        	}
+		        	return new SimpleStringProperty(displayValue);
+		        });
+		        colTrangThai.setCellValueFactory(cellData -> {
+		            TrangThaiNhanVien trangThai = cellData.getValue().getTrangThaiNhanVien();
+		            String displayValue = "";
+		            if (trangThai == TrangThaiNhanVien.hoatDong) {
+		                displayValue = "Hoạt động";
+		            } else if (trangThai == TrangThaiNhanVien.voHieuHoa) {
+		                displayValue = "Vô hiệu hóa";
+		            }
+		            return new SimpleStringProperty(displayValue);
+		        });
+		        return;
+		}
+	    if(kiemTraTxt()) {
+	    	String tenNhanVien = txtTenNV.getText();
+			String CCCD_HoChieu = txtCCCD.getText();
+			LocalDate ngaySinh = datePickerNgaySinh.getValue();
+			String soDienThoai = txtSoDienThoai.getText();
+			String email = txtEmail.getText();
+			
+			ChucVu chucVu;
+			Object chucVuValue = cboChucVu.getValue();
+			if (chucVuValue instanceof ChucVu) {
+			    // Nếu getValue() trả về enum
+			    chucVu = (ChucVu) chucVuValue;
+			} else {
+			    // Nếu getValue() trả về String (toString() của enum)
+			    String chucVuStr = chucVuValue != null ? chucVuValue.toString().trim() : "Bán vé";
+			    if (chucVuStr.equals("Quản lý")) {
+			        chucVu = ChucVu.quanLy;
+			    } else {
+			        chucVu = ChucVu.banVe; // Mặc định là Bán vé
+			    }
+			}
+			
+			TrangThaiNhanVien trangThai;
+			Object trangThaiValue = cboTrangThaiNhanVien.getValue();
 
-	    if (kiemTraTxt()) {
-	        NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+			if (trangThaiValue instanceof TrangThaiNhanVien) {
+			    // Nếu getValue() trả về enum
+			    trangThai = (TrangThaiNhanVien) trangThaiValue;
+			} else {
+			    // Nếu getValue() trả về String (toString() của enum)
+			    String trangThaiStr = trangThaiValue != null ? trangThaiValue.toString().trim() : "Hoạt động";
+			    
+			    if (trangThaiStr.equalsIgnoreCase("Hoạt động") || trangThaiStr.equalsIgnoreCase("hoatDong")) {
+			        trangThai = TrangThaiNhanVien.hoatDong;
+			    } else if (trangThaiStr.equalsIgnoreCase("Vô hiệu hóa") || trangThaiStr.equalsIgnoreCase("voHieuHoa")) {
+			        trangThai = TrangThaiNhanVien.voHieuHoa;
+			    } else {
+			        trangThai = TrangThaiNhanVien.hoatDong; // Mặc định là Hoạt động
+			    }
+			}
+			
+			GioiTinh gioiTinh;
+			Object gioiTinhValue = cboGioiTinh.getValue();
 
-	        String maNhanVien = nhanVien_DAO.taoMaNhanVienMoi();
-	        String tenNhanVien = txtTenNV.getText();
+			if (gioiTinhValue instanceof GioiTinh) {
+			    // Nếu getValue() trả về enum
+			    gioiTinh = (GioiTinh) gioiTinhValue;
+			} else {
+			    // Nếu getValue() trả về String (từ toString() của enum hoặc hiển thị trên GUI)
+			    String gioiTinhStr = gioiTinhValue != null ? gioiTinhValue.toString().trim() : "Nam"; // Mặc định là "Nam"
+			    
+			    if (gioiTinhStr.equalsIgnoreCase("Nam") || gioiTinhStr.equalsIgnoreCase("nam")) {
+			        gioiTinh = GioiTinh.nam;
+			    } else if (gioiTinhStr.equalsIgnoreCase("Nữ") || gioiTinhStr.equalsIgnoreCase("nu")) {
+			        gioiTinh = GioiTinh.nu;
+			    } else {
+			        gioiTinh = GioiTinh.nam; // Mặc định là "Nam" nếu không khớp
+			    }
+			}
+			String decodedPath = URLDecoder.decode(linkAnh.replace("file:/", ""), StandardCharsets.UTF_8);
+			File sourceFile = new File(decodedPath);
 
-	        // Lấy ngày sinh
-	        LocalDate ngaySinh = datePickerNgaySinh.getValue();
-	        if (ngaySinh == null) {
-	            Alert alert = new Alert(Alert.AlertType.ERROR);
-	            alert.setTitle("Lỗi");
-	            alert.setHeaderText(null);
-	            alert.setContentText("Vui lòng chọn ngày sinh!");
-	            File file = new File("image/canhBao.png");
-	            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	            stage.getIcons().add(new Image(file.toURI().toString()));
-	            alert.showAndWait();
-	            return;
-	        }
+			try {
+			    String fileName = sourceFile.getName();
+			    File destFile = new File("image/" + fileName);
+			    Files.copy(
+			        sourceFile.toPath(),
+			        destFile.toPath(),
+			        StandardCopyOption.REPLACE_EXISTING
+			    );
 
-	        GioiTinh gioiTinh = cboGioiTinh.getValue();
-	        String cccd = txtCCCD.getText();
-	        String sdt = txtSoDienThoai.getText();
-	        String email = txtEmail.getText();
-	        ChucVu chucVu = cboChucVu.getValue();
-	        TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
-	        
+			    // Cập nhật linkAnh với đường dẫn tương đối
+			    linkAnh = "image/" + fileName;
+			    System.out.println("Ảnh đã được sao chép đến: " + linkAnh);
 
-	        if (nhanVien_DAO.kiemTraCCCD(cccd)) {
-	            Alert alert = new Alert(Alert.AlertType.ERROR);
-	            alert.setTitle("Lỗi");
-	            alert.setHeaderText(null);
-	            alert.setContentText("CCCD đã tồn tại. Nhân viên có thể đã tồn tại trong hệ thống!");
-	            File file = new File("image/canhBao.png");
-	            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	            stage.getIcons().add(new Image(file.toURI().toString()));
-	            alert.showAndWait();
-
-	            txtCCCD.requestFocus();
-	            txtCCCD.selectAll();
-
-	            List<NhanVien> danhSachTrung = nhanVien_DAO.timNhanVienTheoCCCD_HoChieu(cccd);
-	            tbDanhSachNhanVien.getItems().clear();
-	            tbDanhSachNhanVien.getItems().addAll(danhSachTrung);
-
-	            colStt.setCellValueFactory(cellData -> 
-	                new SimpleStringProperty(String.valueOf(tbDanhSachNhanVien.getItems().indexOf(cellData.getValue()) + 1)));
-	            colMaNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaNhanVien()));
-	            colTenNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenNhanVien()));
-	            colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
-	            colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-	            colChucVu.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getChucVu().toString()));
-	            colTrangThai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTrangThaiNhanVien().toString()));
-	            return;
-	        }
-
-	        // Tạo đối tượng nhân viên
-	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email, email);
-
-	        try {
-				if (nhanVien_DAO.themNhanVien(nv)) {
-				    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				    alert.setTitle("Thông báo");
-				    alert.setHeaderText(null);
-				    alert.setContentText("Thêm nhân viên thành công!\nMã: " + maNhanVien + "\nTên: " + tenNhanVien);
-				    File file = new File("image/thanhCong.png");
-				    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				    stage.getIcons().add(new Image(file.toURI().toString()));
-				    alert.showAndWait();
-
-				    // Hiển thị lại thông tin
-				    txtMaNV.setText(nv.getMaNhanVien());
-				    txtTenNV.setText(nv.getTenNhanVien());
-				    txtCCCD.setText(nv.getCccd_HoChieu());
-				    txtSoDienThoai.setText(nv.getSoDienThoai());
-				    txtEmail.setText(nv.getEmail());
-				    datePickerNgaySinh.setValue(ngaySinh);
-				    cboGioiTinh.setValue(nv.getGioiTinh());
-				    cboChucVu.setValue(nv.getChucVu());
-				    cboTrangThaiNhanVien.setValue(nv.getTrangThaiNhanVien());
-				    cboChucVu.setDisable(false);
-				    cboTrangThaiNhanVien.setDisable(false);
-				} else {
-				    Alert alert = new Alert(Alert.AlertType.ERROR);
-				    alert.setTitle("Lỗi");
-				    alert.setHeaderText(null);
-				    alert.setContentText("Lỗi khi thêm nhân viên!");
-				    File file = new File("image/canhBao.png");
-				    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				    stage.getIcons().add(new Image(file.toURI().toString()));
-				    alert.showAndWait();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			    showErrorAlert("Không thể sao chép ảnh: " + e.getMessage());
+			    return;
+			}
+			String maNhanVien = nhanVien_DAO.taoMaNhanVienMoi();
+			NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, CCCD_HoChieu, chucVu, trangThai, soDienThoai, email, linkAnh);
+			if(!nhanVien_DAO.themNhanVien(nv)) {
+				showErrorAlert("Thêm không thành công!");
+				return;
+			}else {
+				showInformationAlert("Thêm nhân viên thành công!\nMã nhân viên: "+nv.getMaNhanVien()+"\nTên nhân viên: "+nv.getTenNhanVien());
+				linkAnh = "";
+				txtMaNV.setText(maNhanVien);
+				return;
 			}
 	    }
 	}
+	
+	@FXML
+	private String linkAnh = "";
 
+	@FXML
+	private Button btnThemAnh;
+	
+	@FXML
+	private void btnThemAnhClicked() {
+	    // Tạo FileChooser
+	    FileChooser fileChooser = new FileChooser();
+	    fileChooser.setTitle("Chọn ảnh nhân viên");
+
+	    // Chỉ cho phép chọn file ảnh (JPG, PNG)
+	    fileChooser.getExtensionFilters().addAll(
+	        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+	    );
+
+	    // Mở hộp thoại chọn file
+	    File selectedFile = fileChooser.showOpenDialog(null);
+	    if (selectedFile != null) {
+	        try {
+	            // Tải ảnh từ file và hiển thị lên ImageView
+	        	linkAnh = selectedFile.toURI().toString();
+	            Image image = new Image(selectedFile.toURI().toString());
+	            imgNhanVien.setImage(image);
+	            imgNhanVien.setFitWidth(100);
+	            imgNhanVien.setFitHeight(100);
+	        } catch (Exception e) {
+	            showErrorAlert("Không tải ảnh được!");
+	            imgNhanVien.setImage(null);
+	        }
+	    }
+	}
 	
 	@FXML
 	private boolean kiemTraTxt() {
 		String tenNhanVien = txtTenNV.getText();
 		String CCCD_HoChieu = txtCCCD.getText();
+		LocalDate ngaySinh = datePickerNgaySinh.getValue();
 		String soDienThoai = txtSoDienThoai.getText();
 		String email = txtEmail.getText();
-
+		
 		String regexTen = "^[A-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬĐÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ][a-zàáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]*(?: [A-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬĐÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ][a-zàáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]*)+$";
 		String regexCCCD_HoChieu = "^(\\d{12}|[A-Z]\\d{7})$";
 		String regexSoDienThoai = "^(0|\\+84)(3|5|7|8|9)\\d{8}$";
 		String regexEmail = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$";
+		LocalDate ngayHomNay = LocalDate.now();
 
-		if (tenNhanVien.isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Lỗi");
-			alert.setHeaderText(null);
-			alert.setContentText("Tên nhân viên không được rỗng");
-			File file = new File("image/canhBao.png");
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image(file.toURI().toString()));
-			alert.showAndWait();
+		if(tenNhanVien.trim().equals("")) {
+			showErrorAlert("Tên nhân viên không được rỗng!");
 			txtTenNV.requestFocus();
 			return false;
-		} else {
+		}else {
 			Pattern pt = Pattern.compile(regexTen);
 			Matcher mc = pt.matcher(tenNhanVien);
-			if (!mc.matches()) {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi");
-				alert.setHeaderText(null);
-				alert.setContentText("Tên nhân viên phải có ít nhất 2 từ, viết hoa chữ đầu; không chứa kí tự đặc biệt hoặc số!");
-				File file = new File("image/canhBao.png");
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image(file.toURI().toString()));
-				alert.showAndWait();
+			if(!mc.matches()) {
+				showErrorAlert("Tên nhân viên phải có 2 từ trở lên, viết hoa chữ cái đầu!");
 				txtTenNV.requestFocus();
 				txtTenNV.selectAll();
 				return false;
 			}
+		}
+		if(CCCD_HoChieu.trim().equals("")) {
+			showErrorAlert("CCCD/Hộ chiếu của nhân viên không được rỗng!");
+			txtCCCD.requestFocus();
+			return false;
+		}else {
+			Pattern pt = Pattern.compile(regexCCCD_HoChieu);
+			Matcher mc = pt.matcher(CCCD_HoChieu);
+			if(!mc.matches()) {
+				showErrorAlert("CCCD phải là dãy 12 chữ số trở lên. Hộ chiếu phải bắt đầu bằng 1 kí tự in hoa và dãy 7 chữ số!");
+				txtCCCD.requestFocus();
+				txtCCCD.selectAll();
+				return false;
+			}
+		}
+		if(ngaySinh == null) {
+			showErrorAlert("Ngày sinh của nhân viên không được rỗng!");
+			datePickerNgaySinh.requestFocus();
+			return false;
+		}else {
+			ChucVu chucVu;
+			Object chucVuValue = cboChucVu.getValue();
+			if (chucVuValue instanceof ChucVu) {
+			    // Nếu getValue() trả về enum
+			    chucVu = (ChucVu) chucVuValue;
+			} else {
+			    // Nếu getValue() trả về String (toString() của enum)
+			    String chucVuStr = chucVuValue != null ? chucVuValue.toString().trim() : "Bán vé";
+			    if (chucVuStr.equals("Quản lý")) {
+			        chucVu = ChucVu.quanLy;
+			    } else {
+			        chucVu = ChucVu.banVe; // Mặc định là Bán vé
+			    }
+			}
+			// Tính khoảng cách giữa ngayHienTai và ngaySinh
+			Period period = Period.between(ngaySinh, ngayHomNay);
+
+			// Kiểm tra tuổi cho chức vụ Bán vé (phải lớn hơn 16 tuổi)
+			if (chucVu.equals(ChucVu.banVe)) {
+			    if (period.getYears() < 16 || (period.getYears() == 16 && period.getMonths() == 0 && period.getDays() == 0)) {
+			        showErrorAlert("Nhân viên bán vé phải lớn hơn 16 tuổi!");
+			        datePickerNgaySinh.requestFocus();
+			        datePickerNgaySinh.getEditor().selectAll();
+			        return false;
+			    }
+			}
+
+			// Kiểm tra tuổi cho chức vụ Quản lý (phải lớn hơn 20 tuổi)
+			if (chucVu.equals(ChucVu.quanLy)) {
+			    if (period.getYears() < 20 || (period.getYears() == 20 && period.getMonths() == 0 && period.getDays() == 0)) {
+			        showErrorAlert("Nhân viên quản lý phải lớn hơn 20 tuổi!");
+			        datePickerNgaySinh.requestFocus();
+			        datePickerNgaySinh.getEditor().selectAll();
+			        return false;
+			    }
+			}
+		}
+		
+		if(soDienThoai.trim().equals(email)) {
+			showErrorAlert("Số điện thoại của nhân viên không được rỗng!");
+			txtSoDienThoai.requestFocus();
+			return false;
+		}else {
+			Pattern pt = Pattern.compile(regexSoDienThoai);
+			Matcher mc = pt.matcher(soDienThoai);
+			if(!mc.matches()) {
+				showErrorAlert("Số điện thoại phải là dãy số (03|05|07|08|09) và 8 chữ số ngẫu nhiên!");
+				txtSoDienThoai.requestFocus();
+				txtSoDienThoai.selectAll();
+				return false;
+			}
+		}
+		if(email.trim().equals("")) {
+			showErrorAlert("Email của nhân viên không được rỗng!");
+			txtEmail.requestFocus();
+			return false;
+		}else {
+			Pattern pt = Pattern.compile(regexEmail);
+			Matcher mc = pt.matcher(email);
+			if(!mc.matches()) {
+				showErrorAlert("Email sai định dạng!");
+				txtEmail.requestFocus();
+				txtEmail.selectAll();
+				return false;
+			}
+		}
+		if(linkAnh.trim().equals("")) {
+			showErrorAlert("Ảnh nhân viên chưa được chọn!");
+			return false;
 		}
 		return true;
 	}
@@ -457,113 +633,108 @@ public class QuanLyNhanVien_GUI_Controller {
 
     // Xử lý cập nhật nhân viên
 	@FXML
-	private void btnCapNhatClicked() {
-	    if (kiemTraTxt()) {
-	        NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
-	        String maNhanVien = txtMaNV.getText().trim();
-	        String tenNhanVien = txtTenNV.getText();
+	private void btnCapNhatClicked() throws SQLException {
+	    // Kiểm tra đã chọn nhân viên từ bảng chưa
+	    if (txtMaNV.getText().isEmpty()) {
+	        showErrorAlert("Vui lòng chọn nhân viên cần cập nhật từ bảng!");
+	        return;
 
-	        // Lấy ngày sinh
-	        LocalDate ngaySinh = datePickerNgaySinh.getValue();
-	        if (ngaySinh == null) {
-	            Alert alert = new Alert(Alert.AlertType.ERROR);
-	            alert.setTitle("Lỗi");
-	            alert.setHeaderText(null);
-	            alert.setContentText("Vui lòng chọn ngày sinh!");
-	            File file = new File("image/canhBao.png");
-	            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	            stage.getIcons().add(new Image(file.toURI().toString()));
-	            alert.showAndWait();
-	            return;
-	        }
-	        
-
-	        GioiTinh gioiTinh = cboGioiTinh.getValue();
-	        String cccd = txtCCCD.getText();
-	        String sdt = txtSoDienThoai.getText();
-	        String email = txtEmail.getText();
-	        ChucVu chucVu = cboChucVu.getValue();
-	        TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
-
-	        // Tạo đối tượng nhân viên mới
-	        NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, cccd, chucVu, trangThai, sdt, email, email);
-
-	        // Xác nhận cập nhật
-	        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-	        confirm.setTitle("Xác nhận");
-	        confirm.setHeaderText("Bạn có chắc muốn cập nhật thông tin nhân viên này?");
-	        confirm.setContentText("Mã NV: " + maNhanVien + "\nTên NV: " + tenNhanVien);
-	        File file = new File("image/canhBao.png");
-	        if (file.exists()) {
-	            Stage stage = (Stage) confirm.getDialogPane().getScene().getWindow();
-	            stage.getIcons().add(new Image(file.toURI().toString()));
-	        }
-
-	        Optional<ButtonType> result = confirm.showAndWait();
-	        if (result.isPresent() && result.get() == ButtonType.OK) {
-	            if (nhanVien_DAO.capNhatNhanVien(nv)) {
-	                Alert success = new Alert(Alert.AlertType.INFORMATION);
-	                success.setTitle("Thành công");
-	                success.setHeaderText(null);
-	                success.setContentText("Cập nhật nhân viên thành công!");
-	                File successFile = new File("image/thanhCong.png");
-	                if (successFile.exists()) {
-	                    Stage stage = (Stage) success.getDialogPane().getScene().getWindow();
-	                    stage.getIcons().add(new Image(successFile.toURI().toString()));
-	                }
-	                success.showAndWait();
-
-	                // Cập nhật lại dòng trong TableView
-	                NhanVien selected = tbDanhSachNhanVien.getSelectionModel().getSelectedItem();
-	                if (selected != null) {
-	                    int index = tbDanhSachNhanVien.getSelectionModel().getSelectedIndex();
-	                    selected.setTenNhanVien(nv.getTenNhanVien());
-	                    selected.setGioiTinh(nv.getGioiTinh());
-	                    selected.setNgaySinh(nv.getNgaySinh());
-	                    selected.setSoDienThoai(nv.getSoDienThoai());
-	                    selected.setChucVu(nv.getChucVu());
-	                    tbDanhSachNhanVien.getItems().set(index, selected);
-	                }
-
-	            } else {
-	                Alert error = new Alert(Alert.AlertType.ERROR);
-	                error.setTitle("Lỗi");
-	                error.setHeaderText(null);
-	                error.setContentText("Cập nhật nhân viên thất bại!");
-	                File errorFile = new File("image/canhBao.png");
-	                if (errorFile.exists()) {
-	                    Stage stage = (Stage) error.getDialogPane().getScene().getWindow();
-	                    stage.getIcons().add(new Image(errorFile.toURI().toString()));
-	                }
-	                error.showAndWait();
-	            }
-	        }
 	    }
+
+	    // Kiểm tra dữ liệu hợp lệ
+	    if (!kiemTraTxt()) {
+	        return;
+	    }
+
+	    NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+		
+		// Lấy thông tin từ form
+		String maNhanVien = txtMaNV.getText();
+		String tenNhanVien = txtTenNV.getText();
+		LocalDate ngaySinh = datePickerNgaySinh.getValue();
+		String soDienThoai = txtSoDienThoai.getText();
+		String email = txtEmail.getText();
+		String CCCD_HoChieu = txtCCCD.getText();
+		
+		// Xử lý giới tính
+		GioiTinh gioiTinh = cboGioiTinh.getValue();
+		
+		// Xử lý chức vụ
+		ChucVu chucVu = cboChucVu.getValue();
+		
+		// Xử lý trạng thái
+		TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
+		
+		// Xử lý ảnh
+		if (!linkAnh.isEmpty()) {
+		    String decodedPath = URLDecoder.decode(linkAnh.replace("file:/", ""), StandardCharsets.UTF_8);
+		    File sourceFile = new File(decodedPath);
+		    
+		    try {
+		        String fileName = sourceFile.getName();
+		        File destFile = new File("image/" + fileName);
+
+		        Files.copy(
+		            sourceFile.toPath(),
+		            destFile.toPath(),
+		            StandardCopyOption.REPLACE_EXISTING
+		        );
+
+		        linkAnh = "image/" + fileName;
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        showErrorAlert("Không thể sao chép ảnh: " + e.getMessage());
+		        return;
+		    }
+		}
+
+		// Tạo đối tượng nhân viên mới với thông tin cập nhật
+		NhanVien nv = new NhanVien(
+		    maNhanVien, 
+		    tenNhanVien, 
+		    ngaySinh, 
+		    gioiTinh, 
+		    CCCD_HoChieu, 
+		    chucVu, 
+		    trangThai, 
+		    soDienThoai, 
+		    email, 
+		    linkAnh
+		);
+
+		// Gọi DAO để cập nhật
+		if (nhanVien_DAO.capNhatNhanVien(nv)) {
+		    showInformationAlert("Cập nhật nhân viên thành công!");
+		    
+		    // Làm mới bảng danh sách
+		    btnXuatDanhSachClicked();
+		    
+		    // Làm rỗng form
+		    btnLamRongClicked();
+		} else {
+		    showErrorAlert("Cập nhật không thành công!");
+		}
 	}
 
-
-    
-    @FXML
+	@FXML 
+	private Button btnLamRong;
+	
+	@FXML
 	private void btnLamRongClicked() {
-		txtSoDienThoai.setText("");
 		txtMaNV.setText("");
 		txtTenNV.setText("");
-		datePickerNgaySinh.setValue(null);
 		txtCCCD.setText("");
 		txtEmail.setText("");
-		cboGioiTinh.setValue(null);
-		cboChucVu.setValue(null);
-        cboTrangThaiNhanVien.setValue(null);
+		txtSoDienThoai.setText("");
+		datePickerNgaySinh.setValue(null);
+		cboTrangThaiNhanVien.setValue(TrangThaiNhanVien.hoatDong);
+		cboGioiTinh.setValue(GioiTinh.nam);
+		cboChucVu.setValue(ChucVu.banVe);
+		imgNhanVien.setImage(null);
+		cboTrangThaiNhanVien.setEditable(false);
+		cboTrangThaiNhanVien.setDisable(true);
+		txtTenNV.requestFocus();
+		linkAnh = "";
 	}
     
-    // Xóa form nhập liệu
-    private void xoaForm() {
-        txtMaNV.clear();
-        txtTenNV.clear();
-        datePickerNgaySinh.setValue(null);
-        cboGioiTinh.setValue(null);
-        txtCCCD.clear();
-        cboChucVu.setValue(null);
-        cboTrangThaiNhanVien.setValue(null);
-    }
 }

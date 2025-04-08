@@ -33,7 +33,7 @@ CREATE TABLE NhanVien (
     maNhanVien VARCHAR(20) PRIMARY KEY,
     tenNhanVien NVARCHAR(100) NOT NULL,
     ngaySinh DATE NOT NULL,
-	soDienThoai VARCHAR(15) NOT NULL,
+    soDienThoai VARCHAR(15) NOT NULL,
     email VARCHAR(100) NOT NULL,
     gioiTinh VARCHAR(5) CHECK (gioiTinh IN ('nam', 'nu')),
     CCCD_HoChieu VARCHAR(20) UNIQUE NOT NULL,
@@ -42,25 +42,21 @@ CREATE TABLE NhanVien (
 );
 go
 
-INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, soDienThoai, email, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien)
-VALUES
-('2024NV000001', N'Nguyễn Văn An', '1988-05-15', '0912345678', 'nvan@gmail.com', 'nam', '001188123456', 'quanLy', 'hoatDong'),
-('2024NV000002', N'Trần Thị Bình', '1990-08-22', '0987654321', 'ttbinh@gmail.com', 'nu', '002190654321', 'quanLy', 'hoatDong'),
-('2024NV000003', N'Lê Văn Cường', '1995-03-10', '0978123456', 'lcuong@gmail.com', 'nam', '003095987654', 'banVe', 'hoatDong'),
-('2024NV000004', N'Phạm Minh Đức', '1992-11-25', '0965432187', 'pmduc@gmail.com', 'nam', '004092456789', 'banVe', 'hoatDong'),
-('2024NV000005', N'Hoàng Thị Em', '1993-07-18', '0932165498', 'htem@gmail.com', 'nu', '005093789123', 'banVe', 'voHieuHoa'),
-('2024NV000006', N'Vũ Thị Phương', '1994-09-30', '0945678123', 'vtphuong@gmail.com', 'nu', '006194321654', 'banVe', 'hoatDong'),
-('2024NV000007', N'Đặng Thị Quỳnh', '1996-02-14', '0956781234', 'dtquynh@gmail.com', 'nu', '007196987321', 'banVe', 'hoatDong'),
-('2024NV000008', N'Bùi Thị Hương', '1991-12-05', '0923456781', 'bthuong@gmail.com', 'nu', '008191654987', 'banVe', 'hoatDong'),
-('2024NV000009', N'Mai Thị Lan', '1997-04-20', '0918273645', 'mtlan@gmail.com', 'nu', '009197321456', 'banVe', 'voHieuHoa'),
-('2024NV000010', N'Ngô Thị Mai', '1989-06-08', '0909123456', 'ntmai@gmail.com', 'nu', '010189789654', 'banVe', 'hoatDong');
+INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, soDienThoai, email, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien, linkAnh)
+ VALUES
+ ('2022NV000001', N'Phạm Trương Hoàng Phương', '2004-01-17', '0947991755', 'hphuong17@gmail.com', 'nam', '083204007207', 'quanLy', 'hoatDong','image/phuong.jpg'),
+ ('2022NV000002', N'Phạm Viết Quân', '2004-09-29', '0987654321', 'pvquan29@gmail.com', 'nam', '002190654321', 'quanLy', 'hoatDong','image/quan.jpg'),
+ ('2022NV000003', N'Bùi Tấn Quang Trung', '2004-08-10', '0978123456', 'trinhbuc08@gmail.com', 'nam', '003095987654', 'quanLy', 'hoatDong','image/trung.jpg'),
+ ('2022NV000004', N'Trần Minh Tuấn', '2004-09-18', '0965432187', 'tuantran18@gmail.com', 'nam', '004092456789', 'quanLy', 'hoatDong','image/tuan.jpg'),
+ ('2023NV000001',N'Nguyễn Thị Trinh','2006-03-24', '0932342234','trinhwork24@gmail.com','nu','029323131234','banVe','hoatDong','image/trinh.jpg');
+ go
 
-CREATE TABLE TaiKhoan(
-	tenTaiKhoan VARCHAR(20),
-	matKhau NVARCHAR(100),
-	maNhanVien VARCHAR(20) FOREIGN KEY REFERENCES NhanVien(maNhanVien)
-)
-go
+ CREATE TABLE TaiKhoan(
+ 	tenTaiKhoan VARCHAR(20),
+ 	matKhau NVARCHAR(100),
+ 	maNhanVien VARCHAR(20) FOREIGN KEY REFERENCES NhanVien(maNhanVien)
+ )
+ go
 
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
