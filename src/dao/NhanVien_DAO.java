@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 import connectDB.ConnectDB;
+import entity.KhachHang;
 import entity.NhanVien;
+import entity.KhachHang.LoaiThanhVien;
+import entity.KhachHang.TrangThaiKhachHang;
 import entity.NhanVien.ChucVu;
 import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;
@@ -32,7 +36,8 @@ public class NhanVien_DAO {
                 nv.setMaNhanVien(rs.getString("maNhanVien"));
                 nv.setTenNhanVien(rs.getString("tenNhanVien"));
                 nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
-                
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
                 // Xử lý enum GioiTinh
                 String gioiTinh = rs.getString("gioiTinh");
                 nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
@@ -70,8 +75,8 @@ public class NhanVien_DAO {
         return dsNhanVien;
     }
     
-    // Tìm nhân viên theo mã
-    public List<NhanVien> timNhanVienTheoMa(String maNhanVien) {
+    ///Tim theo so dien thoai
+    public List<NhanVien> timNhanVienTheoSoDienThoai(String soDienThoai) {
         List<NhanVien> dsNhanVien = new ArrayList<>();
         Connection con = null;
         PreparedStatement stmt = null;
@@ -79,13 +84,39 @@ public class NhanVien_DAO {
         
         try {
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM NhanVien WHERE maNhanVien LIKE ?";
+            String sql = "SELECT * FROM NhanVien WHERE soDienThoai LIKE ?";
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + maNhanVien + "%");
+            stmt.setString(1, "%" + soDienThoai + "%"); // Tìm kiếm gần đúng
             rs = stmt.executeQuery();
             
             while (rs.next()) {
-                NhanVien nv = createNhanVienFromResultSet(rs);
+            	NhanVien nv = new NhanVien();
+                nv.setMaNhanVien(rs.getString("maNhanVien"));
+                nv.setTenNhanVien(rs.getString("tenNhanVien"));
+                nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
+                // Xử lý enum GioiTinh
+                String gioiTinh = rs.getString("gioiTinh");
+                nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
+                
+                nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
+                
+                // Xử lý enum ChucVu
+                String chucVu = rs.getString("chucVu");
+                if ("quanLy".equals(chucVu)) {
+                    nv.setChucVu(ChucVu.quanLy);
+                } else {
+                    nv.setChucVu(ChucVu.banVe);
+                }
+                
+                String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
+                if ("hoatDong".equals(trangThaiNhanVien)) {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
+                } else {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
+                }
+                
                 dsNhanVien.add(nv);
             }
         } catch (SQLException e) {
@@ -94,15 +125,16 @@ public class NhanVien_DAO {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
+                if (con != null) con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         
         return dsNhanVien;
-    }
+    } 
     
-    // Tìm nhân viên theo tên
+    //Tim khach hang theo ten
     public List<NhanVien> timNhanVienTheoTen(String tenNhanVien) {
         List<NhanVien> dsNhanVien = new ArrayList<>();
         Connection con = null;
@@ -113,11 +145,37 @@ public class NhanVien_DAO {
             con = ConnectDB.getConnection();
             String sql = "SELECT * FROM NhanVien WHERE tenNhanVien LIKE ?";
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + tenNhanVien + "%");
+            stmt.setString(1, "%" + tenNhanVien + "%"); // Tìm kiếm gần đúng
             rs = stmt.executeQuery();
             
             while (rs.next()) {
-                NhanVien nv = createNhanVienFromResultSet(rs);
+            	NhanVien nv = new NhanVien();
+                nv.setMaNhanVien(rs.getString("maNhanVien"));
+                nv.setTenNhanVien(rs.getString("tenNhanVien"));
+                nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
+                // Xử lý enum GioiTinh
+                String gioiTinh = rs.getString("gioiTinh");
+                nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
+                
+                nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
+                
+                // Xử lý enum ChucVu
+                String chucVu = rs.getString("chucVu");
+                if ("quanLy".equals(chucVu)) {
+                    nv.setChucVu(ChucVu.quanLy);
+                } else {
+                    nv.setChucVu(ChucVu.banVe);
+                }
+                
+                String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
+                if ("hoatDong".equals(trangThaiNhanVien)) {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
+                } else {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
+                }
+                
                 dsNhanVien.add(nv);
             }
         } catch (SQLException e) {
@@ -126,6 +184,7 @@ public class NhanVien_DAO {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
+                if (con != null) con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -134,8 +193,8 @@ public class NhanVien_DAO {
         return dsNhanVien;
     }
     
-    // Tìm nhân viên theo cả mã và tên
-    public List<NhanVien> timNhanVienTheoMaVaTen(String maNhanVien, String tenNhanVien) {
+    
+    public List<NhanVien> timNhanVienTheoTenVaSoDienThoai(String tenNhanVien, String soDienThoai) {
         List<NhanVien> dsNhanVien = new ArrayList<>();
         Connection con = null;
         PreparedStatement stmt = null;
@@ -143,14 +202,40 @@ public class NhanVien_DAO {
         
         try {
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM NhanVien WHERE maNhanVien LIKE ? AND tenNhanVien LIKE ?";
+            String sql = "SELECT * FROM NhanVien WHERE tenNhanVien LIKE ? AND soDienThoai LIKE ?";
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + maNhanVien + "%");
-            stmt.setString(2, "%" + tenNhanVien + "%");
+            stmt.setString(1, "%" + tenNhanVien + "%");
+            stmt.setString(2, "%" + soDienThoai + "%");
             rs = stmt.executeQuery();
             
             while (rs.next()) {
-                NhanVien nv = createNhanVienFromResultSet(rs);
+            	NhanVien nv = new NhanVien();
+                nv.setMaNhanVien(rs.getString("maNhanVien"));
+                nv.setTenNhanVien(rs.getString("tenNhanVien"));
+                nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
+                // Xử lý enum GioiTinh
+                String gioiTinh = rs.getString("gioiTinh");
+                nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
+                
+                nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
+                
+                // Xử lý enum ChucVu
+                String chucVu = rs.getString("chucVu");
+                if ("quanLy".equals(chucVu)) {
+                    nv.setChucVu(ChucVu.quanLy);
+                } else {
+                    nv.setChucVu(ChucVu.banVe);
+                }
+                
+                String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
+                if ("hoatDong".equals(trangThaiNhanVien)) {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
+                } else {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
+                } 
+                
                 dsNhanVien.add(nv);
             }
         } catch (SQLException e) {
@@ -159,6 +244,67 @@ public class NhanVien_DAO {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return dsNhanVien;
+    }
+    
+    
+  //Tim khach hang theo ten
+    public List<NhanVien> timNhanVienTheoCCCD_HoChieu(String CCCD_HoChieu) {
+        List<NhanVien> dsNhanVien = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien WHERE CCCD_HoChieu LIKE ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + CCCD_HoChieu + "%"); // Tìm kiếm gần đúng
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+            	NhanVien nv = new NhanVien();
+                nv.setMaNhanVien(rs.getString("maNhanVien"));
+                nv.setTenNhanVien(rs.getString("tenNhanVien"));
+                nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
+                // Xử lý enum GioiTinh
+                String gioiTinh = rs.getString("gioiTinh");
+                nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
+                
+                nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
+                
+                // Xử lý enum ChucVu
+                String chucVu = rs.getString("chucVu");
+                if ("quanLy".equals(chucVu)) {
+                    nv.setChucVu(ChucVu.quanLy);
+                } else {
+                    nv.setChucVu(ChucVu.banVe);
+                }
+                
+                String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
+                if ("hoatDong".equals(trangThaiNhanVien)) {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
+                } else {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
+                } 
+                
+                dsNhanVien.add(nv);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -168,70 +314,105 @@ public class NhanVien_DAO {
     }
     
     // Thêm nhân viên mới
-    public boolean themNhanVien(NhanVien nhanVien) throws SQLException {
-        String sql = "INSERT INTO NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien) "
-                   + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public boolean themNhanVien(NhanVien nv) throws SQLException {
+        String sql = "INSERT INTO NhanVien(maNhanVien, tenNhanVien, ngaySinh,soDienThoai, email, gioiTinh, CCCD_HoChieu, chucVu, trangThaiNhanVien) "
+                   + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection con = ConnectDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             
-            stmt.setString(1, nhanVien.getMaNhanVien());
-            stmt.setString(2, nhanVien.getTenNhanVien());
-            stmt.setDate(3, java.sql.Date.valueOf(nhanVien.getNgaySinh()));
-            stmt.setString(4, nhanVien.getGioiTinh().toString());
-            stmt.setString(5, nhanVien.getCccd_HoChieu());
-            stmt.setString(6, nhanVien.getChucVu().toString());
-            stmt.setString(7, nhanVien.getTrangThaiNhanVien().toString());
+            stmt.setString(1, nv.getMaNhanVien());
+            stmt.setString(2, nv.getTenNhanVien());
+            stmt.setDate(3, java.sql.Date.valueOf(nv.getNgaySinh()));
+            stmt.setString(4, nv.getSoDienThoai());
+            stmt.setString(5, nv.getEmail());
+            String gioiTinh;
+            if (nv.getGioiTinh() == NhanVien.GioiTinh.nam) {
+                gioiTinh = "Nam";
+            } else if (nv.getGioiTinh() == NhanVien.GioiTinh.nu) {
+                gioiTinh = "Nữ";
+            } else {
+                throw new IllegalArgumentException("Chức vụ không hợp lệ");
+            }
+            stmt.setString(6, gioiTinh);
+            
+            stmt.setString(7, nv.getCccd_HoChieu());
+         // Ánh xạ LoaiThanhVien sang giá trị cơ sở dữ liệu
+            String chucVu;
+            if (nv.getChucVu() == NhanVien.ChucVu.quanLy) {
+                chucVu = "Quản lý";
+            } else if (nv.getChucVu() == NhanVien.ChucVu.banVe) {
+                chucVu = "Bán vé";
+            } else {
+                throw new IllegalArgumentException("Chức vụ không hợp lệ");
+            }
+            stmt.setString(8, chucVu);
+
+            // Ánh xạ TrangThaiKhachHang sang giá trị cơ sở dữ liệu
+            String trangThaiNhanVien;
+            if (nv.getTrangThaiNhanVien() == NhanVien.TrangThaiNhanVien.hoatDong) {
+            	trangThaiNhanVien = "hoatDong";
+            } else if (nv.getTrangThaiNhanVien() == NhanVien.TrangThaiNhanVien.voHieuHoa) {
+            	trangThaiNhanVien = "voHieuHoa";
+            } else {
+                throw new IllegalArgumentException("Trạng thái nhân viên không hợp lệ");
+            }
+            stmt.setString(9, trangThaiNhanVien);
             
             return stmt.executeUpdate() > 0;
         }
     }
-    
-    public boolean tonTaiNhanVien(String maNV, String cccd) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM NhanVien WHERE maNhanVien = ? OR CCCD_HoChieu = ?";
-        
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            
-            stmt.setString(1, maNV);
-            stmt.setString(2, cccd);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
-            }
-        }
-    }
-    
-    
-
-    
     // Cập nhật thông tin nhân viên
-    public boolean capNhatNhanVien(NhanVien nhanVien) {
+    public boolean capNhatNhanVien(NhanVien nv) {
         Connection con = null;
         PreparedStatement stmt = null;
         boolean thanhCong = false;
 
         try {
             con = ConnectDB.getConnection();
-            String sql = "UPDATE NhanVien SET tenNhanVien = ?, ngaySinh = ?, gioiTinh = ?, "
+            String sql = "UPDATE NhanVien SET tenNhanVien = ?, ngaySinh = ?, soDienThoai = ?, email = ?, gioiTinh = ?, "
                        + "CCCD_HoChieu = ?, chucVu = ? ,trangThaiNhanVien = ? WHERE maNhanVien = ?";
 
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, nhanVien.getTenNhanVien());
-            stmt.setDate(2, java.sql.Date.valueOf(nhanVien.getNgaySinh()));
+            stmt.setString(1, nv.getTenNhanVien());
+            stmt.setDate(2, java.sql.Date.valueOf(nv.getNgaySinh()));
             
-            // Giới tính
-            stmt.setString(3, nhanVien.getGioiTinh().toString().toLowerCase()); // "nam" hoặc "nu"
+            stmt.setString(3, nv.getSoDienThoai());
+            stmt.setString(4, nv.getEmail());
+            String gioiTinh;
+            if (nv.getGioiTinh() == NhanVien.GioiTinh.nam) {
+                gioiTinh = "Nam";
+            } else if (nv.getGioiTinh() == NhanVien.GioiTinh.nu) {
+                gioiTinh = "Nữ";
+            } else {
+                throw new IllegalArgumentException("Chức vụ không hợp lệ");
+            }
+            stmt.setString(5, gioiTinh);
             
-            stmt.setString(4, nhanVien.getCccd_HoChieu());
+            stmt.setString(6, nv.getCccd_HoChieu());
+         // Ánh xạ LoaiThanhVien sang giá trị cơ sở dữ liệu
+            String chucVu;
+            if (nv.getChucVu() == NhanVien.ChucVu.quanLy) {
+                chucVu = "Quản lý";
+            } else if (nv.getChucVu() == NhanVien.ChucVu.banVe) {
+                chucVu = "Bán vé";
+            } else {
+                throw new IllegalArgumentException("Chức vụ không hợp lệ");
+            }
+            stmt.setString(7, chucVu);
+
+            // Ánh xạ TrangThaiKhachHang sang giá trị cơ sở dữ liệu
+            String trangThaiNhanVien;
+            if (nv.getTrangThaiNhanVien() == NhanVien.TrangThaiNhanVien.hoatDong) {
+            	trangThaiNhanVien = "hoatDong";
+            } else if (nv.getTrangThaiNhanVien() == NhanVien.TrangThaiNhanVien.voHieuHoa) {
+            	trangThaiNhanVien = "voHieuHoa";
+            } else {
+                throw new IllegalArgumentException("Trạng thái nhân viên không hợp lệ");
+            }
+            stmt.setString(8, trangThaiNhanVien);
             
-            // Chức vụ
-            stmt.setString(5, nhanVien.getChucVu().toString().toLowerCase()); // "quanly" hoặc "banve"
-            
-            // Trạng thái nhân viên
-            stmt.setString(6, nhanVien.getTrangThaiNhanVien().toString().toLowerCase()); // "hoatdong" hoặc "vohieu"
-            
-            stmt.setString(7, nhanVien.getMaNhanVien());
+            stmt.setString(9, nv.getMaNhanVien());
 
             int rowsAffected = stmt.executeUpdate();
             thanhCong = rowsAffected > 0;
@@ -250,63 +431,80 @@ public class NhanVien_DAO {
     }
 
     
-    // Xóa nhân viên
-    public boolean xoaNhanVien(String maNhanVien) {
+    public boolean kiemTraCCCD(String cccd) {
         Connection con = null;
         PreparedStatement stmt = null;
-        boolean thanhCong = false;
+        ResultSet rs = null;
         
         try {
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM NhanVien WHERE maNhanVien = ?";
-            
+            String sql = "SELECT COUNT(*) FROM NhanVien WHERE CCCD_HoChieu = ?";
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, maNhanVien);
+            stmt.setString(1, cccd);
+            rs = stmt.executeQuery();
             
-            int rowsAffected = stmt.executeUpdate();
-            thanhCong = rowsAffected > 0;
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    
+    public String layMaNhanVienCuoiCung() {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String maCuoiCung = null;
+
+        try {
+            con = ConnectDB.getConnection();
+            // Sửa thành TOP 1 cho SQL Server
+            String sql = "SELECT TOP 1 maNhanVien FROM NhanVien ORDER BY maNhanVien DESC";
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                maCuoiCung = rs.getString("maNhanVien");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
                 if (con != null) con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        
-        return thanhCong;
+
+        return maCuoiCung;
     }
     
-    // Helper method để tạo đối tượng NhanVien từ ResultSet
-    private NhanVien createNhanVienFromResultSet(ResultSet rs) throws SQLException {
-        NhanVien nv = new NhanVien();
-        nv.setMaNhanVien(rs.getString("maNhanVien"));
-        nv.setTenNhanVien(rs.getString("tenNhanVien"));
-        nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
-        
-        // Xử lý enum GioiTinh
-        String gioiTinh = rs.getString("gioiTinh");
-        nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
-        
-        nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
-        
-        // Xử lý enum ChucVu
-        String chucVu = rs.getString("chucVu");
-        if ("quanLy".equals(chucVu)) {
-            nv.setChucVu(ChucVu.quanLy);
-        } else {
-            nv.setChucVu(ChucVu.banVe);
-        }
-        
-        String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
-        if ("hoatDong".equals(trangThaiNhanVien)) {
-            nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
-        } else {
-            nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
-        }
-        
-        return nv;
-    }
+    public String taoMaNhanVienMoi() {
+		String maCuoiCung = layMaNhanVienCuoiCung();
+		int namHienTai = Year.now().getValue();
+		if(maCuoiCung.isEmpty()) {
+			return namHienTai+"NV"+"000001";
+		}else {
+			int namTrongMa = Integer.parseInt(maCuoiCung.substring(0, 4));
+			if(namTrongMa!=namHienTai) {
+				return namHienTai+"NV"+"000001";
+			}else {
+				int soCuoi = Integer.parseInt(maCuoiCung.substring(6));
+				soCuoi++;
+				String soCuoiFormat = String.format("%06d", soCuoi);
+				return namHienTai+"NV"+soCuoiFormat;
+			}
+		}
+	}
 }

@@ -89,3 +89,12 @@
 	-fx-background-color: #FFD700; /* Màu nền khi hover */
     -fx-cursor: hand;  
 }
+
+.btn-lamRong{
+	-fx-background-color:#FF8C00;
+}
+
+.btn-lamRong:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
