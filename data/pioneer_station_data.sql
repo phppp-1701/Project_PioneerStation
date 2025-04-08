@@ -10,7 +10,7 @@ CREATE TABLE KhachHang (
     soDienThoai VARCHAR(15) NOT NULL,
     email NVARCHAR(100),
     loaiThanhVien VARCHAR(10) CHECK (loaiThanhVien IN ('thanThiet', 'vip')),
-    trangThaiKhachHang VARCHAR(20) CHECK (trangThaiKhachHang IN ('hoatDong','voHieuHoa')) 
+    trangThaiKhachHang VARCHAR(20) CHECK (trangThaiKhachHang IN ('hoatDong','voHieuHoa'))
 );
 go
 
@@ -38,7 +38,9 @@ CREATE TABLE NhanVien (
     gioiTinh VARCHAR(5) CHECK (gioiTinh IN ('nam', 'nu')),
     CCCD_HoChieu VARCHAR(20) UNIQUE NOT NULL,
     chucVu VARCHAR(20) CHECK (chucVu IN ('quanLy', 'banVe')),
-    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieuHoa'))
+    trangThaiNhanVien VARCHAR(20) CHECK (trangThaiNhanVien IN ('hoatDong','voHieuHoa')),
+    linkAnh VARCHAR(255)
+    
 );
 go
 
