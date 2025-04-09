@@ -760,6 +760,8 @@ public class QuanLyNhanVien_GUI_Controller {
 	private void btnThemTaiKhoanClicked() {
 		if(txtMaNV.getText().toString().trim().equals("")) {
 			showErrorAlert("Chọn một nhân viên trước khi thêm tài khoản!", "image/canhBao.png");
+		}else {
+			
 		}
 	}
 }

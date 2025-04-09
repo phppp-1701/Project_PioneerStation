@@ -112,4 +112,97 @@ public class TaiKhoan_DAO {
         
         return taiKhoan;
     }
+    
+    public boolean kiemTraTonTaiTaiKhoan(String tenTaiKhoan) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM TaiKhoan WHERE tenTaiKhoan = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTaiKhoan);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean kiemTraMatKhau(String tenTaiKhoan, String matKhauCanKiemTra) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT matKhau FROM TaiKhoan WHERE tenTaiKhoan = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTaiKhoan);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                String matKhauTrongDB = rs.getString("matKhau");
+                return matKhauTrongDB.equals(matKhauCanKiemTra);
+            }
+            return false; // Tài khoản không tồn tại
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public String timMaNhanVienTheoTenTaiKhoan(String tenTaiKhoan) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String maNhanVien = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT maNhanVien FROM TaiKhoan WHERE tenTaiKhoan = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTaiKhoan);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                maNhanVien = rs.getString("maNhanVien");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return maNhanVien;
+    }
 }

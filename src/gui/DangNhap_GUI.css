@@ -29,7 +29,7 @@
 }
 
 /* Nút đăng nhập */
-#btnDN {
+.login-button {
     -fx-background-color: #2E7D32;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -37,8 +37,8 @@
     -fx-border-radius: 5px;
 }
 
-#btnDN:hover {
-    -fx-background-color: #1B5E20;
+.login-button:hover {
+    -fx-background-color: #FFD700;
     -fx-cursor: hand;
 }
 
