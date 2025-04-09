@@ -1,7 +1,6 @@
 package dao;
 
 import connectDB.ConnectDB;
-import entity.NhanVien;
 import entity.TaiKhoan;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +24,7 @@ public class TaiKhoan_DAO {
             
             stmt.setString(1, taiKhoan.getTenTaiKhoan());
             stmt.setString(2, taiKhoan.getMatKhau());
-            stmt.setString(3, taiKhoan.getMaNhanVien().getMaNhanVien());
+            stmt.setString(3, taiKhoan.getMaNhanVien());
             
             int n = stmt.executeUpdate();
             return n > 0;
@@ -82,7 +81,6 @@ public class TaiKhoan_DAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         TaiKhoan taiKhoan = null;
-        NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
         
         try {
             con = ConnectDB.getConnection();
@@ -95,7 +93,7 @@ public class TaiKhoan_DAO {
             if (rs.next()) {
                 String tenTaiKhoan = rs.getString("tenTaiKhoan");
                 String matKhau = rs.getString("matKhau");
-                NhanVien nhanVien = nhanVienDAO.timNhanVienTheoMa(maNhanVien);
+                String nhanVien = rs.getString("maNhanVien");
                 
                 taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau, nhanVien);
             }

@@ -3,6 +3,7 @@ package gui;
 import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
+import entity.TaiKhoan;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -69,43 +70,72 @@ public class ThemTaiKhoan_GUI_Controller {
     
     @FXML
     private void btnThemTaiKhoanClicked() {
-    	TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
-        // Kiểm tra tên tài khoản không được rỗng
+        // Kiểm tra tên tài khoản
         if (txtTenTaiKhoan.getText().isEmpty()) {
-            showAlert(AlertType.WARNING, "Lỗi", "Tên tài khoản không được để trống!");
+            showAlert(AlertType.ERROR, "Lỗi", "Tên tài khoản không được để trống!");
             txtTenTaiKhoan.requestFocus();
             return;
-        }else {
-        	if(taiKhoan_DAO.kiemTraTonTaiTaiKhoan(txtTenTaiKhoan.getText().toString())) {
-        		showAlert(AlertType.WARNING, "Lỗi", "Tên tài khoản đã tồn tại, vui lòng nhập tên khác!");
-        		txtTenTaiKhoan.requestFocus();
-        		txtTenNhanVien.selectAll();
-        	}else {
-                String tenTaiKhoan = txtTenTaiKhoan.getText();
-                if (tenTaiKhoan.length() < 6 || !tenTaiKhoan.matches("[a-zA-Z0-9]+")) {
-                    showAlert(AlertType.WARNING, "Lỗi", "Tên tài khoản phải có ít nhất 6 ký tự (chỉ gồm chữ và số)!");
-                    txtTenTaiKhoan.requestFocus();
-                    txtTenTaiKhoan.selectAll();
-                    return;
-                }
-        	}
         }
         
-        // Kiểm tra mật khẩu không được rỗng
-        if (txtPassword.getText().isEmpty()) {
-            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu không được để trống!");
+        // Kiểm tra tài khoản đã tồn tại chưa
+        TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
+        if (taiKhoan_DAO.kiemTraTonTaiTaiKhoan(txtTenTaiKhoan.getText())) {
+            showAlert(AlertType.WARNING, "Lỗi", "Tên tài khoản đã tồn tại, vui lòng nhập tên khác!");
+            txtTenTaiKhoan.requestFocus();
+            txtTenTaiKhoan.selectAll();
             return;
         }
         
-        //Kiểm tra có nhập lại mật khẩu chưa
-        if(txtNhapLaiPassword.getText().isEmpty()) {
-        	showAlert(AlertType.WARNING, "Lỗi", "Chưa nhập lại mật khẩu!");
-        	return;
+        // Kiểm tra tên tài khoản 6 ký tự chữ/số
+        String tenTaiKhoan = txtTenTaiKhoan.getText();
+        if (tenTaiKhoan.length() <= 6 || !tenTaiKhoan.matches("[a-zA-Z0-9]+")) {
+            showAlert(AlertType.ERROR, "Lỗi", "Tên tài khoản phải có đúng 6 ký tự (chỉ gồm chữ và số)!");
+            txtTenTaiKhoan.requestFocus();
+            txtTenTaiKhoan.selectAll();
+            return;
+        }
+        
+        // Kiểm tra mật khẩu
+        if (txtPassword.getText().isEmpty()) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu không được để trống!");
+            txtPassword.requestFocus();
+            return;
+        }
+        
+        if (txtPassword.getText().length() < 8) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu phải có ít nhất 8 ký tự!");
+            txtPassword.requestFocus();
+            txtPassword.selectAll();
+            return;
+        }
+        
+        // Kiểm tra nhập lại mật khẩu
+        if (txtNhapLaiPassword.getText().isEmpty()) {
+            showAlert(AlertType.WARNING, "Lỗi", "Chưa nhập lại mật khẩu!");
+            txtNhapLaiPassword.requestFocus();
+            return;
+        }
+        
+        if (!txtPassword.getText().equals(txtNhapLaiPassword.getText())) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu nhập lại không khớp!");
+            txtNhapLaiPassword.requestFocus();
+            txtNhapLaiPassword.selectAll();
+            return;
         }
         
         // Nếu tất cả điều kiện hợp lệ, thực hiện thêm tài khoản
-        // (Thêm code xử lý thêm tài khoản vào database ở đây)
-        showAlert(AlertType.INFORMATION, "Thành công", "Thêm tài khoản thành công!");
+        TaiKhoan taiKhoanMoi = new TaiKhoan();
+        taiKhoanMoi.setTenTaiKhoan(tenTaiKhoan);
+        taiKhoanMoi.setMatKhau(txtPassword.getText());
+        taiKhoanMoi.setMaNhanVien(maNhanVien);
+        
+        if (taiKhoan_DAO.themTaiKhoan(taiKhoanMoi)) {
+            showAlert(AlertType.INFORMATION, "Thành công", "Thêm tài khoản thành công!");
+            Stage stage = (Stage) btnThemTaiKhoan.getScene().getWindow();
+            stage.close();
+        } else {
+            showAlert(AlertType.ERROR, "Lỗi", "Thêm tài khoản thất bại!");
+        }
     }
     
     // Hiển thị thông báo
