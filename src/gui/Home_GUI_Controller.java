@@ -169,6 +169,18 @@ public class Home_GUI_Controller {
                 e.printStackTrace();
             }
         });
+        
+        // Handler cho trang chủ
+        lblTrangChu.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Home");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new Home_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     }
 
     // Phương thức để cập nhật thông tin nhân viên sau khi setMaNhanVien

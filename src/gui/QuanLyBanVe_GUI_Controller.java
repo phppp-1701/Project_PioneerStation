@@ -6,16 +6,109 @@ import dao.NhanVien_DAO;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class QuanLyBanVe_GUI_Controller {
     private String maNhanVien;
 
     @FXML
+    private Label lblQuanLyVe;
+    
+    @FXML
+    private Label lblTrangChu;
+    
+    @FXML
+    private Label lblQuanLyHoaDon;
+    
+    @FXML
+    private Label lblQuanLyKhachHang;
+    
+    @FXML
+    private Label lblQuanLyNhanVien;
+    
+    @FXML
+    private Label lblThongKe;
+    
+    @FXML
     public void initialize() {
-        // Khởi tạo giao diện, có thể sử dụng maNhanVien nếu cần
+    	// Thêm vào phương thức initialize()
+        lblQuanLyVe.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý vé");
+            try {
+                // Tạo Stage mới cho QuanLyVe_GUI
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyVe_GUI(currentStage, maNhanVien); // Truyền maNhanVien nếu cần
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở QuanLyVe_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+     // Thêm vào phương thức initialize() trong Home_GUI_Controller.java
+        lblQuanLyHoaDon.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý hóa đơn");
+            try {
+                // Tạo Stage mới cho QuanLyHoaDon_GUI
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyHoaDon_GUI(currentStage, maNhanVien); // Truyền maNhanVien nếu cần
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở QuanLyHoaDon_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+     // Handler cho Quản lý khách hàng
+        lblQuanLyKhachHang.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý khách hàng");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyKhachHang_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở QuanLyKhachHang_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+     // Handler cho Quản lý nhân viên
+        lblQuanLyNhanVien.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý nhân viên");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyNhanVien_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở QuanLyNhanVien_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+        
+        // Handler cho thống kê
+        lblThongKe.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Thống kê");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new ThongKe_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở ThongKe_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+        // Handler cho thống kê
+        lblTrangChu.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Home");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new Home_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     	
     }
 

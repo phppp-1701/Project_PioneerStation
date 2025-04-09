@@ -27,7 +27,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
+      <AnchorPane id="pnmenu" layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
          <children>
             <Label id="lblQuanLyBanVe" fx:id="lblQuanLyBanVe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="70.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý bán vé         " textFill="WHITE">
                <font>
@@ -141,6 +141,7 @@
             </ImageView>
          </children>
       </AnchorPane>
+     
       <AnchorPane layoutX="246.0" layoutY="28.0" prefHeight="86.0" prefWidth="1044.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="107.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-nen" width="1044.0" />
