@@ -10,36 +10,33 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class QuanLyVe_GUI_Controller {
-    private String maNhanVien;
-
+public class ThongKe_GUI_Controller {
+	private String maNhanVien;
     @FXML
-    public void initialize() {
-        // Khởi tạo giao diện, có thể sử dụng maNhanVien nếu cần
-    }
-
-    public String getMaNhanVien() {
-        return maNhanVien;
-    }
-
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
-        updateNhanVienInfo(); // Cập nhật thông tin sau khi gán
-    }
-    
-    @FXML 
     private Label lblMaNhanVien;
-    
     @FXML
     private Label lblTenNhanVien;
-    
     @FXML
     private Label lblChucVu;
-    
-    @FXML 
+    @FXML
     private ImageView imgAnhNhanVien;
     
-    // Phương thức để cập nhật thông tin nhân viên sau khi setMaNhanVien
+    
+    
+    public String getMaNhanVien() {
+		return maNhanVien;
+	}
+
+
+
+	public void setMaNhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
+		updateNhanVienInfo();
+	}
+
+
+
+	// Phương thức để cập nhật thông tin nhân viên sau khi setMaNhanVien
     public void updateNhanVienInfo() {
         if (maNhanVien != null && !maNhanVien.isEmpty()) {
             NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();

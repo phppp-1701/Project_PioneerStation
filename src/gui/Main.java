@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         primaryStage = stage; // Lưu trữ stage
-        new DangNhap_GUI(primaryStage);
+        new Home_GUI(stage, "2022NV000001");
         primaryStage.show();
     }
 

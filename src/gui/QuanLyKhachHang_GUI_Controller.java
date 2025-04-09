@@ -1,17 +1,18 @@
 package gui;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dao.KhachHang_DAO;
+import dao.NhanVien_DAO;
 import entity.KhachHang;
+import entity.NhanVien;
 import entity.KhachHang.LoaiThanhVien;
 import entity.KhachHang.TrangThaiKhachHang;
+import entity.NhanVien.ChucVu;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -20,14 +21,60 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 
 public class QuanLyKhachHang_GUI_Controller {
+	
+	private String maNhanVien;
+	
+	// Added maNhanVien handling from previous pattern
+    public void setMaNhanVien(String maNhanVien) {
+        this.maNhanVien = maNhanVien;
+        updateNhanVienInfo();
+    }
+
+    public String getMaNhanVien() {
+        return maNhanVien;
+    }
+    
+    @FXML
+    private Label lblMaNhanVien;
+    @FXML
+    private Label lblTenNhanVien;
+    @FXML
+    private Label lblChucVu;
+    @FXML
+    private ImageView imgAnhNhanVien;
+    
+    // Phương thức để cập nhật thông tin nhân viên sau khi setMaNhanVien
+    public void updateNhanVienInfo() {
+        if (maNhanVien != null && !maNhanVien.isEmpty()) {
+            NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+            NhanVien nv = nhanVien_DAO.timNhanVienTheoMa(maNhanVien);
+            if (nv != null) {
+                lblMaNhanVien.setText(nv.getMaNhanVien());
+                lblTenNhanVien.setText(nv.getTenNhanVien());
+                if (nv.getChucVu().equals(ChucVu.banVe)) {
+                    lblChucVu.setText("Bán vé");
+                } else {
+                    lblChucVu.setText("Quản lý");
+                }
+                File imageFile = new File(nv.getLinkAnh());
+                Image image = new Image(imageFile.toURI().toString());
+                imgAnhNhanVien.setImage(image);
+            } else {
+                lblMaNhanVien.setText("Mã nhân viên: Không tìm thấy");
+                lblTenNhanVien.setText("Tên nhân viên: Không tìm thấy");
+                lblChucVu.setText("Chức vụ: Không xác định");
+            }
+        }
+    }
 	@FXML
     private Button btnXuatDanhSach;
 	

@@ -205,4 +205,35 @@ public class TaiKhoan_DAO {
         
         return maNhanVien;
     }
+    
+    public boolean kiemTraTonTaiTaiKhoanTheoMaNhanVien(String maNhanVien) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM TaiKhoan WHERE maNhanVien = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maNhanVien);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

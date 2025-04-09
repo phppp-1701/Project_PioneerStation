@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connectDB.ConnectDB;
-import entity.KhachHang;
 import entity.NhanVien;
-import entity.KhachHang.LoaiThanhVien;
-import entity.KhachHang.TrangThaiKhachHang;
 import entity.NhanVien.ChucVu;
 import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;

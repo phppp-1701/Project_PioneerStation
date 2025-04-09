@@ -9,25 +9,22 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dao.KhachHang_DAO;
 import dao.NhanVien_DAO;
-import entity.KhachHang;
+import dao.TaiKhoan_DAO;
 import entity.NhanVien;
-import entity.KhachHang.LoaiThanhVien;
-import entity.KhachHang.TrangThaiKhachHang;
+
 import entity.NhanVien.ChucVu;
 import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -35,16 +32,62 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+
 import javafx.stage.Stage;
 
 public class QuanLyNhanVien_GUI_Controller {
+	
+	private String maNhanVien;
+
+	// Thêm các Label để hiển thị thông tin nhân viên đang đăng nhập
+	@FXML
+	private Label lblMaNhanVien;
+	@FXML
+	private Label lblTenNhanVien;
+	@FXML
+	private Label lblChucVu;
+	@FXML
+	private ImageView imgAnhNhanVien;
+
+	// Phương thức set mã nhân viên
+	public void setMaNhanVien(String maNhanVien) {
+	    this.maNhanVien = maNhanVien;
+	    updateNhanVienInfo();
+	}
+
+	public String getMaNhanVien() {
+	    return maNhanVien;
+	}
+
+	// Phương thức cập nhật thông tin nhân viên
+	public void updateNhanVienInfo() {
+	    if (maNhanVien != null && !maNhanVien.isEmpty()) {
+	        NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+	        NhanVien nv = nhanVien_DAO.timNhanVienTheoMa(maNhanVien);
+	        if (nv != null) {
+	            lblMaNhanVien.setText(nv.getMaNhanVien());
+	            lblTenNhanVien.setText(nv.getTenNhanVien());
+	            lblChucVu.setText(nv.getChucVu() == ChucVu.banVe ? "Bán vé" : "Quản lý");
+	            
+	            File imageFile = new File(nv.getLinkAnh());
+	            Image image = new Image(imageFile.toURI().toString());
+	            imgAnhNhanVien.setImage(image);
+	        } else {
+	            lblMaNhanVien.setText("Mã nhân viên: Không tìm thấy");
+	            lblTenNhanVien.setText("Tên nhân viên: Không tìm thấy");
+	            lblChucVu.setText("Chức vụ: Không xác định");
+	        }
+	    }
+	}
+	
     @FXML
     private Button btnXuatDanhSach;
     
@@ -316,7 +359,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	private void btnThemNhanVienClicked() throws SQLException {
 		NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
 		if(!txtMaNV.getText().toString().isEmpty()) {
-			showErrorAlert("Hãy nhấn làm rỗng nếu muốn thêm nhân viên mới!","image/canhBao.png");
+			showWarningAlert("Hãy nhấn làm rỗng nếu muốn thêm nhân viên mới!","image/canhBao.png");
 			return;
 		}
 		if(nhanVien_DAO.kiemTraCCCD(txtCCCD.getText().toString())) {
@@ -514,35 +557,35 @@ public class QuanLyNhanVien_GUI_Controller {
 		LocalDate ngayHomNay = LocalDate.now();
 
 		if(tenNhanVien.trim().equals("")) {
-			showErrorAlert("Tên nhân viên không được rỗng!","image/canhBao.png");
+			showWarningAlert("Tên nhân viên không được rỗng!","image/canhBao.png");
 			txtTenNV.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexTen);
 			Matcher mc = pt.matcher(tenNhanVien);
 			if(!mc.matches()) {
-				showErrorAlert("Tên nhân viên phải có 2 từ trở lên, viết hoa chữ cái đầu!","image/canhBao.png");
+				showWarningAlert("Tên nhân viên phải có 2 từ trở lên, viết hoa chữ cái đầu!","image/canhBao.png");
 				txtTenNV.requestFocus();
 				txtTenNV.selectAll();
 				return false;
 			}
 		}
 		if(CCCD_HoChieu.trim().equals("")) {
-			showErrorAlert("CCCD/Hộ chiếu của nhân viên không được rỗng!","image/canhBao.png");
+			showWarningAlert("CCCD/Hộ chiếu của nhân viên không được rỗng!","image/canhBao.png");
 			txtCCCD.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexCCCD_HoChieu);
 			Matcher mc = pt.matcher(CCCD_HoChieu);
 			if(!mc.matches()) {
-				showErrorAlert("CCCD phải là dãy 12 chữ số trở lên. Hộ chiếu phải bắt đầu bằng 1 kí tự in hoa và dãy 7 chữ số!","image/canhBao.png");
+				showWarningAlert("CCCD phải là dãy 12 chữ số trở lên. Hộ chiếu phải bắt đầu bằng 1 kí tự in hoa và dãy 7 chữ số!","image/canhBao.png");
 				txtCCCD.requestFocus();
 				txtCCCD.selectAll();
 				return false;
 			}
 		}
 		if(ngaySinh == null) {
-			showErrorAlert("Ngày sinh của nhân viên không được rỗng!","image/canhBao.png");
+			showWarningAlert("Ngày sinh của nhân viên không được rỗng!","image/canhBao.png");
 			datePickerNgaySinh.requestFocus();
 			return false;
 		}else {
@@ -566,7 +609,7 @@ public class QuanLyNhanVien_GUI_Controller {
 			// Kiểm tra tuổi cho chức vụ Bán vé (phải lớn hơn 16 tuổi)
 			if (chucVu.equals(ChucVu.banVe)) {
 			    if (period.getYears() < 16 || (period.getYears() == 16 && period.getMonths() == 0 && period.getDays() == 0)) {
-			        showErrorAlert("Nhân viên bán vé phải lớn hơn 16 tuổi!","image/canhBao.png");
+			    	showWarningAlert("Nhân viên bán vé phải lớn hơn 16 tuổi!","image/canhBao.png");
 			        datePickerNgaySinh.requestFocus();
 			        datePickerNgaySinh.getEditor().selectAll();
 			        return false;
@@ -585,7 +628,7 @@ public class QuanLyNhanVien_GUI_Controller {
 		}
 		
 		if(soDienThoai.trim().equals(email)) {
-			showErrorAlert("Số điện thoại của nhân viên không được rỗng!","image/canhBao.png");
+			showWarningAlert("Số điện thoại của nhân viên không được rỗng!","image/canhBao.png");
 			txtSoDienThoai.requestFocus();
 			return false;
 		}else {
@@ -599,21 +642,21 @@ public class QuanLyNhanVien_GUI_Controller {
 			}
 		}
 		if(email.trim().equals("")) {
-			showErrorAlert("Email của nhân viên không được rỗng!","image/canhBao.png");
+			showWarningAlert("Email của nhân viên không được rỗng!","image/canhBao.png");
 			txtEmail.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexEmail);
 			Matcher mc = pt.matcher(email);
 			if(!mc.matches()) {
-				showErrorAlert("Email sai định dạng!","image/canhBao.png");
+				showWarningAlert("Email sai định dạng!","image/canhBao.png");
 				txtEmail.requestFocus();
 				txtEmail.selectAll();
 				return false;
 			}
 		}
 		if(linkAnh.trim().equals("")) {
-			showErrorAlert("Ảnh nhân viên chưa được chọn!","image/canhBao.png");
+			showWarningAlert("Ảnh nhân viên chưa được chọn!","image/canhBao.png");
 			return false;
 		}
 		return true;
@@ -626,7 +669,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	private void btnCapNhatClicked() throws SQLException {
 	    // Kiểm tra đã chọn nhân viên từ bảng chưa
 	    if (txtMaNV.getText().isEmpty()) {
-	        showErrorAlert("Vui lòng chọn nhân viên cần cập nhật từ bảng!","image/canhBao.png");
+	    	showWarningAlert("Vui lòng chọn nhân viên cần cập nhật từ bảng!","image/canhBao.png");
 	        return;
 	    }
 
@@ -761,7 +804,17 @@ public class QuanLyNhanVien_GUI_Controller {
 		if(txtMaNV.getText().toString().trim().equals("")) {
 			showErrorAlert("Chọn một nhân viên trước khi thêm tài khoản!", "image/canhBao.png");
 		}else {
-			
+			String maNhanVien = txtMaNV.getText().toString().trim();
+			TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
+			if(taiKhoan_DAO.kiemTraTonTaiTaiKhoanTheoMaNhanVien(maNhanVien)) {
+				showWarningAlert("Nhân viên đã có tài khoản, vui lòng chọn nhân viên khác hoặc sang chức năng quản lý tài khoản để đổi mật khẩu!", "image/canhBao.png");
+				return;
+			}
+			// Tạo một Stage mới cho cửa sổ modal
+			Stage stage = new Stage();
+	        
+	        // Khởi tạo 
+	        new ThemTaiKhoan_GUI(stage, maNhanVien);
 		}
 	}
 }

@@ -253,12 +253,12 @@
             
             <!-- Phần mới thêm -->
             <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
-            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/Menu_NhanVien.png" />
                </image>
             </ImageView>
-            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+            <Label id="lblMaNhanVien" fx:id="lblMaNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>

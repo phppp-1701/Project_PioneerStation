@@ -1,7 +1,6 @@
 package gui;
 
 import java.io.File;
-
 import dao.NhanVien_DAO;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
@@ -10,12 +9,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class QuanLyVe_GUI_Controller {
+public class QuanLyHoaDon_GUI_Controller {
     private String maNhanVien;
 
     @FXML
     public void initialize() {
-        // Khởi tạo giao diện, có thể sử dụng maNhanVien nếu cần
+        // Khởi tạo giao diện
+        if (maNhanVien != null) {
+            updateNhanVienInfo();
+        }
     }
 
     public String getMaNhanVien() {
@@ -52,9 +54,13 @@ public class QuanLyVe_GUI_Controller {
                 } else {
                     lblChucVu.setText("Quản lý");
                 }
-                File imageFile = new File(nv.getLinkAnh());
-                Image image = new Image(imageFile.toURI().toString());
-                imgAnhNhanVien.setImage(image);
+                try {
+                    File imageFile = new File(nv.getLinkAnh());
+                    Image image = new Image(imageFile.toURI().toString());
+                    imgAnhNhanVien.setImage(image);
+                } catch (Exception e) {
+                    System.err.println("Không thể tải ảnh nhân viên: " + e.getMessage());
+                }
             } else {
                 lblMaNhanVien.setText("Mã nhân viên: Không tìm thấy");
                 lblTenNhanVien.setText("Tên nhân viên: Không tìm thấy");

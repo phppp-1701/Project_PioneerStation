@@ -10,12 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class QuanLyVe_GUI_Controller {
+public class QuanLyBanVe_GUI_Controller {
     private String maNhanVien;
 
     @FXML
     public void initialize() {
         // Khởi tạo giao diện, có thể sử dụng maNhanVien nếu cần
+    	
     }
 
     public String getMaNhanVien() {
@@ -62,4 +63,6 @@ public class QuanLyVe_GUI_Controller {
             }
         }
     }
+    
+    
 }
