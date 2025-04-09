@@ -60,6 +60,15 @@ INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, soDienThoai, email, gio
  )
  go
 
+INSERT INTO TaiKhoan (tenTaiKhoan, matKhau, maNhanVien)
+VALUES
+('hphuong17', 'phuong123', '2022NV000001'),
+('pvquan29', 'quan456', '2022NV000002'),
+('trungbtq', 'trung789', '2022NV000003'),
+('tuanminh', 'tuan101', '2022NV000004'),
+('trinhnt', 'trinh202', '2023NV000001');
+go
+
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
     tenTau NVARCHAR(100) NOT NULL,

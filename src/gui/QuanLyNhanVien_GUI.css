@@ -98,3 +98,12 @@
     -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
     -fx-cursor: hand;	
 }
+
+.btn-themTaiKhoan{
+	-fx-background-color:#66CCCC;
+}
+
+.btn-themTaiKhoan:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}

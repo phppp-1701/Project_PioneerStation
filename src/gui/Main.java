@@ -13,5 +13,4 @@ public class Main extends Application {
     	new QuanLyNhanVien_GUI(primaryStage);
         primaryStage.show();
     }
-
 }

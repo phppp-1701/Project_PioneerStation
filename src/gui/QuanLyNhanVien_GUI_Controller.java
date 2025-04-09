@@ -80,11 +80,7 @@ public class QuanLyNhanVien_GUI_Controller {
         try {
             List<NhanVien> danhSachNhanVien = new NhanVien_DAO().getAllNhanVien();
             if (danhSachNhanVien.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Thông báo");
-                alert.setHeaderText(null);
-                alert.setContentText("Danh sách nhân viên trống!");
-                alert.showAndWait();
+            	showInformationAlert("Danh sách nhân viên trống!","image/thongBao.png");
                 return;
             }
             
@@ -130,7 +126,7 @@ public class QuanLyNhanVien_GUI_Controller {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            showErrorAlert("Không thể tải danh sách nhân viên!");
+            showErrorAlert("Không thể tải danh sách nhân viên!","image/canhBao.png");
         }
     }
     @FXML
@@ -150,15 +146,7 @@ public class QuanLyNhanVien_GUI_Controller {
         
         // Kiểm tra nếu cả hai trường đều trống
         if (tenNhanVien.isEmpty() && soDienThoai.isEmpty()) {
-        	Alert alert = new Alert(Alert.AlertType.WARNING);
-	        alert.setTitle("Cảnh báo");
-	        alert.setHeaderText(null);
-	        alert.setContentText("Vui lòng nhập tên khách hàng hoặc số điện thoại để tìm kiếm!");
-	        
-	        File file = new File("image/canhBao.png");
-	        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(file.toURI().toString()));
-            alert.showAndWait();
+        	showInformationAlert("Bạn chưa nhập thông tin tìm kiếm!","image/thongBao.png");
             txtTimTenNhanVien.requestFocus();
 	        txtTimTenNhanVien.selectAll();
         }
@@ -178,7 +166,7 @@ public class QuanLyNhanVien_GUI_Controller {
             
             // Kiểm tra kết quả tìm kiếm
             if (ketQuaTimKiem == null || ketQuaTimKiem.isEmpty()) {
-                showInformationAlert("Không tìm thấy nhân viên phù hợp!");
+                showInformationAlert("Không tìm thấy nhân viên phù hợp!","image/thongBao.png");
                 tbDanhSachNhanVien.getSelectionModel().selectAll();
                 // Di chuyển chuột đến dòng đầu tiên (hoặc dòng nào bạn muốn)
                 tbDanhSachNhanVien.scrollTo(0); 
@@ -191,39 +179,39 @@ public class QuanLyNhanVien_GUI_Controller {
             
         } catch (Exception e) {
             e.printStackTrace();
-            showErrorAlert("Lỗi khi tìm kiếm nhân viên: " + e.getMessage());
+            showErrorAlert("Lỗi khi tìm kiếm nhân viên","image/canhBao.png");
         }
     }
 
-    private void showErrorAlert(String message) {
+    private void showErrorAlert(String message, String icon) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Lỗi");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        setAlertIcon(alert);
+        setAlertIcon(alert, icon);
         alert.showAndWait();
     }
 
-    private void showWarningAlert(String message) {
+    private void showWarningAlert(String message, String icon) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Cảnh báo");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        setAlertIcon(alert);
+        setAlertIcon(alert, icon);
         alert.showAndWait();
     }
 
-    private void showInformationAlert(String message) {
+    private void showInformationAlert(String message, String icon) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông báo");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        setAlertIcon(alert);
+        setAlertIcon(alert, icon);
         alert.showAndWait();
     }
 
-    private void setAlertIcon(Alert alert) {
-        File file = new File("image/canhBao.png");
+    private void setAlertIcon(Alert alert, String icon) {
+        File file = new File(icon);
         if (file.exists()) {
             try {
                 Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -328,11 +316,11 @@ public class QuanLyNhanVien_GUI_Controller {
 	private void btnThemNhanVienClicked() throws SQLException {
 		NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
 		if(!txtMaNV.getText().toString().isEmpty()) {
-			showErrorAlert("Hãy nhấn làm rỗng nếu muốn thêm nhân viên mới!");
+			showErrorAlert("Hãy nhấn làm rỗng nếu muốn thêm nhân viên mới!","image/canhBao.png");
 			return;
 		}
 		if(nhanVien_DAO.kiemTraCCCD(txtCCCD.getText().toString())) {
-			showErrorAlert("CCCD/Hộ chiếu đã tồn tại!");
+			showErrorAlert("CCCD/Hộ chiếu đã tồn tại!","image/canhBao.png");
 			txtCCCD.requestFocus();
 			txtCCCD.selectAll();
 			List<NhanVien> danhSachNhanVien = nhanVien_DAO.timNhanVienTheoCCCD_HoChieu(txtCCCD.getText().toString());
@@ -459,17 +447,17 @@ public class QuanLyNhanVien_GUI_Controller {
 
 			} catch (IOException e) {
 			    e.printStackTrace();
-			    showErrorAlert("Không thể sao chép ảnh: " + e.getMessage());
+			    showErrorAlert("Không thể sao chép ảnh: " + e.getMessage(),"image/canhBao.png");
 			    return;
 			}
 
 			String maNhanVien = nhanVien_DAO.taoMaNhanVienMoi();
 			NhanVien nv = new NhanVien(maNhanVien, tenNhanVien, ngaySinh, gioiTinh, CCCD_HoChieu, chucVu, trangThai, soDienThoai, email, linkAnh);
 			if(!nhanVien_DAO.themNhanVien(nv)) {
-				showErrorAlert("Thêm không thành công!");
+				showErrorAlert("Thêm không thành công!","image/canhBao.png");
 				return;
 			}else {
-				showInformationAlert("Thêm nhân viên thành công!\nMã nhân viên: "+nv.getMaNhanVien()+"\nTên nhân viên: "+nv.getTenNhanVien());
+				showInformationAlert("Thêm nhân viên thành công!\nMã nhân viên: "+nv.getMaNhanVien()+"\nTên nhân viên: "+nv.getTenNhanVien(),"image/thanhCong.png");
 				linkAnh = "";
 				txtMaNV.setText(maNhanVien);
 				return;
@@ -505,7 +493,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	            imgNhanVien.setFitWidth(100);
 	            imgNhanVien.setFitHeight(100);
 	        } catch (Exception e) {
-	            showErrorAlert("Không tải ảnh được!");
+	            showErrorAlert("Không tải ảnh được!","image/canhBao.png");
 	            imgNhanVien.setImage(null);
 	        }
 	    }
@@ -526,35 +514,35 @@ public class QuanLyNhanVien_GUI_Controller {
 		LocalDate ngayHomNay = LocalDate.now();
 
 		if(tenNhanVien.trim().equals("")) {
-			showErrorAlert("Tên nhân viên không được rỗng!");
+			showErrorAlert("Tên nhân viên không được rỗng!","image/canhBao.png");
 			txtTenNV.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexTen);
 			Matcher mc = pt.matcher(tenNhanVien);
 			if(!mc.matches()) {
-				showErrorAlert("Tên nhân viên phải có 2 từ trở lên, viết hoa chữ cái đầu!");
+				showErrorAlert("Tên nhân viên phải có 2 từ trở lên, viết hoa chữ cái đầu!","image/canhBao.png");
 				txtTenNV.requestFocus();
 				txtTenNV.selectAll();
 				return false;
 			}
 		}
 		if(CCCD_HoChieu.trim().equals("")) {
-			showErrorAlert("CCCD/Hộ chiếu của nhân viên không được rỗng!");
+			showErrorAlert("CCCD/Hộ chiếu của nhân viên không được rỗng!","image/canhBao.png");
 			txtCCCD.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexCCCD_HoChieu);
 			Matcher mc = pt.matcher(CCCD_HoChieu);
 			if(!mc.matches()) {
-				showErrorAlert("CCCD phải là dãy 12 chữ số trở lên. Hộ chiếu phải bắt đầu bằng 1 kí tự in hoa và dãy 7 chữ số!");
+				showErrorAlert("CCCD phải là dãy 12 chữ số trở lên. Hộ chiếu phải bắt đầu bằng 1 kí tự in hoa và dãy 7 chữ số!","image/canhBao.png");
 				txtCCCD.requestFocus();
 				txtCCCD.selectAll();
 				return false;
 			}
 		}
 		if(ngaySinh == null) {
-			showErrorAlert("Ngày sinh của nhân viên không được rỗng!");
+			showErrorAlert("Ngày sinh của nhân viên không được rỗng!","image/canhBao.png");
 			datePickerNgaySinh.requestFocus();
 			return false;
 		}else {
@@ -578,7 +566,7 @@ public class QuanLyNhanVien_GUI_Controller {
 			// Kiểm tra tuổi cho chức vụ Bán vé (phải lớn hơn 16 tuổi)
 			if (chucVu.equals(ChucVu.banVe)) {
 			    if (period.getYears() < 16 || (period.getYears() == 16 && period.getMonths() == 0 && period.getDays() == 0)) {
-			        showErrorAlert("Nhân viên bán vé phải lớn hơn 16 tuổi!");
+			        showErrorAlert("Nhân viên bán vé phải lớn hơn 16 tuổi!","image/canhBao.png");
 			        datePickerNgaySinh.requestFocus();
 			        datePickerNgaySinh.getEditor().selectAll();
 			        return false;
@@ -588,7 +576,7 @@ public class QuanLyNhanVien_GUI_Controller {
 			// Kiểm tra tuổi cho chức vụ Quản lý (phải lớn hơn 20 tuổi)
 			if (chucVu.equals(ChucVu.quanLy)) {
 			    if (period.getYears() < 20 || (period.getYears() == 20 && period.getMonths() == 0 && period.getDays() == 0)) {
-			        showErrorAlert("Nhân viên quản lý phải lớn hơn 20 tuổi!");
+			        showErrorAlert("Nhân viên quản lý phải lớn hơn 20 tuổi!","image/canhBao.png");
 			        datePickerNgaySinh.requestFocus();
 			        datePickerNgaySinh.getEditor().selectAll();
 			        return false;
@@ -597,35 +585,35 @@ public class QuanLyNhanVien_GUI_Controller {
 		}
 		
 		if(soDienThoai.trim().equals(email)) {
-			showErrorAlert("Số điện thoại của nhân viên không được rỗng!");
+			showErrorAlert("Số điện thoại của nhân viên không được rỗng!","image/canhBao.png");
 			txtSoDienThoai.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexSoDienThoai);
 			Matcher mc = pt.matcher(soDienThoai);
 			if(!mc.matches()) {
-				showErrorAlert("Số điện thoại phải là dãy số (03|05|07|08|09) và 8 chữ số ngẫu nhiên!");
+				showErrorAlert("Số điện thoại phải là dãy số (03|05|07|08|09) và 8 chữ số ngẫu nhiên!","image/canhBao.png");
 				txtSoDienThoai.requestFocus();
 				txtSoDienThoai.selectAll();
 				return false;
 			}
 		}
 		if(email.trim().equals("")) {
-			showErrorAlert("Email của nhân viên không được rỗng!");
+			showErrorAlert("Email của nhân viên không được rỗng!","image/canhBao.png");
 			txtEmail.requestFocus();
 			return false;
 		}else {
 			Pattern pt = Pattern.compile(regexEmail);
 			Matcher mc = pt.matcher(email);
 			if(!mc.matches()) {
-				showErrorAlert("Email sai định dạng!");
+				showErrorAlert("Email sai định dạng!","image/canhBao.png");
 				txtEmail.requestFocus();
 				txtEmail.selectAll();
 				return false;
 			}
 		}
 		if(linkAnh.trim().equals("")) {
-			showErrorAlert("Ảnh nhân viên chưa được chọn!");
+			showErrorAlert("Ảnh nhân viên chưa được chọn!","image/canhBao.png");
 			return false;
 		}
 		return true;
@@ -638,7 +626,7 @@ public class QuanLyNhanVien_GUI_Controller {
 	private void btnCapNhatClicked() throws SQLException {
 	    // Kiểm tra đã chọn nhân viên từ bảng chưa
 	    if (txtMaNV.getText().isEmpty()) {
-	        showErrorAlert("Vui lòng chọn nhân viên cần cập nhật từ bảng!");
+	        showErrorAlert("Vui lòng chọn nhân viên cần cập nhật từ bảng!","image/canhBao.png");
 	        return;
 	    }
 
@@ -648,73 +636,100 @@ public class QuanLyNhanVien_GUI_Controller {
 	    }
 
 	    NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
-		
-		// Lấy thông tin từ form
-		String maNhanVien = txtMaNV.getText();
-		String tenNhanVien = txtTenNV.getText();
-		LocalDate ngaySinh = datePickerNgaySinh.getValue();
-		String soDienThoai = txtSoDienThoai.getText();
-		String email = txtEmail.getText();
-		String CCCD_HoChieu = txtCCCD.getText();
-		
-		// Xử lý giới tính
-		GioiTinh gioiTinh = cboGioiTinh.getValue();
-		
-		// Xử lý chức vụ
-		ChucVu chucVu = cboChucVu.getValue();
-		
-		// Xử lý trạng thái
-		TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
-		
-		// Xử lý ảnh
-		if (!linkAnh.isEmpty()) {
-		    String decodedPath = URLDecoder.decode(linkAnh.replace("file:/", ""), StandardCharsets.UTF_8);
-		    File sourceFile = new File(decodedPath);
-		    
-		    try {
-		        String fileName = sourceFile.getName();
-		        File destFile = new File("image/" + fileName);
+	    
+	    // Lấy thông tin từ form
+	    String maNhanVien = txtMaNV.getText();
+	    String tenNhanVien = txtTenNV.getText();
+	    LocalDate ngaySinh = datePickerNgaySinh.getValue();
+	    String soDienThoai = txtSoDienThoai.getText();
+	    String email = txtEmail.getText();
+	    String CCCD_HoChieu = txtCCCD.getText();
+	    
+	    // Xử lý giới tính
+	    GioiTinh gioiTinh = cboGioiTinh.getValue();
+	    
+	    // Xử lý chức vụ
+	    ChucVu chucVu = cboChucVu.getValue();
+	    
+	    // Xử lý trạng thái
+	    TrangThaiNhanVien trangThai = cboTrangThaiNhanVien.getValue();
+	    
+	    // Xử lý ảnh
+	    if (!linkAnh.isEmpty()) {
+	        String decodedPath = URLDecoder.decode(linkAnh.replace("file:/", ""), StandardCharsets.UTF_8);
+	        File sourceFile = new File(decodedPath);
+	        
+	        try {
+	            String fileName = sourceFile.getName();
+	            File destFile = new File("image/" + fileName);
 
-		        Files.copy(
-		            sourceFile.toPath(),
-		            destFile.toPath(),
-		            StandardCopyOption.REPLACE_EXISTING
-		        );
+	            Files.copy(
+	                sourceFile.toPath(),
+	                destFile.toPath(),
+	                StandardCopyOption.REPLACE_EXISTING
+	            );
 
-		        linkAnh = "image/" + fileName;
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		        showErrorAlert("Không thể sao chép ảnh: " + e.getMessage());
-		        return;
-		    }
-		}
+	            linkAnh = "image/" + fileName;
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            showErrorAlert("Không thể sao chép ảnh: " + e.getMessage(),"image/canhBao.png");
+	            return;
+	        }
+	    }
 
-		// Tạo đối tượng nhân viên mới với thông tin cập nhật
-		NhanVien nv = new NhanVien(
-		    maNhanVien, 
-		    tenNhanVien, 
-		    ngaySinh, 
-		    gioiTinh, 
-		    CCCD_HoChieu, 
-		    chucVu, 
-		    trangThai, 
-		    soDienThoai, 
-		    email, 
-		    linkAnh
-		);
+	    // Hiển thị hộp thoại xác nhận
+	    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+	    confirmationAlert.setTitle("Xác nhận cập nhật");
+	    confirmationAlert.setHeaderText("Bạn có chắc chắn muốn cập nhật thông tin nhân viên này?");
+	    confirmationAlert.setContentText("Mã NV: " + txtMaNV.getText() + "\nTên NV: " + txtTenNV.getText());
+	    
+	    // Thiết lập icon cho hộp thoại
+	    setAlertIcon(confirmationAlert, "image/hoi.png");
+	    
+	    // Thêm các nút tùy chỉnh
+	    ButtonType buttonTypeYes = new ButtonType("Cập nhật", ButtonData.YES);
+	    ButtonType buttonTypeNo = new ButtonType("Hủy", ButtonData.NO);
+	    confirmationAlert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
-		// Gọi DAO để cập nhật
-		if (nhanVien_DAO.capNhatNhanVien(nv)) {
-		    showInformationAlert("Cập nhật nhân viên thành công!");
-		    
-		    // Làm mới bảng danh sách
-		    btnXuatDanhSachClicked();
-		    
-		    // Làm rỗng form
-		    btnLamRongClicked();
-		} else {
-		    showErrorAlert("Cập nhật không thành công!");
-		}
+	    // Hiển thị hộp thoại và chờ phản hồi từ người dùng
+	    Optional<ButtonType> result = confirmationAlert.showAndWait();
+	    
+	    // Nếu người dùng chọn "Hủy" thì không thực hiện cập nhật
+	    if (result.isPresent() && result.get() == buttonTypeNo) {
+	        return;
+	    }
+	    
+	    // Tạo đối tượng nhân viên mới với thông tin cập nhật
+	    NhanVien nv = new NhanVien(
+	        maNhanVien, 
+	        tenNhanVien, 
+	        ngaySinh, 
+	        gioiTinh, 
+	        CCCD_HoChieu, 
+	        chucVu, 
+	        trangThai, 
+	        soDienThoai, 
+	        email, 
+	        linkAnh
+	    );
+
+	    // Gọi DAO để cập nhật
+	    if (nhanVien_DAO.capNhatNhanVien(nv)) {
+	        showInformationAlert("Cập nhật nhân viên thành công!","image/thanhCong.png");
+	        
+	        // Lấy vị trí của nhân viên đã cập nhật trong bảng
+	        int selectedIndex = tbDanhSachNhanVien.getSelectionModel().getSelectedIndex();
+	        
+	        // Cập nhật lại dòng đã sửa trong bảng
+	        if (selectedIndex >= 0) {
+	            tbDanhSachNhanVien.getItems().set(selectedIndex, nv);
+	        }
+	        
+	        // Làm rỗng form
+	        btnLamRongClicked();
+	    } else {
+	        showErrorAlert("Cập nhật không thành công!","image/canhBao.png");
+	    }
 	}
 
 	@FXML 
@@ -738,4 +753,13 @@ public class QuanLyNhanVien_GUI_Controller {
 		linkAnh = "";
 	}
     
+	@FXML
+	private Button btnThemTaiKhoan;
+	
+	@FXML
+	private void btnThemTaiKhoanClicked() {
+		if(txtMaNV.getText().toString().trim().equals("")) {
+			showErrorAlert("Chọn một nhân viên trước khi thêm tài khoản!", "image/canhBao.png");
+		}
+	}
 }
