@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -186,9 +187,9 @@
                               </Label>
                               <TableView layoutY="61.0" prefHeight="358.0" prefWidth="415.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="STT" />
-                                  <TableColumn prefWidth="93.60003662109375" text="Mã tàu" />
-                                    <TableColumn prefWidth="75.0" text="Tên tàu" />
+                                  <TableColumn prefWidth="43.20001220703125" text="STT" />
+                                  <TableColumn prefWidth="107.20001220703125" text="Mã tàu" />
+                                    <TableColumn prefWidth="95.20001220703125" text="Tên tàu" />
                                     <TableColumn prefWidth="75.0" text="Loại tàu" />
                                     <TableColumn prefWidth="94.4000244140625" text="Trạng thái" />
                                 </columns>
@@ -300,17 +301,114 @@
                   </AnchorPane>
             </content>
           </Tab>
+            <Tab text="Ga">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane prefHeight="70.0" prefWidth="470.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="161.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="470.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="470.0" />
+                              <Label layoutX="177.0" layoutY="20.0" text="Tra cứu ga tàu" textFill="WHITE">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="14.0" layoutY="78.0" text="Tên ga:">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtTimGa" layoutX="103.0" layoutY="75.0" prefHeight="26.0" prefWidth="348.0">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Button fx:id="btnTimGa" layoutX="373.0" layoutY="116.0" mnemonicParsing="false" onAction="#btnTimGaClicked" prefHeight="28.0" prefWidth="77.0" text="Tìm">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="181.0" prefHeight="200.0" prefWidth="470.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="470.0" />
+                              <Label layoutX="165.0" layoutY="20.0" text="Danh sách ga tàu" textFill="WHITE">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <TableView fx:id="tbDanhSachGa" layoutY="60.0" prefHeight="200.0" prefWidth="470.0">
+                                <columns>
+                                  <TableColumn fx:id="colSTTGa" prefWidth="45.59999084472656" text="STT" />
+                                  <TableColumn fx:id="colMaGa" prefWidth="97.5999755859375" text="Mã ga tàu" />
+                                    <TableColumn fx:id="colTenGa" prefWidth="129.60003662109375" text="Tên ga tàu" />
+                                    <TableColumn fx:id="colDiaChi" prefWidth="200.79998779296875" text="Địa chỉ" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="499.0" prefHeight="374.0" prefWidth="808.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="440.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="808.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="808.0" />
+                              <Label layoutX="326.0" layoutY="20.0" text="Thông tin chi tiết ga tàu" textFill="WHITE">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="31.0" layoutY="76.0" text="Mã ga:">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="422.0" layoutY="76.0" text="Tên ga:">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField layoutX="102.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </TextField>
+                              <TextField layoutX="493.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="31.0" layoutY="107.0" text="Địa chỉ:">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextArea layoutX="31.0" layoutY="135.0" prefHeight="286.0" prefWidth="742.0">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </TextArea>
+                           </children>
+                        </AnchorPane>
+                        <Button layoutX="808.0" layoutY="453.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="77.0" text="Cập nhật">
+                           <font>
+                              <Font name="Tahoma" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="918.0" layoutY="453.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="77.0" text="Thêm">
+                           <font>
+                              <Font name="Tahoma" size="14.0" />
+                           </font>
+                        </Button>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
             <Tab text="Tuyến tàu">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
             </Tab>
             <Tab text="Chuyến tàu">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
-            <Tab text="Ga">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>

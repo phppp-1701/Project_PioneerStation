@@ -76,6 +76,20 @@ CREATE TABLE Ga (
 );
 go
 
+INSERT INTO Ga (maGa, tenGa, diaChi)
+VALUES
+    ('2020GA0001', N'Ga Hà Nội', N'120 Lê Duẩn, Hoàn Kiếm, Hà Nội'),
+    ('2018GA0002', N'Ga Sài Gòn', N'1 Nguyễn Thông, Quận 3, TP.HCM'),
+    ('2019GA0003', N'Ga Đà Nẵng', N'791 Hải Phòng, Thanh Khê, Đà Nẵng'),
+    ('2021GA0004', N'Ga Huế', N'2 Bùi Thị Xuân, TP. Huế, Thừa Thiên Huế'),
+    ('2017GA0005', N'Ga Nha Trang', N'17 Thái Nguyên, Nha Trang, Khánh Hòa'),
+    ('2022GA0006', N'Ga Đồng Hới', N'20 Hữu Nghị, Đồng Hới, Quảng Bình'),
+    ('2020GA0007', N'Ga Thanh Hóa', N'Đường Lê Lai, TP. Thanh Hóa'),
+    ('2019GA0008', N'Ga Vinh', N'75 Quang Trung, TP. Vinh, Nghệ An'),
+    ('2021GA0009', N'Ga Hải Phòng', N'75 Lương Khánh Thiện, Hải Phòng'),
+    ('2018GA0010', N'Ga Đà Lạt', N'1 Quang Trung, Phường 9, Đà Lạt');
+go
+
 CREATE TABLE TuyenTau (
     maTuyenTau VARCHAR(20) PRIMARY KEY,
     tenTuyenTau NVARCHAR(100),
