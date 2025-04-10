@@ -44,8 +44,11 @@ public class DangNhap_GUI_Controller {
         	String tenTaiKhoan = txtTenDangNhap.getText().toString();
         	TaiKhoan_DAO dao = new TaiKhoan_DAO();
         	String maNhanVien = dao.timMaNhanVienTheoTenTaiKhoan(tenTaiKhoan);
+            // Lấy stage hiện tại của DangNhap_GUI
+            Stage currentStage = (Stage) txtTenDangNhap.getScene().getWindow();
+            currentStage.close();
             // Lấy stage hiện tại và mở Home_GUI
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage = new Stage();
             new Home_GUI(currentStage, maNhanVien);
         }
     }

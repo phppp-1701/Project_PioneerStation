@@ -91,9 +91,21 @@ public class ThongKe_GUI_Controller {
     }
     
     @FXML
+    private Label lblQuanLyChuyenTau;
+    
+    @FXML
     public void initialize() {
-        pnHome.getStyleClass().add("anchor-pane");
-        lblTrangChu.getStyleClass().add("hover-label");
+        // Handler cho quản lý chuyến tàu
+        lblQuanLyChuyenTau.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý chuyến tàu");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
 
         // Không gọi DAO trong initialize, để trống ban đầu
         lblMaNhanVien.setText("Mã nhân viên: Chưa tải");

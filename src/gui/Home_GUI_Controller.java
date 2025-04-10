@@ -48,8 +48,6 @@ public class Home_GUI_Controller {
     
     @FXML
     public void initialize() {
-        pnHome.getStyleClass().add("anchor-pane");
-        lblTrangChu.getStyleClass().add("hover-label");
 
         // Không gọi DAO trong initialize, để trống ban đầu
         lblMaNhanVien.setText("Mã nhân viên: Chưa tải");
@@ -176,6 +174,18 @@ public class Home_GUI_Controller {
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new Home_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
+        // Handler cho quản lý chuyến tàu
+        lblQuanLyChuyenTau.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý chuyến tàu");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
                 System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
                 e.printStackTrace();
