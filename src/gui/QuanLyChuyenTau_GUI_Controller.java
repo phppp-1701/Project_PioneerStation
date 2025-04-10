@@ -1,10 +1,18 @@
 package gui;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-
+import dao.KhachHang_DAO;
 import dao.NhanVien_DAO;
+import dao.Tau_DAO;
+import entity.KhachHang;
 import entity.NhanVien;
+import entity.Tau;
+import entity.KhachHang.LoaiThanhVien;
+import entity.KhachHang.TrangThaiKhachHang;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -13,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -264,4 +274,35 @@ public class QuanLyChuyenTau_GUI_Controller {
         this.maNhanVien = maNhanVien;
         updateNhanVienInfo();
     }
+    
+    
+    @FXML
+	private TableView<Tau> tbDanhSachTau;
+	
+	@FXML
+	private TableColumn<Tau, String> colStt; 
+	
+	@FXML 
+	private TableColumn<Tau, String> colMaTau;
+	
+	@FXML 
+	private TableColumn<Tau, String> colTenTau;
+	
+	@FXML 
+	private TableColumn<Tau, String> colLoaiTau;
+	
+	@FXML
+	private TableColumn<Tau, String> colTrangThaiTau;
+	
+	@FXML
+	private TextField txtTimTenTau;
+
+
+	@FXML
+	private void btnTimClicked() {
+	    String tenTau = txtTimTenTau.getText().trim();
+
+	    }
+
+    
 }

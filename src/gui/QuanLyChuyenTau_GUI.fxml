@@ -186,11 +186,11 @@
                               </Label>
                               <TableView layoutY="61.0" prefHeight="358.0" prefWidth="415.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="STT" />
-                                  <TableColumn prefWidth="93.60003662109375" text="Mã tàu" />
-                                    <TableColumn prefWidth="75.0" text="Tên tàu" />
-                                    <TableColumn prefWidth="75.0" text="Loại tàu" />
-                                    <TableColumn prefWidth="94.4000244140625" text="Trạng thái" />
+                                  <TableColumn fx:id="colStt" prefWidth="75.0" text="STT" />
+                                  <TableColumn fx:id="colMaTau" prefWidth="93.60003662109375" text="Mã tàu" />
+                                    <TableColumn fx:id="colTenTau" prefWidth="75.0" text="Tên tàu" />
+                                    <TableColumn fx:id="colLoaiTau" prefWidth="75.0" text="Loại tàu" />
+                                    <TableColumn fx:id="colTrangThai" prefWidth="94.4000244140625" text="Trạng thái" />
                                 </columns>
                               </TableView>
                            </children>
@@ -204,7 +204,7 @@
                                     <Font name="Tahoma Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="107.0" layoutY="77.0" prefHeight="26.0" prefWidth="279.0">
+                              <TextField fx:id="txtTimTenTau" layoutX="107.0" layoutY="77.0" prefHeight="26.0" prefWidth="279.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font></TextField>
@@ -213,7 +213,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <Button layoutX="306.0" layoutY="118.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Tìm">
+                              <Button fx:id="btnTim" layoutX="306.0" layoutY="118.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Tìm">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -234,7 +234,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="130.0" layoutY="72.0" prefHeight="26.0" prefWidth="279.0">
+                              <TextField fx:id="txtMaTau" layoutX="130.0" layoutY="72.0" prefHeight="26.0" prefWidth="279.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -244,7 +244,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="544.0" layoutY="72.0" prefHeight="26.0" prefWidth="279.0">
+                              <TextField fx:id="txtTenTau" layoutX="544.0" layoutY="72.0" prefHeight="26.0" prefWidth="279.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -254,37 +254,37 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="130.0" layoutY="114.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
+                              <ComboBox fx:id="cboLoaiTau" layoutX="130.0" layoutY="114.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
                               <Label layoutX="425.0" layoutY="118.0" text="Trạng thái:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="544.0" layoutY="113.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
+                              <ComboBox fx:id="cboTrangThaiTau" layoutX="544.0" layoutY="113.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
                               <Label layoutX="26.0" layoutY="163.0" text="Số lượng toa:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="130.0" layoutY="158.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
+                              <ComboBox fx:id="cboSoLuongToa" layoutX="130.0" layoutY="158.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
                               <Label layoutX="26.0" layoutY="265.0" text="Toa:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="130.0" layoutY="261.0" prefHeight="28.0" prefWidth="146.0" styleClass="tab" />
+                              <ComboBox fx:id="cboToa" layoutX="130.0" layoutY="261.0" prefHeight="28.0" prefWidth="146.0" styleClass="tab" />
                               <Label layoutX="306.0" layoutY="265.0" text="Loại toa:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="389.0" layoutY="261.0" prefHeight="28.0" prefWidth="219.0" styleClass="tab" />
-                              <Button layoutX="544.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Thêm">
+                              <ComboBox fx:id="cboLoaiTau" layoutX="389.0" layoutY="261.0" prefHeight="28.0" prefWidth="219.0" styleClass="tab" />
+                              <Button fx:id="btnThem" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Thêm">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button layoutX="652.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Cập nhật">
+                              <Button fx:id="btnCapNhat" layoutX="652.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Cập nhật">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>

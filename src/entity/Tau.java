@@ -5,14 +5,14 @@ import java.util.Objects;
 public class Tau {
 	private String maTau;
 	private String tenTau;
-	private TrangThai trangThaiTau;
+	private TrangThaiTau trangThaiTau;
 	private LoaiTau loaiTau;
 	
-	public enum TrangThai {
+	public enum TrangThaiTau {
         hoatDong,
         baoTri
     }
-	private enum LoaiTau {
+	public enum LoaiTau {
 	    SE,  // Tàu SE
 	    TN,  // Tàu TN
 	    DP   // Tàu DP
@@ -23,7 +23,7 @@ public class Tau {
 
 	}
 
-	public Tau(String maTau, String tenTau, TrangThai trangThaiTau, LoaiTau loaiTau) {
+	public Tau(String maTau, String tenTau, TrangThaiTau trangThaiTau, LoaiTau loaiTau) {
 		this.maTau = maTau;
 		this.tenTau = tenTau;
 		this.trangThaiTau = trangThaiTau;
@@ -46,11 +46,11 @@ public class Tau {
 		this.tenTau = tenTau;
 	}
 
-	public TrangThai getTrangThaiTau() {
+	public TrangThaiTau getTrangThaiTau() {
 		return trangThaiTau;
 	}
 
-	public void setTrangThaiTau(TrangThai trangThaiTau) {
+	public void setTrangThaiTau(TrangThaiTau trangThaiTau) {
 		this.trangThaiTau = trangThaiTau;
 	}
 

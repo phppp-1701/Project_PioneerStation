@@ -100,16 +100,6 @@ CREATE TABLE Toa (
     maTau VARCHAR(20) FOREIGN KEY REFERENCES Tau(maTau)
 );
 
-CREATE TABLE ChoNgoi (
-    maCho VARCHAR(20),
-    maChuyenTau VARCHAR(20),
-    tenCho NVARCHAR(50) NOT NULL,
-    trangThaiCho VARCHAR(20) CHECK (trangThaiCho IN ('daDat', 'conTrong', 'dangChon')),
-    PRIMARY KEY (maChuyenTau, maCho),
-	maChuyenTau VARCHAR(20) FOREIGN KEY REFERENCES ChuyenTau(maChuyenTau),
-    maToa VARCHAR(20) FOREIGN KEY REFERENCES Toa(maToa)
-);
-
 CREATE TABLE KhuyenMai (
     maKhuyenMai VARCHAR(20) PRIMARY KEY,
     tenKhuyenMai NVARCHAR(100) NOT NULL,
@@ -124,6 +114,15 @@ CREATE TABLE Tau(
 	loaiTau VARCHAR(20) CHECK (loaiTau IN ('SE', 'TN', 'DP')),
 	trangThai VARCHAR(20) CHECK (trangThai IN ('hoatDong', 'baoTri'))
 )
+
+INSERT INTO Tau (maTau, tenTau, loaiTau, trangThai) VALUES
+('2025SE000001', N'Tàu Thống Nhất 1', 'SE', 'hoatDong'),
+('2025SE000002', N'Tàu Thống Nhất 2', 'SE', 'baoTri'),
+('2025TN000001', N'Tàu Miền Trung 1', 'TN', 'hoatDong'),
+('2025TN000002', N'Tàu Tây Nguyên', 'TN', 'baoTri'),
+('2025DP000001', N'Tàu Địa Phương 1', 'DP', 'hoatDong'),
+('2025DP000002', N'Tàu Địa Phương 2', 'DP', 'baoTri');
+
 
 CREATE TABLE HoaDon (
     maHoaDon VARCHAR(20) PRIMARY KEY,
@@ -147,6 +146,16 @@ CREATE TABLE ChuyenTau (
     maTuyenTau VARCHAR(20) FOREIGN KEY REFERENCES TuyenTau(maTuyenTau),
 	maTau VARCHAR(20) FOREIGN KEY REFERENCES Tau(maTau),
 	maLichTrinh VARCHAR(20) FOREIGN KEY REFERENCES LichTrinh(maLichTrinh)
+);
+
+CREATE TABLE ChoNgoi (
+    maCho VARCHAR(20),
+    maChuyenTau VARCHAR(20),
+    tenCho NVARCHAR(50) NOT NULL,
+    trangThaiCho VARCHAR(20) CHECK (trangThaiCho IN ('daDat', 'conTrong', 'dangChon')),
+    PRIMARY KEY (maChuyenTau, maCho),
+	maChuyenTau VARCHAR(20) FOREIGN KEY REFERENCES ChuyenTau(maChuyenTau),
+    maToa VARCHAR(20) FOREIGN KEY REFERENCES Toa(maToa)
 );
 
 
