@@ -1,7 +1,6 @@
 package gui;
 
 import java.io.File;
-
 import dao.NhanVien_DAO;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
@@ -15,12 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class QuanLyVe_GUI_Controller {
+public class QuanLyHoaDon_GUI_Controller {
     private String maNhanVien;
-
-    // Các thành phần khác
+    
     @FXML
     private AnchorPane pnHome;
+    
+    // Các thành phần khác
     @FXML private ImageView imgTrangChu;
     @FXML private Label lblQuanLyLichSu;
     @FXML private ImageView imgQuanLyLichSu;
@@ -40,12 +40,26 @@ public class QuanLyVe_GUI_Controller {
     @FXML private ImageView imgQuanLyTaiKhoan;
     @FXML private Label lblDangXuat;
     @FXML private ImageView imgDangXuat;
-    @FXML
-    private Label lblTrangChu;
-    @FXML
-    private Label lblQuanLyBanVe;
+    
+    @FXML private Label lblQuanLyBanVe;
+    @FXML private Label lblTrangChu;
     @FXML
     public void initialize() {
+        // Khởi tạo giao diện
+        if (maNhanVien != null) {
+            updateNhanVienInfo();
+        }
+        // Handler cho quản lý chuyến tàu
+        lblQuanLyChuyenTau.setOnMouseClicked(event -> {
+            System.out.println("Đã nhấp vào Quản lý chuyến tàu");
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
         // Handler cho quản lý chuyến tàu
         lblQuanLyChuyenTau.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý chuyến tàu");
@@ -218,9 +232,13 @@ public class QuanLyVe_GUI_Controller {
                 } else {
                     lblChucVu.setText("Quản lý");
                 }
-                File imageFile = new File(nv.getLinkAnh());
-                Image image = new Image(imageFile.toURI().toString());
-                imgAnhNhanVien.setImage(image);
+                try {
+                    File imageFile = new File(nv.getLinkAnh());
+                    Image image = new Image(imageFile.toURI().toString());
+                    imgAnhNhanVien.setImage(image);
+                } catch (Exception e) {
+                    System.err.println("Không thể tải ảnh nhân viên: " + e.getMessage());
+                }
             } else {
                 lblMaNhanVien.setText("Mã nhân viên: Không tìm thấy");
                 lblTenNhanVien.setText("Tên nhân viên: Không tìm thấy");

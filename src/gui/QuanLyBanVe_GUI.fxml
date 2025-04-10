@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="pnHome" fx:id="pnHome" prefHeight="795.0" prefWidth="1540.0" stylesheets="@QuanLyBanVe_GUI.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pnHome" fx:id="pnHome" prefHeight="795.0" prefWidth="1540.0" stylesheets="@QuanLyBanVe_GUI.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.QuanLyBanVe_GUI_Controller">
    <children>
       <MenuBar id="menuBar" fx:id="menuBar" layoutX="-3.2" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="1542.0">
         <menus>
@@ -28,7 +28,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
+      <AnchorPane id="pnmenu" layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
          <children>
             <Label id="lblQuanLyBanVe" fx:id="lblQuanLyBanVe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="70.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Quản lý bán vé         " textFill="WHITE">
                <font>
@@ -142,6 +142,7 @@
             </ImageView>
          </children>
       </AnchorPane>
+      
       <ComboBox id="cboDiemDi" fx:id="cboDiemDi" layoutX="340.0" layoutY="86.0" prefHeight="30.0" prefWidth="200.0" />
       <Label id="lblDiemDi" fx:id="lblDiemDi" layoutX="250.0" layoutY="91.0" text="Điểm đi:">
          <font>
@@ -865,12 +866,12 @@
             
             <!-- Phần mới thêm -->
             <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
-            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/Menu_NhanVien.png" />
                </image>
             </ImageView>
-            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+            <Label id="lblMaNhanVien" fx:id="lblMaNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>

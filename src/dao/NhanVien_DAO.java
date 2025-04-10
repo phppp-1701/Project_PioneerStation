@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connectDB.ConnectDB;
-import entity.KhachHang;
 import entity.NhanVien;
-import entity.KhachHang.LoaiThanhVien;
-import entity.KhachHang.TrangThaiKhachHang;
 import entity.NhanVien.ChucVu;
 import entity.NhanVien.GioiTinh;
 import entity.NhanVien.TrangThaiNhanVien;
@@ -484,4 +481,64 @@ public class NhanVien_DAO {
 			}
 		}
 	}
+    
+    public NhanVien timNhanVienTheoMa(String maNhanVien) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        NhanVien nv = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien WHERE maNhanVien = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maNhanVien);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                nv = new NhanVien();
+                nv.setMaNhanVien(rs.getString("maNhanVien"));
+                nv.setTenNhanVien(rs.getString("tenNhanVien"));
+                nv.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
+                nv.setEmail(rs.getString("email"));
+                
+                // Xử lý enum GioiTinh
+                String gioiTinh = rs.getString("gioiTinh");
+                nv.setGioiTinh("nu".equals(gioiTinh) ? GioiTinh.nu : GioiTinh.nam);
+                
+                nv.setCccd_HoChieu(rs.getString("CCCD_HoChieu"));
+                
+                // Xử lý enum ChucVu
+                String chucVu = rs.getString("chucVu");
+                if ("quanLy".equals(chucVu)) {
+                    nv.setChucVu(ChucVu.quanLy);
+                } else {
+                    nv.setChucVu(ChucVu.banVe);
+                }
+                
+                String trangThaiNhanVien = rs.getString("trangThaiNhanVien");
+                if ("hoatDong".equals(trangThaiNhanVien)) {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.hoatDong);
+                } else {
+                    nv.setTrangThaiNhanVien(TrangThaiNhanVien.voHieuHoa);
+                }
+                
+                // Thêm ánh xạ cho cột linkAnh
+                nv.setLinkAnh(rs.getString("linkAnh"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return nv;
+    }
 }

@@ -5,12 +5,12 @@ import java.util.Objects;
 public class TaiKhoan {
     private String tenTaiKhoan;
     private String matKhau;
-    private NhanVien maNhanVien;
+    private String maNhanVien;
 
     public TaiKhoan() {
     }
 
-    public TaiKhoan(String tenTaiKhoan, String matKhau, NhanVien maNhanVien) {
+    public TaiKhoan(String tenTaiKhoan, String matKhau, String maNhanVien) {
         this.tenTaiKhoan = tenTaiKhoan;
         this.matKhau = matKhau;
         
@@ -32,11 +32,11 @@ public class TaiKhoan {
         this.matKhau = matKhau;
     }
 
-	public NhanVien getMaNhanVien() {
+	public String getMaNhanVien() {
 		return maNhanVien;
 	}
 
-	public void setMaNhanVien(NhanVien maNhanVien) {
+	public void setMaNhanVien(String maNhanVien) {
 		this.maNhanVien = maNhanVien;
 	}
 

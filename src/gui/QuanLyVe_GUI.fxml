@@ -27,7 +27,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
+      <AnchorPane id="pnmenu" layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
          <children>
             <Label id="lblQuanLyBanVe" fx:id="lblQuanLyBanVe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="70.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý bán vé         " textFill="WHITE">
                <font>
@@ -141,6 +141,7 @@
             </ImageView>
          </children>
       </AnchorPane>
+     
       <AnchorPane layoutX="246.0" layoutY="28.0" prefHeight="86.0" prefWidth="1044.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="107.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-nen" width="1044.0" />
@@ -216,12 +217,12 @@
             
             <!-- Phần mới thêm -->
             <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="#66cccc" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
-            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/Menu_NhanVien.png" />
                </image>
             </ImageView>
-            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+            <Label id="lblMaNhanVien" fx:id="lblMaNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>

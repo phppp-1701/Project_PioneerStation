@@ -253,12 +253,12 @@
             
             <!-- Phần mới thêm -->
             <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
-            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/Menu_NhanVien.png" />
                </image>
             </ImageView>
-            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+            <Label id="lblMaNhanVien" fx:id="lblMaNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
@@ -341,12 +341,17 @@
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="btnThemNhanVien" layoutX="731.0" layoutY="688.0" mnemonicParsing="false" onAction="#btnThemNhanVienClicked" styleClass="btn-themNhanVien" text="Thêm nhân viên" textFill="WHITE">
+      <Button fx:id="btnThemNhanVien" layoutX="670.0" layoutY="688.0" mnemonicParsing="false" onAction="#btnThemNhanVienClicked" styleClass="btn-themNhanVien" text="Thêm nhân viên" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="btnCapNhatNhanVien" layoutX="914.0" layoutY="688.0" mnemonicParsing="false" onAction="#btnCapNhatClicked" styleClass="btn-capNhatNhanVien" text="Cập nhật nhân viên" textFill="WHITE">
+      <Button fx:id="btnCapNhatNhanVien" layoutX="982.0" layoutY="688.0" mnemonicParsing="false" onAction="#btnCapNhatClicked" styleClass="btn-capNhatNhanVien" text="Cập nhật nhân viên" textFill="WHITE">
+         <font>
+            <Font name="Tahoma" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnThemTaiKhoan" layoutX="829.0" layoutY="688.0" mnemonicParsing="false" onAction="#btnThemTaiKhoanClicked" styleClass="btn-themTaiKhoan" text="Thêm tài khoản" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>

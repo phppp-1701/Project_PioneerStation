@@ -60,11 +60,13 @@ INSERT INTO NhanVien (maNhanVien, tenNhanVien, ngaySinh, soDienThoai, email, gio
  )
  go
 
-CREATE TABLE Tau (
-    maTau VARCHAR(20) PRIMARY KEY,
-    tenTau NVARCHAR(100) NOT NULL,
-    trangThai VARCHAR(10) CHECK (trangThai IN ('hoatDong', 'baoTri'))
-);
+INSERT INTO TaiKhoan (tenTaiKhoan, matKhau, maNhanVien)
+VALUES
+('hphuong17', 'phuong123', '2022NV000001'),
+('pvquan29', 'quan456', '2022NV000002'),
+('trungbtq', 'trung789', '2022NV000003'),
+('tuanminh', 'tuan101', '2022NV000004'),
+('trinhnt', 'trinh202', '2023NV000001');
 go
 
 CREATE TABLE Ga (
@@ -99,9 +101,12 @@ CREATE TABLE Toa (
 );
 
 CREATE TABLE ChoNgoi (
-    maCho VARCHAR(20) PRIMARY KEY,
+    maCho VARCHAR(20),
+    maChuyenTau VARCHAR(20),
     tenCho NVARCHAR(50) NOT NULL,
     trangThaiCho VARCHAR(20) CHECK (trangThaiCho IN ('daDat', 'conTrong', 'dangChon')),
+    PRIMARY KEY (maChuyenTau, maCho),
+	maChuyenTau VARCHAR(20) FOREIGN KEY REFERENCES ChuyenTau(maChuyenTau),
     maToa VARCHAR(20) FOREIGN KEY REFERENCES Toa(maToa)
 );
 
@@ -112,6 +117,13 @@ CREATE TABLE KhuyenMai (
     ngayBatDau DATE NOT NULL,
     ngayKetThuc DATE NOT NULL
 );
+
+CREATE TABLE Tau(
+	maTau VARCHAR(20) PRIMARY KEY,
+	tenTau NVARCHAR(100) NOT NULL,
+	loaiTau VARCHAR(20) CHECK (loaiTau IN ('SE', 'TN', 'DP')),
+	trangThai VARCHAR(20) CHECK (trangThai IN ('hoatDong', 'baoTri'))
+)
 
 CREATE TABLE HoaDon (
     maHoaDon VARCHAR(20) PRIMARY KEY,
