@@ -289,12 +289,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button layoutX="731.0" layoutY="260.0" mnemonicParsing="false" text="Cập nhật">
-                                 <font>
-                                    <Font name="Tahoma" size="14.0" />
-                                 </font>
-                              </Button>
-                              <Button layoutX="630.0" layoutY="261.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Thêm">
+                              <Button layoutX="646.0" layoutY="261.0" mnemonicParsing="false" text="Cập nhật">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -311,6 +306,11 @@
               </content>
             </Tab>
             <Tab text="Chuyến tàu">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Ga">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
