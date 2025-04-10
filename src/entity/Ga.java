@@ -50,8 +50,4 @@ public class Ga {
 		Ga other = (Ga) obj;
 		return Objects.equals(maGa, other.maGa);
 	}
-	
-	
-	
-	
 }

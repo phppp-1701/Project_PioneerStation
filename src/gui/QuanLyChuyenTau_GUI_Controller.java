@@ -13,9 +13,16 @@ import entity.Tau;
 import entity.KhachHang.LoaiThanhVien;
 import entity.KhachHang.TrangThaiKhachHang;
 import javafx.beans.property.SimpleStringProperty;
+import dao.Ga_DAO;
+import dao.NhanVien_DAO;
+import entity.Ga;
+import entity.NhanVien;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -24,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -303,6 +311,101 @@ public class QuanLyChuyenTau_GUI_Controller {
 	    String tenTau = txtTimTenTau.getText().trim();
 
 	    }
-
+	
+	
+    @FXML
+    private TextField txtTimGa;
     
+    @FXML
+    private Button btnTimGa;
+    
+    @FXML
+    private TableView<Ga> tbDanhSachGa; 
+    
+    @FXML
+    private TableColumn<Ga, String> colSTTGa;
+    
+    @FXML
+    private TableColumn<Ga, String> colMaGa;
+    
+    @FXML
+    private TableColumn<Ga, String> colTenGa;
+    
+    @FXML
+    private	TableColumn<Ga, String> colDiaChi;
+    
+    @FXML
+    private void btnTimGaClicked() {
+    	String tenGa = txtTimGa.getText().toString();
+    	if(tenGa.trim().equals("")) {
+    		showWarningAlert("Bạn chưa nhập tên ga để tìm!", "image/canhBao.png");
+    		txtTimGa.requestFocus();
+    	}else {
+    		Ga_DAO ga_dao = new Ga_DAO();
+    		List<Ga> dsga = ga_dao.timGaTheoTen(tenGa);
+    		if(dsga.isEmpty()) {
+    			showWarningAlert("Không tìm thấy ga theo tên được nhập!", "image/canhBao.png");
+    			txtTimGa.requestFocus();
+    			txtTimGa.selectAll();
+    		}else {
+                tbDanhSachGa.getItems().clear();
+                
+                // Tạo ObservableList từ danh sách ga
+                ObservableList<Ga> data = FXCollections.observableArrayList(dsga);
+                
+                // Liên kết dữ liệu với các cột
+
+                colSTTGa.setCellValueFactory(cellData -> 
+	            new SimpleStringProperty(String.valueOf(tbDanhSachGa.getItems().indexOf(cellData.getValue()) + 1)));
+                
+                colMaGa.setCellValueFactory(new PropertyValueFactory<>("maGa"));
+                colTenGa.setCellValueFactory(new PropertyValueFactory<>("tenGa"));
+                colDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
+                
+                // Đặt dữ liệu vào table
+                tbDanhSachGa.setItems(data);
+    		}
+    	}
+    }
+    
+    private void showErrorAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void showWarningAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Cảnh báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void showInformationAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+    
+    private void setAlertIcon(Alert alert, String icon) {
+        File file = new File(icon);
+        if (file.exists()) {
+            try {
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tải ảnh: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+        }
+    }
 }
