@@ -166,8 +166,6 @@ public class QuanLyNhanVien_GUI_Controller {
                     displayValue = "Hoạt động";
                 } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieuHoa) {
                     displayValue = "Vô hiệu hóa";
-                    
-
                 }
                 return new SimpleStringProperty(displayValue);
             });

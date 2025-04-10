@@ -185,13 +185,13 @@
                                     <Font name="Tahoma Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <TableView layoutY="61.0" prefHeight="358.0" prefWidth="415.0">
+                              <TableView fx:id="tbDanhSachTau" layoutY="61.0" prefHeight="358.0" prefWidth="415.0">
                                 <columns>
-                                  <TableColumn fx:id="colStt" prefWidth="75.0" text="STT" />
-                                  <TableColumn fx:id="colMaTau" prefWidth="93.60003662109375" text="Mã tàu" />
-                                    <TableColumn fx:id="colTenTau" prefWidth="75.0" text="Tên tàu" />
-                                    <TableColumn fx:id="colLoaiTau" prefWidth="75.0" text="Loại tàu" />
-                                    <TableColumn fx:id="colTrangThai" prefWidth="94.4000244140625" text="Trạng thái" />
+                                  <TableColumn fx:id="colStt" prefWidth="36.800048828125" text="STT" />
+                                  <TableColumn fx:id="colMaTau" prefWidth="96.79998779296875" text="Mã tàu" />
+                                    <TableColumn fx:id="colTenTau" prefWidth="123.20001220703125" text="Tên tàu" />
+                                    <TableColumn fx:id="colLoaiTau" prefWidth="64.0" text="Loại tàu" />
+                                    <TableColumn fx:id="colTrangThaiTau" prefWidth="94.4000244140625" text="Trạng thái" />
 
                                 </columns>
                               </TableView>
@@ -215,7 +215,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="btnTim" layoutX="306.0" layoutY="118.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Tìm">
+                              <Button fx:id="btnTimTau" layoutX="306.0" layoutY="118.0" mnemonicParsing="false" onAction="#btnTimTauClicked" prefHeight="28.0" prefWidth="79.0" text="Tìm">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -280,7 +280,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cboLoaiTau" layoutX="389.0" layoutY="261.0" prefHeight="28.0" prefWidth="219.0" styleClass="tab" />
+                              <ComboBox fx:id="cboLoaiToa" layoutX="389.0" layoutY="261.0" prefHeight="28.0" prefWidth="219.0" styleClass="tab" />
                               <Button fx:id="btnThem" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Thêm">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />

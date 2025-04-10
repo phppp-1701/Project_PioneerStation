@@ -10,8 +10,13 @@ import dao.Tau_DAO;
 import entity.KhachHang;
 import entity.NhanVien;
 import entity.Tau;
+import entity.Tau.LoaiTau;
+import entity.Tau.TrangThaiTau;
 import entity.KhachHang.LoaiThanhVien;
 import entity.KhachHang.TrangThaiKhachHang;
+import entity.NhanVien.ChucVu;
+import entity.NhanVien.GioiTinh;
+import entity.NhanVien.TrangThaiNhanVien;
 import javafx.beans.property.SimpleStringProperty;
 import dao.Ga_DAO;
 import dao.NhanVien_DAO;
@@ -24,6 +29,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -111,6 +117,16 @@ public class QuanLyChuyenTau_GUI_Controller {
         lblMaNhanVien.setText("Mã nhân viên: Chưa tải");
         lblTenNhanVien.setText("Tên nhân viên: Chưa tải");
         lblChucVu.setText("Chức vụ: Chưa tải");
+        
+        tbDanhSachTau.setOnMouseClicked(event -> {
+            Tau tau = tbDanhSachTau.getSelectionModel().getSelectedItem();
+            if (tau != null) {
+                txtMaTau.setText(tau.getMaTau());
+                txtTenTau.setText(tau.getTenTau());
+                cboLoaiTau.setValue(tau.getLoaiTau());
+                cboTrangThaiTau.setValue(tau.getTrangThaiTau());
+            }
+        });
         
         // Thêm sự kiện nhấp chuột cho lblDangXuat với xác nhận
         lblDangXuat.setOnMouseClicked(event -> {
@@ -304,13 +320,76 @@ public class QuanLyChuyenTau_GUI_Controller {
 	
 	@FXML
 	private TextField txtTimTenTau;
-
+	
+	@FXML
+	private TextField txtMaTau;
+	
+	@FXML
+	private TextField txtTenTau;
+	
+	@FXML
+	private ComboBox<LoaiTau> cboLoaiTau;
+	
+	
+	@FXML
+	private ComboBox<TrangThaiTau> cboTrangThaiTau;
 
 	@FXML
-	private void btnTimClicked() {
-	    String tenTau = txtTimTenTau.getText().trim();
+	private Button btnTimTau;
 
-	    }
+	@FXML
+	private void btnTimTauClicked() {
+	    String tenTau = txtTimTenTau.getText().toString();
+    	if(tenTau.trim().equals("")) {
+    		showWarningAlert("Bạn chưa nhập tên tàu để tìm!", "image/canhBao.png");
+    		txtTimGa.requestFocus();
+    	}else {
+    		Tau_DAO tau_dao = new Tau_DAO();
+    		List<Tau> dstau = tau_dao.timTauTheoTen(tenTau);
+    		if(dstau.isEmpty()) {
+    			showWarningAlert("Không tìm thấy tàu theo tên được nhập!", "image/canhBao.png");
+    			txtTimTenTau.requestFocus();
+    			txtTimTenTau.selectAll();
+    		}else {
+    			tbDanhSachTau.getItems().clear();
+                
+                // Tạo ObservableList từ danh sách ga
+                ObservableList<Tau> data = FXCollections.observableArrayList(dstau);
+                
+                // Liên kết dữ liệu với các cột
+
+                colStt.setCellValueFactory(cellData -> 
+	            new SimpleStringProperty(String.valueOf(tbDanhSachTau.getItems().indexOf(cellData.getValue()) + 1)));
+                
+                colMaTau.setCellValueFactory(new PropertyValueFactory<>("maTau"));
+                colTenTau.setCellValueFactory(new PropertyValueFactory<>("tenTau"));
+                colLoaiTau.setCellValueFactory(cellData -> {
+                	LoaiTau loaiTau = cellData.getValue().getLoaiTau();
+                	String displayValue = "";
+                	if (loaiTau == LoaiTau.SE) {
+                	    displayValue = "SE";
+                	} else if (loaiTau == LoaiTau.TN) {
+                	    displayValue = "TN";
+                	} else if (loaiTau == LoaiTau.DP) {
+                	    displayValue = "DP";
+                	}
+                	return new SimpleStringProperty(displayValue);
+                });
+                colTrangThaiTau.setCellValueFactory(cellData -> {
+                    TrangThaiTau trangThaiTau = cellData.getValue().getTrangThaiTau();
+                    String displayValue = "";
+                    if (trangThaiTau == TrangThaiTau.hoatDong) {
+                        displayValue = "Hoạt động";
+                    } else if (trangThaiTau == TrangThaiTau.baoTri) {
+                        displayValue = "Bảo trì";
+                    }
+                    return new SimpleStringProperty(displayValue);
+                });                
+                // Đặt dữ liệu vào table
+                tbDanhSachTau.setItems(data);
+    		}
+    	}
+	}
 	
 	
     @FXML

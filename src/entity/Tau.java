@@ -9,8 +9,19 @@ public class Tau {
 	private LoaiTau loaiTau;
 	
 	public enum TrangThaiTau {
-        hoatDong,
-        baoTri
+		hoatDong("Hoạt động"),
+	    baoTri("Bảo trì");
+
+	    private String displayName;
+
+	    private TrangThaiTau(String displayName) {
+	        this.displayName = displayName;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return displayName;
+	    }
     }
 	public enum LoaiTau {
 	    SE,  // Tàu SE
