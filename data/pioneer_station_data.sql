@@ -107,12 +107,65 @@ CREATE TABLE LichTrinh (
     ngayKhoiHanh VARCHAR(20) CHECK (ngayKhoiHanh IN ('thuHai', 'thuBa', 'thuTu', 'thuNam', 'thuSau', 'thuBay', 'chuNhat'))
 );
 
+CREATE TABLE Tau(
+	maTau VARCHAR(20) PRIMARY KEY,
+	tenTau NVARCHAR(100) NOT NULL,
+	loaiTau VARCHAR(20) CHECK (loaiTau IN ('SE', 'TN')),
+	trangThai VARCHAR(20) CHECK (trangThai IN ('hoatDong', 'baoTri'))
+)
+go
+
+INSERT INTO Tau (maTau, tenTau, loaiTau, trangThai) VALUES
+('2025SE000001', N'Tàu Thống Nhất 1', 'SE', 'hoatDong'),
+('2025SE000002', N'Tàu Thống Nhất 2', 'SE', 'baoTri'),
+('2025TN000001', N'Tàu Miền Trung 1', 'TN', 'hoatDong'),
+('2025TN000002', N'Tàu Tây Nguyên', 'TN', 'baoTri');
+go
+
 CREATE TABLE Toa (
     maToa VARCHAR(20) PRIMARY KEY,
     tenToa NVARCHAR(100) NOT NULL,
     loaiToa VARCHAR(20) CHECK (loaiToa IN ('ngoiMemDieuHoa', 'giuongNamDieuHoa', 'gheCungDieuHoa')),
+	trangThai VarChar(20) Check (trangThai in ('hoatDong', 'voHieuHoa')),
     maTau VARCHAR(20) FOREIGN KEY REFERENCES Tau(maTau)
 );
+
+INSERT INTO Toa (maToa, tenToa, loaiToa, trangThai, maTau) VALUES
+-- Tàu '2025SE000001' (SE, 10 toa)
+('2025SE00000101', N'Toa số 1', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000102', N'Toa số 2', 'giuongNamDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000103', N'Toa số 3', 'gheCungDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000104', N'Toa số 4', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000105', N'Toa số 5', 'giuongNamDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000106', N'Toa số 6', 'gheCungDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000107', N'Toa số 7', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000108', N'Toa số 8', 'giuongNamDieuHoa', 'hoatDong', '2025SE000001'),
+('2025SE00000109', N'Toa số 9', 'gheCungDieuHoa', 'voHieuHoa', '2025SE000001'),
+('2025SE00000110', N'Toa số 10', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000001'),
+
+-- Tàu '2025SE000002' (SE, 8 toa)
+('2025SE00000201', N'Toa số 1', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000202', N'Toa số 2', 'giuongNamDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000203', N'Toa số 3', 'gheCungDieuHoa', 'voHieuHoa', '2025SE000002'),
+('2025SE00000204', N'Toa số 4', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000205', N'Toa số 5', 'giuongNamDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000206', N'Toa số 6', 'gheCungDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000207', N'Toa số 7', 'ngoiMemDieuHoa', 'hoatDong', '2025SE000002'),
+('2025SE00000208', N'Toa số 8', 'giuongNamDieuHoa', 'voHieuHoa', '2025SE000002'),
+
+-- Tàu '2025TN000001' (TN, 5 toa)
+('2025TN00000101', N'Toa số 1', 'ngoiMemDieuHoa', 'hoatDong', '2025TN000001'),
+('2025TN00000102', N'Toa số 2', 'giuongNamDieuHoa', 'hoatDong', '2025TN000001'),
+('2025TN00000103', N'Toa số 3', 'gheCungDieuHoa', 'hoatDong', '2025TN000001'),
+('2025TN00000104', N'Toa số 4', 'ngoiMemDieuHoa', 'hoatDong', '2025TN000001'),
+('2025TN00000105', N'Toa số 5', 'giuongNamDieuHoa', 'voHieuHoa', '2025TN000001'),
+
+-- Tàu '2025TN000002' (TN, 4 toa)
+('2025TN00000201', N'Toa số 1', 'ngoiMemDieuHoa', 'hoatDong', '2025TN000002'),
+('2025TN00000202', N'Toa số 2', 'giuongNamDieuHoa', 'hoatDong', '2025TN000002'),
+('2025TN00000203', N'Toa số 3', 'gheCungDieuHoa', 'voHieuHoa', '2025TN000002'),
+('2025TN00000204', N'Toa số 4', 'ngoiMemDieuHoa', 'hoatDong', '2025TN000002');
+GO
 
 CREATE TABLE KhuyenMai (
     maKhuyenMai VARCHAR(20) PRIMARY KEY,
@@ -122,20 +175,6 @@ CREATE TABLE KhuyenMai (
     ngayKetThuc DATE NOT NULL
 );
 
-CREATE TABLE Tau(
-	maTau VARCHAR(20) PRIMARY KEY,
-	tenTau NVARCHAR(100) NOT NULL,
-	loaiTau VARCHAR(20) CHECK (loaiTau IN ('SE', 'TN', 'DP')),
-	trangThai VARCHAR(20) CHECK (trangThai IN ('hoatDong', 'baoTri'))
-)
-
-INSERT INTO Tau (maTau, tenTau, loaiTau, trangThai) VALUES
-('2025SE000001', N'Tàu Thống Nhất 1', 'SE', 'hoatDong'),
-('2025SE000002', N'Tàu Thống Nhất 2', 'SE', 'baoTri'),
-('2025TN000001', N'Tàu Miền Trung 1', 'TN', 'hoatDong'),
-('2025TN000002', N'Tàu Tây Nguyên', 'TN', 'baoTri'),
-('2025DP000001', N'Tàu Địa Phương 1', 'DP', 'hoatDong'),
-('2025DP000002', N'Tàu Địa Phương 2', 'DP', 'baoTri');
 
 
 CREATE TABLE HoaDon (

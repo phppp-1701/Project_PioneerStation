@@ -264,4 +264,91 @@ public class Tau_DAO {
         }
         return false;
     }
+    
+    public boolean kiemTraTonTaiTauTheoTen(String tenTau) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean tonTai = false;
+
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM Tau WHERE tenTau = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTau.trim()); // Loại bỏ khoảng trắng thừa
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                tonTai = rs.getInt(1) > 0; // Nếu COUNT > 0 => tên tàu tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return tonTai;
+    }
+    public String taoMaTauMoiTheoLoaiVaMa(LoaiTau loaiTau, String maTau) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String maCuoiCung = null;
+        int namHienTai = Year.now().getValue();
+
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT TOP 1 maTau FROM Tau WHERE maTau LIKE ? ORDER BY maTau DESC";
+            stmt = con.prepareStatement(sql);
+            
+            // Tạo prefix dựa trên loại tàu, ví dụ: "SE%", "TN%", "DP%"
+            String prefix = "%" + loaiTau.name() + "%";
+            stmt.setString(1, prefix);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                maCuoiCung = rs.getString("maTau");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String maSoMoi;
+        // Nếu không có mã cuối cùng hoặc mã truyền vào không hợp lệ
+        if (maCuoiCung == null || maCuoiCung.isEmpty()) {
+            maSoMoi = "000001";
+            return namHienTai + loaiTau.name() + maSoMoi;
+        }
+
+        // Lấy 4 ký tự đầu của mã cuối cùng (năm)
+        String namCuoiCungStr = maCuoiCung.substring(0, 4);
+        int namCuoiCung = Integer.parseInt(namCuoiCungStr);
+
+        // Nếu năm cuối cùng không trùng với năm hiện tại
+        if (namCuoiCung != namHienTai) {
+            maSoMoi = "000001";
+            return namHienTai + loaiTau.name() + maSoMoi;
+        }
+
+        // Nếu trùng năm hiện tại, tăng số thứ tự lên
+        int soCuoi = Integer.parseInt(maCuoiCung.substring(6)); // Lấy dãy số cuối (00000x)
+        soCuoi++;
+        maSoMoi = String.format("%06d", soCuoi); // Định dạng lại thành 6 chữ số
+
+        return namHienTai + loaiTau.name() + maSoMoi;
+    }
 }

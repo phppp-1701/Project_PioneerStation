@@ -224,7 +224,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="436.0" prefHeight="198.0" prefWidth="850.0">
                            <children>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="308.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="850.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="323.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="850.0" />
                               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="850.0" />
                               <Label layoutX="341.0" layoutY="20.0" text="Thông tin chi tiết tàu" textFill="WHITE">
                                  <font>
@@ -269,33 +269,50 @@
                                  </font>
                               </Label>
                               <ComboBox fx:id="cboSoLuongToa" layoutX="130.0" layoutY="158.0" prefHeight="26.0" prefWidth="279.0" styleClass="tab" />
-                              <Label layoutX="26.0" layoutY="265.0" text="Toa:">
+                              <Label layoutX="23.0" layoutY="281.0" text="Toa:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cboToa" layoutX="130.0" layoutY="261.0" prefHeight="28.0" prefWidth="146.0" styleClass="tab" />
-                              <Label layoutX="306.0" layoutY="265.0" text="Loại toa:">
+                              <ComboBox fx:id="cboToa" layoutX="68.0" layoutY="276.0" prefHeight="28.0" prefWidth="146.0" styleClass="tab" />
+                              <Label layoutX="226.0" layoutY="282.0" text="Loại toa:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cboLoaiToa" layoutX="389.0" layoutY="261.0" prefHeight="28.0" prefWidth="219.0" styleClass="tab" />
-                              <Button fx:id="btnThem" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Thêm">
+                              <ComboBox fx:id="cboLoaiToa" layoutX="288.0" layoutY="277.0" prefHeight="28.0" prefWidth="196.0" styleClass="tab" />
+                              <Button fx:id="btnThem" layoutX="644.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnThemTauClicked" prefHeight="28.0" prefWidth="79.0" text="Thêm">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnCapNhat" layoutX="652.0" layoutY="158.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="79.0" text="Cập nhật">
+                              <Button fx:id="btnCapNhatTau" layoutX="743.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnCapNhatTauClicked" prefHeight="28.0" prefWidth="79.0" text="Cập nhật">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button layoutX="646.0" layoutY="261.0" mnemonicParsing="false" text="Cập nhật">
+                              <Button fx:id="btnCapNhatToa" layoutX="747.0" layoutY="277.0" mnemonicParsing="false" onAction="#btnCapNhatToaClicked" text="Cập nhật">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
+                              <Button fx:id="btnLamRong" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnLamRongClicked" prefHeight="28.0" prefWidth="79.0" text="Làm rỗng">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Button>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" layoutY="203.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-tieuDe" width="850.0" />
+                              <Label layoutX="371.0" layoutY="223.0" text="Thông tin toa" textFill="WHITE">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="494.0" layoutY="281.0" text="Trạng thái:">
+                                 <font>
+                                    <Font name="Tahoma" size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cboTrangThaiToa" layoutX="576.0" layoutY="276.0" prefHeight="28.0" prefWidth="155.0" styleClass="tab" />
                            </children>
                         </AnchorPane>
                      </children>
