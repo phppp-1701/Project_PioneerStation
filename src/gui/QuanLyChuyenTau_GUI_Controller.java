@@ -33,6 +33,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -109,6 +110,18 @@ public class QuanLyChuyenTau_GUI_Controller {
     
     @FXML
     public void initialize() {
+    	txtMaGa.setDisable(true);
+    	txtMaGa.setEditable(false);
+    	// Sự kiện khi nhấp vào một ga trong TableView
+    	tbDanhSachGa.setOnMouseClicked(event -> {
+    	    Ga ga = tbDanhSachGa.getSelectionModel().getSelectedItem();
+    	    if (ga != null) {
+    	        // Hiển thị thông tin ga lên các TextField và TextArea
+    	        txtMaGa.setText(ga.getMaGa());
+    	        txtTenGa.setText(ga.getTenGa());
+    	        txtDiaChi.setText(ga.getDiaChi());
+    	    }
+    	});
     	
     	// Trong phương thức initialize()
     	cboLoaiToa.setItems(FXCollections.observableArrayList(
@@ -957,6 +970,128 @@ public class QuanLyChuyenTau_GUI_Controller {
         } catch (SQLException e) {
             e.printStackTrace();
             showErrorAlert("Lỗi khi cập nhật toa: " + e.getMessage(), "image/loi.png");
+        }
+    }
+    
+    @FXML
+    private TextField txtMaGa;
+    
+    @FXML
+    private TextField txtTenGa;
+    
+    @FXML
+    private TextArea txtDiaChi;
+    
+    @FXML
+    private Button btnCapNhatGa;
+    
+    @FXML
+    private Button btnThemGa;
+    
+    @FXML
+    private Button btnThemGaClicked;
+    
+    @FXML
+    private void btnThemGaClicked() {
+        String tenGa = txtTenGa.getText().trim();
+        String diaChi = txtDiaChi.getText().trim();
+        
+        if(!txtMaGa.getText().trim().equals("")) {
+        	showWarningAlert("Bạn đang chọn một ga, vui lòng nhấn làm rỗng rồi mới thêm!", "image/canhBao.png");
+        	return;
+        }
+
+        // Kiểm tra các trường nhập liệu không được để trống
+        if (tenGa.isEmpty() || diaChi.isEmpty()) {
+            showWarningAlert("Tên ga và địa chỉ không được để trống!", "image/canhBao.png");
+            if (tenGa.isEmpty()) {
+                txtTenGa.requestFocus();
+            } else {
+                txtDiaChi.requestFocus();
+            }
+            return;
+        }
+
+        Ga_DAO ga_DAO = new Ga_DAO();
+
+        // Kiểm tra xem tên ga đã tồn tại chưa
+        if (ga_DAO.kiemTraTonTaiGaTheoTen(tenGa)) {
+            showWarningAlert("Tên ga '" + tenGa + "' đã tồn tại! Vui lòng chọn tên khác.", "image/canhBao.png");
+            txtTenGa.requestFocus();
+            txtTenGa.selectAll();
+            return;
+        }
+
+        // Tạo mã ga mới
+        String maGaMoi = ga_DAO.taoMaGaMoi();
+        
+        // Tạo đối tượng ga mới
+        Ga ga = new Ga(maGaMoi, tenGa, diaChi);
+        
+        // Thêm ga vào cơ sở dữ liệu
+        if (ga_DAO.themGa(ga)) {
+            showInformationAlert("Thêm ga thành công! Mã ga: " + maGaMoi, "image/thanhCong.png");
+            txtMaGa.setText(maGaMoi); // Hiển thị mã ga mới lên txtMaGa
+            btnTimGaClicked(); // Cập nhật lại danh sách ga trong TableView
+        } else {
+            showErrorAlert("Thêm ga thất bại!", "image/canhBao.png");
+        }
+    }
+    
+    @FXML
+    private Button btnLamRongGa;
+    
+    @FXML
+    private void btnLamRongGaClicked() {
+    	txtMaGa.setText("");
+    	txtTenGa.setText("");
+    	txtDiaChi.setText("");
+    }
+    
+    @FXML
+    private void btnCapNhatGaClicked() {
+        // Kiểm tra xem đã chọn ga để cập nhật chưa
+        if (txtMaGa.getText().trim().isEmpty()) {
+            showWarningAlert("Vui lòng chọn một ga từ danh sách để cập nhật!", "image/canhBao.png");
+            return;
+        }
+
+        // Lấy thông tin từ giao diện
+        String maGa = txtMaGa.getText().trim();
+        String tenGa = txtTenGa.getText().trim();
+        String diaChi = txtDiaChi.getText().trim();
+
+        // Kiểm tra các trường nhập liệu không được để trống
+        if (tenGa.isEmpty() || diaChi.isEmpty()) {
+            showWarningAlert("Tên ga và địa chỉ không được để trống!", "image/canhBao.png");
+            if (tenGa.isEmpty()) {
+                txtTenGa.requestFocus();
+            } else {
+                txtDiaChi.requestFocus();
+            }
+            return;
+        }
+
+        Ga_DAO ga_DAO = new Ga_DAO();
+
+        // Kiểm tra xem tên ga mới có trùng với ga khác không (ngoại trừ ga hiện tại)
+        List<Ga> dsGa = ga_DAO.timGaTheoTen(tenGa);
+        if (!dsGa.isEmpty() && dsGa.stream().anyMatch(ga -> ga.getTenGa().equals(tenGa) && !ga.getMaGa().equals(maGa))) {
+            showWarningAlert("Tên ga '" + tenGa + "' đã tồn tại! Vui lòng chọn tên khác.", "image/canhBao.png");
+            txtTenGa.requestFocus();
+            txtTenGa.selectAll();
+            return;
+        }
+
+        // Tạo đối tượng Ga với thông tin cập nhật
+        Ga ga = new Ga(maGa, tenGa, diaChi);
+
+        // Cập nhật ga trong cơ sở dữ liệu
+        if (ga_DAO.capNhatGa(ga)) {
+            showInformationAlert("Cập nhật ga thành công!", "image/thanhCong.png");
+            btnTimGaClicked(); // Cập nhật lại danh sách ga trong TableView
+        } else {
+            showErrorAlert("Cập nhật ga thất bại!", "image/loi.png");
         }
     }
 }

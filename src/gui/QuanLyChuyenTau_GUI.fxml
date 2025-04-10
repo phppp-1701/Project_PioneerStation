@@ -386,12 +386,12 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="102.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
+                              <TextField fx:id="txtMaGa" layoutX="102.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </TextField>
-                              <TextField layoutX="493.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
+                              <TextField fx:id="txtTenGa" layoutX="493.0" layoutY="71.0" prefHeight="28.0" prefWidth="278.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -401,19 +401,24 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <TextArea layoutX="31.0" layoutY="135.0" prefHeight="286.0" prefWidth="742.0">
+                              <TextArea fx:id="txtDiaChi" layoutX="31.0" layoutY="135.0" prefHeight="286.0" prefWidth="742.0">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </TextArea>
                            </children>
                         </AnchorPane>
-                        <Button layoutX="808.0" layoutY="453.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="77.0" text="Cập nhật">
+                        <Button fx:id="btnCapNhatGa" layoutX="762.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnCapNhatGaClicked" prefHeight="28.0" prefWidth="77.0" text="Cập nhật">
                            <font>
                               <Font name="Tahoma" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="918.0" layoutY="453.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="77.0" text="Thêm">
+                        <Button fx:id="btnThemGa" layoutX="872.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnThemGaClicked" prefHeight="28.0" prefWidth="77.0" text="Thêm">
+                           <font>
+                              <Font name="Tahoma" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnLamRongGa" layoutX="981.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnLamRongGaClicked" prefHeight="28.0" prefWidth="79.0" text="Làm rỗng">
                            <font>
                               <Font name="Tahoma" size="14.0" />
                            </font>
