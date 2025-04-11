@@ -92,9 +92,6 @@ public class QuanLyNhanVien_GUI_Controller {
 	        }
 	    }
 	}
-	
-    @FXML
-    private Button btnXuatDanhSach;
     
     @FXML
     private TableView<NhanVien> tbDanhSachNhanVien;
@@ -123,58 +120,6 @@ public class QuanLyNhanVien_GUI_Controller {
     @FXML 
     private TableColumn<NhanVien, String> colTrangThai;
     
-    @FXML
-    private void btnXuatDanhSachClicked() {
-        try {
-            List<NhanVien> danhSachNhanVien = new NhanVien_DAO().getAllNhanVien();
-            if (danhSachNhanVien.isEmpty()) {
-            	showInformationAlert("Danh sách nhân viên trống!","image/thongBao.png");
-                return;
-            }
-            
-            // Xóa dữ liệu cũ trong table (nếu có)
-            tbDanhSachNhanVien.getItems().clear();
-            
-            // Thêm dữ liệu mới vào table
-            tbDanhSachNhanVien.getItems().addAll(danhSachNhanVien);
-            
-            // Thiết lập giá trị cho các cột
-            colStt.setCellValueFactory(cellData -> 
-                new SimpleStringProperty(String.valueOf(tbDanhSachNhanVien.getItems().indexOf(cellData.getValue()) + 1)));
-            colMaNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaNhanVien()));
-            colTenNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenNhanVien()));
-            colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
-            colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-            colGioiTinh.setCellValueFactory(cellData -> {
-                GioiTinh gioiTinh = cellData.getValue().getGioiTinh();
-                String displayValue = gioiTinh == GioiTinh.nam ? "Nam" : "Nữ";
-                return new SimpleStringProperty(displayValue);
-            });
-            colChucVu.setCellValueFactory(cellData -> {
-                ChucVu chucVu = cellData.getValue().getChucVu();
-                String displayValue = "";
-                if (chucVu == ChucVu.quanLy) {
-                    displayValue = "Quản lý";
-                } else if (chucVu == ChucVu.banVe) {
-                    displayValue = "Bán vé";
-                }
-                return new SimpleStringProperty(displayValue);
-            });
-            colTrangThai.setCellValueFactory(cellData -> {
-                TrangThaiNhanVien trangThaiNhanVien = cellData.getValue().getTrangThaiNhanVien();
-                String displayValue = "";
-                if (trangThaiNhanVien == TrangThaiNhanVien.hoatDong) {
-                    displayValue = "Hoạt động";
-                } else if (trangThaiNhanVien == TrangThaiNhanVien.voHieuHoa) {
-                    displayValue = "Vô hiệu hóa";
-                }
-                return new SimpleStringProperty(displayValue);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            showErrorAlert("Không thể tải danh sách nhân viên!","image/canhBao.png");
-        }
-    }
     @FXML
     private Button btnTim;
 

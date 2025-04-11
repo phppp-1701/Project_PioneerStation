@@ -77,8 +77,6 @@ public class QuanLyKhachHang_GUI_Controller {
             }
         }
     }
-	@FXML
-    private Button btnXuatDanhSach;
 	
 	@FXML
 	private TableView<KhachHang> tbDanhSachKhachHang;
@@ -103,83 +101,6 @@ public class QuanLyKhachHang_GUI_Controller {
 	
 	@FXML
 	private TableColumn<KhachHang, String> colTrangThaiKhachHang;
-	
-	@FXML
-	private void btnXuatDanhSachClicked() {
-	    try {
-	        List<KhachHang> danhSachKhachHang = new KhachHang_DAO().getAllKhachHang();
-	        txtTimSoDienThoai.setText("");
-	        txtTimTenKhachHang.setText("");
-	        if (danhSachKhachHang.isEmpty()) {
-	            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-	            alert.setTitle("Thông báo");
-	            alert.setHeaderText(null);
-	            alert.setContentText("Danh sách khách hàng trống!");
-	            alert.showAndWait();
-	            return;
-	        }
-	        
-	        // Xóa dữ liệu cũ trong table (nếu có)
-	        tbDanhSachKhachHang.getItems().clear();
-	        
-	        // Thêm dữ liệu mới vào table
-	        tbDanhSachKhachHang.getItems().addAll(danhSachKhachHang);
-	        
-	        // Thiết lập giá trị cho các cột
-	        colStt.setCellValueFactory(cellData -> 
-	            new SimpleStringProperty(String.valueOf(tbDanhSachKhachHang.getItems().indexOf(cellData.getValue()) + 1)));
-	        colMaKhachHang.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaKhachHang()));
-	        colTen.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenKhachHang()));
-	        colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
-	        colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-	        colLoaiKhachHang.setCellValueFactory(cellData -> {
-	            LoaiThanhVien loai = cellData.getValue().getLoaiThanhVien();
-	            String displayValue = "";
-	            if (loai == LoaiThanhVien.thanThiet) {
-	                displayValue = "Thân thiết";
-	            } else if (loai == LoaiThanhVien.vip) {
-	                displayValue = "VIP";
-	            }
-	            return new SimpleStringProperty(displayValue);
-	        });
-	        colTrangThaiKhachHang.setCellValueFactory(cellData -> {
-	            TrangThaiKhachHang trangThaiKhachHang = cellData.getValue().getTrangThaiKhachHang();
-	            String displayValue = "";
-	            if (trangThaiKhachHang == TrangThaiKhachHang.hoatDong) {
-	                displayValue = "Hoạt động";
-	            } else if (trangThaiKhachHang == TrangThaiKhachHang.voHieuHoa) {
-	                displayValue = "Vô hiệu hóa";
-	            }
-	            return new SimpleStringProperty(displayValue);
-	        });
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        Alert alert = new Alert(Alert.AlertType.ERROR);
-	        alert.setTitle("Lỗi");
-	        alert.setHeaderText(null);
-	        alert.setContentText("Không thể tải danh sách khách hàng!");
-	        File file = new File("image/canhBao.png");
-	        if (file.exists()) {
-	            try {
-	                // Cách 1: Dùng đường dẫn file
-	                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	                stage.getIcons().add(new Image(file.toURI().toString()));
-	                
-	                // Hoặc Cách 2: Dùng InputStream
-	                // Image image = new Image(new FileInputStream(file));
-	                // stage.getIcons().add(image);
-	                
-	                System.out.println("Đã tải icon từ: " + file.getAbsolutePath());
-	            } catch (Exception e1) {
-	                System.err.println("Lỗi khi tải ảnh: " + e.getMessage());
-	            }
-	        } else {
-	            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
-	        }
-	        alert.showAndWait();
-	    }
-	}
 	
 	@FXML
 	private Button btnTim;
