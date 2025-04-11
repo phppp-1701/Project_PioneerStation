@@ -8,11 +8,13 @@ import java.util.List;
 import dao.ChuyenTau_DAO;
 import dao.Ga_DAO;
 import dao.NhanVien_DAO;
+import dao.Tau_DAO;
 import dao.TuyenTau_DAO;
 import entity.ChuyenTau;
 import entity.Ga;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
+import entity.Tau;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -24,6 +26,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -341,7 +348,9 @@ public class QuanLyBanVe_GUI_Controller {
     			showWarningAlert("Không tìm thấy chuyến tàu phù hợp!", "image/canhBao.png");
     			return;
     		}
-    		
+    		int soLuongChuyenTau = dsct.size();
+        	pnChuyenTau.setPrefWidth(160*soLuongChuyenTau + 14);
+    		taoPaneChuyenTau(dsct);
     	}
     }
     
@@ -416,6 +425,89 @@ public class QuanLyBanVe_GUI_Controller {
     }
     
     private void taoPaneChuyenTau(List<ChuyenTau> dsct) {
-    	int soLuongChuyenTau = dsct.size();
+        int layoutX = 14;
+        int layoutY = 14;
+
+        // Xóa các node cũ trong pnChuyenTau để tránh trùng lặp
+        pnChuyenTau.getChildren().clear();
+        System.out.println("Đã xóa các node cũ trong pnChuyenTau");
+
+        // Kiểm tra danh sách ChuyenTau
+        if (dsct == null || dsct.isEmpty()) {
+            System.out.println("Danh sách ChuyenTau rỗng hoặc null");
+            return;
+        }
+        System.out.println("Số lượng ChuyenTau: " + dsct.size());
+
+        // Tạo đối tượng Tau_DAO để tìm tàu
+        Tau_DAO tauDAO = new Tau_DAO();
+
+        // Duyệt qua danh sách các ChuyenTau
+        int index = 0;
+        for (ChuyenTau chuyenTau : dsct) {
+            // Tạo AnchorPane cho mỗi ChuyenTau
+            AnchorPane anchorPane = new AnchorPane();
+            anchorPane.setPrefSize(160, 160); // Giữ kích thước AnchorPane là 160x160
+            anchorPane.setLayoutX(layoutX);
+            anchorPane.setLayoutY(layoutY);
+            System.out.println("Tạo AnchorPane " + index + " tại (" + anchorPane.getLayoutX() + ", " + anchorPane.getLayoutY() + ")");
+
+            // Tăng layoutX để đặt AnchorPane tiếp theo
+            layoutX += 160; // Giữ khoảng cách giữa các AnchorPane
+
+            // Tạo ImageView
+            ImageView imageView = new ImageView();
+            String imagePath = "image/QuanLyBanVe_TauLuaChuaChon.png"; // Đường dẫn tương đối từ thư mục gốc dự án
+            try {
+                // Load ảnh từ file hệ thống
+                File file = new File(imagePath);
+                if (!file.exists()) {
+                    throw new IllegalArgumentException("Không tìm thấy file ảnh tại: " + file.getAbsolutePath());
+                }
+                Image image = new Image(file.toURI().toString());
+                imageView.setImage(image);
+                imageView.setFitWidth(140);  // Đặt chiều rộng là 140
+                imageView.setFitHeight(140); // Đặt chiều cao là 140
+                imageView.setPreserveRatio(false); // Không giữ tỷ lệ, lấp đầy 140x140
+                System.out.println("Load ảnh thành công cho ChuyenTau " + chuyenTau.getMaChuyenTau());
+
+                // Căn giữa ImageView trong AnchorPane
+                AnchorPane.setTopAnchor(imageView, 0.0);    // Cách đỉnh 0px
+                AnchorPane.setLeftAnchor(imageView, 10.0);  // Cách trái 10px
+                AnchorPane.setRightAnchor(imageView, 10.0); // Cách phải 10px
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tải ảnh tại " + imagePath + ": " + e.getMessage());
+                anchorPane.setStyle("-fx-background-color: red;"); // Màu đỏ để dễ thấy
+            }
+
+            // Tạo Label 1: Ký hiệu tàu (tìm Tau theo maTau rồi gọi getKyHieuTau)
+            Label kyHieuLabel = new Label();
+            Tau tau = tauDAO.timTauTheoMa(chuyenTau.getMaTau());
+            if (tau != null) {
+                kyHieuLabel.setText(tau.getKyHieuTau());
+            } else {
+                kyHieuLabel.setText("N/A"); // Nếu không tìm thấy tàu
+            }
+            kyHieuLabel.setLayoutX(68); // Đặt tại tọa độ x = 59
+            kyHieuLabel.setLayoutY(52); // Đặt tại tọa độ y = 57
+
+            // Tạo Label 2: Giờ khởi hành
+            Label gioKhoiHanhLabel = new Label();
+            gioKhoiHanhLabel.setText(chuyenTau.getGioKhoiHanh().toString()); // Giả định getGioKhoiHanh trả về LocalTime
+            gioKhoiHanhLabel.setLayoutX(68); // Đặt tại tọa độ x = 59
+            gioKhoiHanhLabel.setLayoutY(135); // Đặt tại tọa độ y = 138
+
+            // Thêm ImageView và các Label vào AnchorPane
+            anchorPane.getChildren().addAll(imageView, kyHieuLabel, gioKhoiHanhLabel);
+
+            // Thêm AnchorPane vào pnChuyenTau
+            pnChuyenTau.getChildren().add(anchorPane);
+            System.out.println("Đã thêm AnchorPane " + index + " vào pnChuyenTau");
+
+            index++;
+        }
     }
+    
+	@FXML
+	private Pane pnChuyenTau;
 }

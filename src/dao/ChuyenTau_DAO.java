@@ -10,20 +10,20 @@ import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.ChuyenTau;
+import entity.Tau;
 import entity.Tau.LoaiTau;
+import entity.Tau.TrangThaiTau;
 
 public class ChuyenTau_DAO {
-	public List<ChuyenTau> timChuyenTau(String maGaDi, String maGaDen, LocalDate ngayKhoiHanh, LoaiTau loaiTau) {
+    public List<ChuyenTau> timChuyenTau(String maGaDi, String maGaDen, LocalDate ngayKhoiHanh, LoaiTau loaiTau) {
         List<ChuyenTau> danhSachChuyenTau = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
-            // Lấy kết nối từ ConnectDB
             conn = ConnectDB.getConnection();
 
-            // Xây dựng câu truy vấn SQL động
             StringBuilder sql = new StringBuilder(
                 "SELECT ct.maChuyenTau, ct.ngayKhoiHanh, ct.gioKhoiHanh, ct.ngayDuKien, ct.gioDuKien, " +
                 "ct.maTau, ct.maTuyen, t.tenTau, t.loaiTau, " +
@@ -33,13 +33,11 @@ public class ChuyenTau_DAO {
                 "INNER JOIN TuyenTau tt ON ct.maTuyen = tt.maTuyen " +
                 "INNER JOIN Ga g1 ON tt.maGaDi = g1.maGa " +
                 "INNER JOIN Ga g2 ON tt.maGaDen = g2.maGa " +
-                "WHERE 1=1" // Điều kiện luôn đúng để dễ thêm các điều kiện khác
+                "WHERE 1=1"
             );
 
-            // Danh sách tham số cho PreparedStatement
             List<Object> params = new ArrayList<>();
 
-            // Thêm điều kiện nếu có giá trị
             if (maGaDi != null) {
                 sql.append(" AND tt.maGaDi = ?");
                 params.add(maGaDi);
@@ -59,16 +57,13 @@ public class ChuyenTau_DAO {
 
             pstmt = conn.prepareStatement(sql.toString());
 
-            // Gán giá trị cho các tham số
             for (int i = 0; i < params.size(); i++) {
                 pstmt.setObject(i + 1, params.get(i));
             }
 
             rs = pstmt.executeQuery();
 
-            // Duyệt qua kết quả và tạo đối tượng ChuyenTau
             while (rs.next()) {
-                // Tạo đối tượng ChuyenTau
                 ChuyenTau chuyenTau = new ChuyenTau();
                 chuyenTau.setMaChuyenTau(rs.getString("maChuyenTau"));
                 chuyenTau.setNgayKhoiHanh(rs.getDate("ngayKhoiHanh").toLocalDate());
@@ -84,7 +79,6 @@ public class ChuyenTau_DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Đóng tài nguyên
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
@@ -95,77 +89,138 @@ public class ChuyenTau_DAO {
 
         return danhSachChuyenTau;
     }
-	
-	public List<ChuyenTau> timChuyenTauTheoTenGaVaNgay(String tenGaDi, String tenGaDen, LocalDate ngayKhoiHanh) {
-	    List<ChuyenTau> danhSachChuyenTau = new ArrayList<>();
-	    Connection conn = null;
-	    PreparedStatement pstmt = null;
-	    ResultSet rs = null;
 
-	    try {
-	        conn = ConnectDB.getConnection();
+    public List<ChuyenTau> timChuyenTauTheoTenGaVaNgay(String tenGaDi, String tenGaDen, LocalDate ngayKhoiHanh) {
+        List<ChuyenTau> danhSachChuyenTau = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-	        StringBuilder sql = new StringBuilder(
-	            "SELECT ct.maChuyenTau, ct.ngayKhoiHanh, ct.gioKhoiHanh, ct.ngayDuKien, ct.gioDuKien, "
-	            + "ct.maTau, ct.maTuyen, t.tenTau, t.loaiTau, "
-	            + "g1.tenGa AS tenGaDi, g2.tenGa AS tenGaDen "
-	            + "FROM ChuyenTau ct "
-	            + "INNER JOIN Tau t ON ct.maTau = t.maTau "
-	            + "INNER JOIN TuyenTau tt ON ct.maTuyen = tt.maTuyen "
-	            + "INNER JOIN Ga g1 ON tt.maGaDi = g1.maGa "
-	            + "INNER JOIN Ga g2 ON tt.maGaDen = g2.maGa "
-	            + "WHERE 1=1"
-	        );
+        try {
+            conn = ConnectDB.getConnection();
 
-	        List<Object> params = new ArrayList<>();
+            StringBuilder sql = new StringBuilder(
+                "SELECT ct.maChuyenTau, ct.ngayKhoiHanh, ct.gioKhoiHanh, ct.ngayDuKien, ct.gioDuKien, " +
+                "ct.maTau, ct.maTuyen, t.tenTau, t.loaiTau, " +
+                "g1.tenGa AS tenGaDi, g2.tenGa AS tenGaDen " +
+                "FROM ChuyenTau ct " +
+                "INNER JOIN Tau t ON ct.maTau = t.maTau " +
+                "INNER JOIN TuyenTau tt ON ct.maTuyen = tt.maTuyen " +
+                "INNER JOIN Ga g1 ON tt.maGaDi = g1.maGa " +
+                "INNER JOIN Ga g2 ON tt.maGaDen = g2.maGa " +
+                "WHERE 1=1"
+            );
 
-	        if (tenGaDi != null && !tenGaDi.isEmpty()) {
-	            sql.append(" AND g1.tenGa LIKE ?");
-	            params.add("%" + tenGaDi + "%");
-	        }
-	        
-	        if (tenGaDen != null && !tenGaDen.isEmpty()) {
-	            sql.append(" AND g2.tenGa LIKE ?");
-	            params.add("%" + tenGaDen + "%");
-	        }
-	        
-	        if (ngayKhoiHanh != null) {
-	            sql.append(" AND ct.ngayKhoiHanh = ?");
-	            params.add(java.sql.Date.valueOf(ngayKhoiHanh));
-	        }
+            List<Object> params = new ArrayList<>();
 
-	        pstmt = conn.prepareStatement(sql.toString());
+            if (tenGaDi != null && !tenGaDi.isEmpty()) {
+                sql.append(" AND g1.tenGa LIKE ?");
+                params.add("%" + tenGaDi + "%");
+            }
+            
+            if (tenGaDen != null && !tenGaDen.isEmpty()) {
+                sql.append(" AND g2.tenGa LIKE ?");
+                params.add("%" + tenGaDen + "%");
+            }
+            
+            if (ngayKhoiHanh != null) {
+                sql.append(" AND ct.ngayKhoiHanh = ?");
+                params.add(java.sql.Date.valueOf(ngayKhoiHanh));
+            }
 
-	        for (int i = 0; i < params.size(); i++) {
-	            pstmt.setObject(i + 1, params.get(i));
-	        }
+            pstmt = conn.prepareStatement(sql.toString());
 
-	        rs = pstmt.executeQuery();
+            for (int i = 0; i < params.size(); i++) {
+                pstmt.setObject(i + 1, params.get(i));
+            }
 
-	        while (rs.next()) {
-	            ChuyenTau chuyenTau = new ChuyenTau();
-	            chuyenTau.setMaChuyenTau(rs.getString("maChuyenTau"));
-	            chuyenTau.setNgayKhoiHanh(rs.getDate("ngayKhoiHanh").toLocalDate());
-	            chuyenTau.setGioKhoiHanh(rs.getTime("gioKhoiHanh").toLocalTime());
-	            chuyenTau.setNgayDuKien(rs.getDate("ngayDuKien").toLocalDate());
-	            chuyenTau.setGioDuKien(rs.getTime("gioDuKien").toLocalTime());
-	            chuyenTau.setMaTau(rs.getString("maTau"));
-	            chuyenTau.setMaTuyen(rs.getString("maTuyen"));
-	            
-	            danhSachChuyenTau.add(chuyenTau);
-	        }
+            rs = pstmt.executeQuery();
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            if (pstmt != null) pstmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+            while (rs.next()) {
+                ChuyenTau chuyenTau = new ChuyenTau();
+                chuyenTau.setMaChuyenTau(rs.getString("maChuyenTau"));
+                chuyenTau.setNgayKhoiHanh(rs.getDate("ngayKhoiHanh").toLocalDate());
+                chuyenTau.setGioKhoiHanh(rs.getTime("gioKhoiHanh").toLocalTime());
+                chuyenTau.setNgayDuKien(rs.getDate("ngayDuKien").toLocalDate());
+                chuyenTau.setGioDuKien(rs.getTime("gioDuKien").toLocalTime());
+                chuyenTau.setMaTau(rs.getString("maTau"));
+                chuyenTau.setMaTuyen(rs.getString("maTuyen"));
+                
+                danhSachChuyenTau.add(chuyenTau);
+            }
 
-	    return danhSachChuyenTau;
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return danhSachChuyenTau;
+    }
+
+    // Phương thức mới: Tìm chuyến tàu theo mã chuyến tàu
+    public ChuyenTau timChuyenTauTheoMaChuyenTau(String maChuyenTau) {
+        ChuyenTau chuyenTau = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectDB.getConnection();
+
+            String sql = 
+                "SELECT ct.maChuyenTau, ct.ngayKhoiHanh, ct.gioKhoiHanh, ct.ngayDuKien, ct.gioDuKien, " +
+                "ct.maTau, ct.maTuyen, t.tenTau, t.loaiTau, t.trangThai, " +
+                "g1.tenGa AS tenGaDi, g2.tenGa AS tenGaDen " +
+                "FROM ChuyenTau ct " +
+                "INNER JOIN Tau t ON ct.maTau = t.maTau " +
+                "INNER JOIN TuyenTau tt ON ct.maTuyen = tt.maTuyen " +
+                "INNER JOIN Ga g1 ON tt.maGaDi = g1.maGa " +
+                "INNER JOIN Ga g2 ON tt.maGaDen = g2.maGa " +
+                "WHERE ct.maChuyenTau = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, maChuyenTau);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                chuyenTau = new ChuyenTau();
+                chuyenTau.setMaChuyenTau(rs.getString("maChuyenTau"));
+                chuyenTau.setNgayKhoiHanh(rs.getDate("ngayKhoiHanh").toLocalDate());
+                chuyenTau.setGioKhoiHanh(rs.getTime("gioKhoiHanh").toLocalTime());
+                chuyenTau.setNgayDuKien(rs.getDate("ngayDuKien").toLocalDate());
+                chuyenTau.setGioDuKien(rs.getTime("gioDuKien").toLocalTime());
+                chuyenTau.setMaTau(rs.getString("maTau"));
+                chuyenTau.setMaTuyen(rs.getString("maTuyen"));
+
+                // Tạo đối tượng Tau và gán thông tin
+                Tau tau = new Tau();
+                tau.setMaTau(rs.getString("maTau"));
+                tau.setTenTau(rs.getString("tenTau"));
+                tau.setLoaiTau(LoaiTau.valueOf(rs.getString("loaiTau")));
+                tau.setTrangThaiTau(TrangThaiTau.valueOf(rs.getString("trangThai")));
+                
+                // Bạn có thể thêm logic để gán đối tượng Tau vào ChuyenTau nếu lớp ChuyenTau có thuộc tính Tau
+                // Ví dụ: chuyenTau.setTau(tau); (nếu có setter này trong entity ChuyenTau)
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return chuyenTau;
+    }
 }
