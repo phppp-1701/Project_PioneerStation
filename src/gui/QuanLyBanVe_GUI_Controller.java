@@ -2,17 +2,22 @@ package gui;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import dao.ChuyenTau_DAO;
 import dao.Ga_DAO;
 import dao.NhanVien_DAO;
 import dao.TuyenTau_DAO;
+import entity.ChuyenTau;
 import entity.Ga;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -319,5 +324,98 @@ public class QuanLyBanVe_GUI_Controller {
                 dpNgayVe.setValue(null); // Clear dpNgayVe if it's before the new dpNgayDi
             }
         });
+    }
+    
+    @FXML
+    private Button btnTim;
+    
+    @FXML
+    private void btnTimClicked() {
+    	if(kiemTraThongTinTim()) {
+    		String tenGaDi = cboGaDi.getValue().getTenGa();
+    		String tenGaDen = cboGaDen.getValue().getTenGa();
+    		LocalDate ngayKhoiHanh = dpNgayDi.getValue();
+    		
+    		List<ChuyenTau> dsct = timChuyenTauTheo(tenGaDi, tenGaDen, ngayKhoiHanh);
+    		if(dsct.isEmpty()) {
+    			showWarningAlert("Không tìm thấy chuyến tàu phù hợp!", "image/canhBao.png");
+    			return;
+    		}
+    		
+    	}
+    }
+    
+    private boolean kiemTraThongTinTim() {
+        // Kiểm tra ga đi
+        if(cboGaDi.getValue() == null) { // Kiểm tra giá trị được chọn
+            showWarningAlert("Bạn chưa chọn ga đi!", "image/canhBao.png");
+            return false;
+        }
+        
+        // Kiểm tra ga đến
+        if(cboGaDen.getValue() == null) { // Kiểm tra giá trị được chọn
+            showWarningAlert("Bạn chưa chọn ga đến!", "image/canhBao.png");
+            return false;
+        }
+        
+        // Kiểm tra ngày đi
+        if(dpNgayDi.getValue() == null) {
+            showWarningAlert("Bạn chưa chọn ngày khởi hành!", "image/canhBao.png");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private List<ChuyenTau> timChuyenTauTheo(String tenGaDi, String tenGaDen, LocalDate ngayKhoiHanh) {
+		List<ChuyenTau> dsct = new ArrayList<ChuyenTau>();
+		ChuyenTau_DAO chuyenTau_DAO = new ChuyenTau_DAO();
+		dsct = chuyenTau_DAO.timChuyenTauTheoTenGaVaNgay(tenGaDi, tenGaDen, ngayKhoiHanh);
+		return dsct;
+	}
+    
+    private void showErrorAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void showWarningAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Cảnh báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void showInformationAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void setAlertIcon(Alert alert, String icon) {
+        File file = new File(icon);
+        if (file.exists()) {
+            try {
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tải ảnh: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+        }
+    }
+    
+    private void taoPaneChuyenTau(List<ChuyenTau> dsct) {
+    	int soLuongChuyenTau = dsct.size();
     }
 }
