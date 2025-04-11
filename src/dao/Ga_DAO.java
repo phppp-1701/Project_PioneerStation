@@ -144,4 +144,21 @@ public class Ga_DAO {
     public void close() {
         ConnectDB.getInstance().disconnect();
     }
+    
+    public String timTenGaTheoMa(String maGa) {
+        String tenGa = null;
+        try (Connection con = ConnectDB.getConnection()) {
+            String sql = "SELECT tenGa FROM Ga WHERE maGa = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maGa);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                tenGa = rs.getString("tenGa");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenGa;
+    }
 }

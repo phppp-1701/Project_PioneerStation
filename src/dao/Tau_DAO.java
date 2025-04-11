@@ -14,6 +14,38 @@ import entity.Tau.LoaiTau;
 import entity.Tau.TrangThaiTau;
 
 public class Tau_DAO {
+	public Tau timTauTheoMa(String maTau) {
+        Tau tau = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Tau WHERE maTau = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, maTau);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                tau = new Tau();
+                tau.setMaTau(rs.getString("maTau"));
+                tau.setTenTau(rs.getString("tenTau"));
+                tau.setLoaiTau(LoaiTau.valueOf(rs.getString("loaiTau")));
+                tau.setTrangThaiTau(TrangThaiTau.valueOf(rs.getString("trangThai")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tau;
+    }
     // Lấy toàn bộ danh sách tàu
     public List<Tau> getAllTau() {
         List<Tau> dsTau = new ArrayList<>();
@@ -33,7 +65,7 @@ public class Tau_DAO {
                 tau.setTenTau(rs.getString("tenTau"));
                 
                 String loaiTau = rs.getString("loaiTau");
-                tau.setLoaiTau("SE".equals(loaiTau) ? LoaiTau.SE : ("TN".equals(loaiTau) ? LoaiTau.TN : LoaiTau.DP));
+                tau.setLoaiTau("SE".equals(loaiTau) ? LoaiTau.SE : ("TN".equals(loaiTau) ? LoaiTau.TN : LoaiTau.TN));
                 
                 // Xử lý enum TrangThaiTau
                 String trangThai = rs.getString("trangThai");
@@ -79,7 +111,7 @@ public class Tau_DAO {
                 tau.setTenTau(rs.getString("tenTau"));
                 
                 String loaiTau = rs.getString("loaiTau");
-                tau.setLoaiTau("SE".equals(loaiTau) ? LoaiTau.SE : ("TN".equals(loaiTau) ? LoaiTau.TN : LoaiTau.DP));
+                tau.setLoaiTau("SE".equals(loaiTau) ? LoaiTau.SE : ("TN".equals(loaiTau) ? LoaiTau.TN : LoaiTau.TN));
                 
                 // Xử lý enum TrangThaiTau
                 String trangThai = rs.getString("trangThai");

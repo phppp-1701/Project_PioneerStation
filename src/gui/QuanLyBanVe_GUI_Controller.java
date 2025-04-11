@@ -1,16 +1,28 @@
 package gui;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
 
+import dao.Ga_DAO;
 import dao.NhanVien_DAO;
+import dao.TuyenTau_DAO;
+import entity.Ga;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.scene.control.DateCell;
 
 public class QuanLyBanVe_GUI_Controller {
     private String maNhanVien;
@@ -38,6 +50,10 @@ public class QuanLyBanVe_GUI_Controller {
     
     @FXML
     public void initialize() {
+    	// Initialize DatePickers and CheckBox
+        initializeDatePickersAndCheckBox();
+    	// Initialize ComboBoxes for gaDi and gaDen
+        initializeComboBoxes();
         // Handler cho quản lý chuyến tàu
         lblQuanLyChuyenTau.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý chuyến tàu");
@@ -126,6 +142,79 @@ public class QuanLyBanVe_GUI_Controller {
     	
     }
 
+    private void initializeComboBoxes() {
+        Ga_DAO gaDAO = new Ga_DAO();
+        TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
+
+        // Load all stations into both ComboBoxes
+        List<Ga> allGa = gaDAO.timGaTheoTen(""); // Get all stations by using empty search
+        cboGaDi.setItems(FXCollections.observableArrayList(allGa));
+        cboGaDen.setItems(FXCollections.observableArrayList(allGa));
+
+        // Set StringConverter to display tenGa
+        cboGaDi.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return null; // Not needed for selection
+            }
+        });
+
+        cboGaDen.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return null; // Not needed for selection
+            }
+        });
+
+        // Listener for cboGaDi
+        cboGaDi.getSelectionModel().selectedItemProperty().addListener((obs, oldGa, newGa) -> {
+            if (newGa != null) {
+                // Get valid gaDen for selected gaDi
+                List<Ga> validGaDen = tuyenTauDAO.getDanhSachGaDenTheoGaDi(newGa.getMaGa());
+                // Remove selected gaDi from validGaDen to enforce maGaDi ≠ maGaDen
+                validGaDen.removeIf(ga -> ga.getMaGa().equals(newGa.getMaGa()));
+                cboGaDen.setItems(FXCollections.observableArrayList(validGaDen));
+                // Clear cboGaDen selection if it's no longer valid
+                if (cboGaDen.getValue() != null && 
+                    !validGaDen.contains(cboGaDen.getValue())) {
+                    cboGaDen.getSelectionModel().clearSelection();
+                }
+            } else {
+                // Reset cboGaDen to all stations if no gaDi selected
+                cboGaDen.setItems(FXCollections.observableArrayList(allGa));
+            }
+        });
+
+        // Listener for cboGaDen
+        cboGaDen.getSelectionModel().selectedItemProperty().addListener((obs, oldGa, newGa) -> {
+            if (newGa != null) {
+                // Get valid gaDi for selected gaDen
+                List<Ga> validGaDi = tuyenTauDAO.getDanhSachGaDiTheoGaDen(newGa.getMaGa());
+                // Remove selected gaDen from validGaDi to enforce maGaDi ≠ maGaDen
+                validGaDi.removeIf(ga -> ga.getMaGa().equals(newGa.getMaGa()));
+                cboGaDi.setItems(FXCollections.observableArrayList(validGaDi));
+                // Clear cboGaDi selection if it's no longer valid
+                if (cboGaDi.getValue() != null && 
+                    !validGaDi.contains(cboGaDi.getValue())) {
+                    cboGaDi.getSelectionModel().clearSelection();
+                }
+            } else {
+                // Reset cboGaDi to all stations if no gaDen selected
+                cboGaDi.setItems(FXCollections.observableArrayList(allGa));
+            }
+        });
+    }
+    
     public String getMaNhanVien() {
         return maNhanVien;
     }
@@ -171,5 +260,64 @@ public class QuanLyBanVe_GUI_Controller {
         }
     }
     
+    @FXML
+    private ComboBox<Ga> cboGaDi;
     
+    @FXML
+    private ComboBox<Ga> cboGaDen;
+    
+    @FXML
+    private DatePicker dpNgayDi;
+    
+    @FXML
+    private DatePicker dpNgayVe;
+    
+    @FXML
+    private CheckBox ckcKhuHoi;
+    
+    private void initializeDatePickersAndCheckBox() {
+        // Restrict dpNgayDi to today or future dates
+        Callback<DatePicker, DateCell> dayCellFactoryNgayDi = dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(LocalDate.now()));
+            }
+        };
+        dpNgayDi.setDayCellFactory(dayCellFactoryNgayDi);
+
+        // Restrict dpNgayVe to today or future dates AND after dpNgayDi
+        Callback<DatePicker, DateCell> dayCellFactoryNgayVe = dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate ngayDi = dpNgayDi.getValue();
+                // Disable if: empty OR before today OR before dpNgayDi (if dpNgayDi is selected)
+                setDisable(empty || date.isBefore(LocalDate.now()) || 
+                           (ngayDi != null && date.isBefore(ngayDi)));
+            }
+        };
+        dpNgayVe.setDayCellFactory(dayCellFactoryNgayVe);
+
+        // Initialize dpNgayVe as disabled and non-editable by default
+        dpNgayVe.setDisable(true);
+        dpNgayVe.setEditable(false);
+
+        // Listener for ckcKhuHoi to toggle dpNgayVe
+        ckcKhuHoi.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            dpNgayVe.setDisable(!isSelected);
+            dpNgayVe.setEditable(isSelected);
+            if (!isSelected) {
+                dpNgayVe.setValue(null); // Clear selection when disabled
+            }
+        });
+
+        // Listener for dpNgayDi to clear dpNgayVe if it becomes invalid
+        dpNgayDi.valueProperty().addListener((obs, oldDate, newDate) -> {
+            LocalDate ngayVe = dpNgayVe.getValue();
+            if (newDate != null && ngayVe != null && ngayVe.isBefore(newDate)) {
+                dpNgayVe.setValue(null); // Clear dpNgayVe if it's before the new dpNgayDi
+            }
+        });
+    }
 }
