@@ -6,10 +6,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	 @Override
+	   @Override
 	    public void start(Stage primaryStage) {
 	    	new QuanLyKhachHang_GUI(primaryStage);
 	        primaryStage.show();
 	    }
-
 }
