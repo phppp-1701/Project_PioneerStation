@@ -9,7 +9,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         primaryStage = stage; // Lưu trữ stage
-        new QuanLyChuyenTau_GUI(stage, "2022NV000001");
+        new QuanLyBanVe_GUI(stage, "2022NV000001");
+//        new DangNhap_GUI(stage);
         primaryStage.show();
     }
 

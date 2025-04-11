@@ -1,69 +1,80 @@
 package entity;
 
 import java.util.Objects;
+
 public class ChoNgoi {
-    private String maCho;
+    private String maChoNgoi;
     private String tenCho;
-    private TrangThaiCho trangThaiCho;
-    private Toa maToa;
+    private TrangThaiChoNgoi trangThai;
+    private String maChuyenTau;  // Thay vì dùng đối tượng ChuyenTau
 
     public ChoNgoi() {
     }
 
-    public ChoNgoi(String maCho, String tenCho, TrangThaiCho trangThaiCho, Toa maToa) {
-        this.maCho = maCho;
+    public enum TrangThaiChoNgoi {
+        chuaDat,   // Chỗ ngồi chưa được đặt
+        dangDat,   // Chỗ ngồi đang trong quá trình đặt
+        daDat      // Chỗ ngồi đã được đặt chính thức
+    }
+
+    // Constructor sửa lại theo maChuyenTau
+    public ChoNgoi(String maChoNgoi, String tenCho, TrangThaiChoNgoi trangThai, String maChuyenTau) {
+        this.maChoNgoi = maChoNgoi;
         this.tenCho = tenCho;
-        this.trangThaiCho = trangThaiCho;
-        this.maToa = maToa;
+        this.trangThai = trangThai;
+        this.maChuyenTau = maChuyenTau;
     }
 
-    public String getMaCho() {
-        return maCho;
+    // Getter/Setter cho maChuyenTau
+    public String getMaChuyenTau() {
+        return maChuyenTau;
     }
 
-    public void setMaCho(String maCho) {
-        this.maCho = maCho;
+    public void setMaChuyenTau(String maChuyenTau) {
+        if (maChuyenTau == null || maChuyenTau.trim().isEmpty()) {
+            throw new IllegalArgumentException("Mã chuyến tàu không được để trống");
+        }
+        this.maChuyenTau = maChuyenTau;
     }
 
-    public String getTenCho() {
-        return tenCho;
-    }
-
-    public void setTenCho(String tenCho) {
-        this.tenCho = tenCho;
-    }
-   
-    public Toa getMaToa() {
-		return maToa;
+    public String getMaChoNgoi() {
+		return maChoNgoi;
 	}
 
-	public void setMaToa(Toa maToa) {
-		this.maToa = maToa;
+	public void setMaChoNgoi(String maChoNgoi) {
+		this.maChoNgoi = maChoNgoi;
 	}
 
-	public TrangThaiCho getTrangThaiCho() {
-        return trangThaiCho;
-    }
+	public String getTenCho() {
+		return tenCho;
+	}
 
-    public void setTrangThaiCho(TrangThaiCho trangThaiCho) {
-        this.trangThaiCho = trangThaiCho;
-    }
-    public enum TrangThaiCho {
-        daDat,
-        conTrong,
-        dangChon
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChoNgoi choNgoi = (ChoNgoi) o;
-        return Objects.equals(maCho, choNgoi.maCho);
-    }
+	public void setTenCho(String tenCho) {
+		this.tenCho = tenCho;
+	}
 
-    @Override
+	public TrangThaiChoNgoi getTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(TrangThaiChoNgoi trangThai) {
+		this.trangThai = trangThai;
+	}
+
+	@Override
     public int hashCode() {
-        return Objects.hash(maCho);
+        return Objects.hash(maChoNgoi);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ChoNgoi other = (ChoNgoi) obj;
+        return Objects.equals(maChoNgoi, other.maChoNgoi);
+    }
 }
