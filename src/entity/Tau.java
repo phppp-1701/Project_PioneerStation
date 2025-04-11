@@ -25,8 +25,7 @@ public class Tau {
     }
 	public enum LoaiTau {
 	    SE,  // Tàu SE
-	    TN,  // Tàu TN
-	    DP   // Tàu DP
+	    TN
 	}
 
 	

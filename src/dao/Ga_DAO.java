@@ -4,6 +4,7 @@ import entity.Ga;
 import connectDB.ConnectDB;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Ga_DAO {
@@ -84,9 +85,80 @@ public class Ga_DAO {
     }
 
     /**
+     * Tạo mã ga mới với định dạng 2022GA0001
+     * - 2022: Năm hiện tại
+     * - GA: Cố định
+     * - 0001: Số thứ tự tự tăng
+     * @return Mã ga mới dạng String
+     */
+    public String taoMaGaMoi() {
+        String maGaMoi = "";
+        try (Connection con = ConnectDB.getConnection()) {
+            int namHienTai = Calendar.getInstance().get(Calendar.YEAR);
+            String prefix = namHienTai + "GA";
+
+            String sql = "SELECT MAX(maGa) FROM Ga WHERE maGa LIKE ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, prefix + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            int soThuTu = 0;
+            if (rs.next() && rs.getString(1) != null) {
+                String maGaMax = rs.getString(1);
+                String soThuTuStr = maGaMax.substring(prefix.length());
+                soThuTu = Integer.parseInt(soThuTuStr);
+            }
+
+            soThuTu++;
+            maGaMoi = prefix + String.format("%04d", soThuTu);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maGaMoi;
+    }
+
+    /**
+     * Kiểm tra xem tên ga đã tồn tại trong database chưa
+     * @param tenGa Tên ga cần kiểm tra
+     * @return true nếu tên ga đã tồn tại, false nếu chưa
+     */
+    public boolean kiemTraTonTaiGaTheoTen(String tenGa) {
+        try (Connection con = ConnectDB.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM Ga WHERE tenGa = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenGa);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu có ít nhất 1 ga trùng tên
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * Đóng kết nối khi không sử dụng nữa
      */
     public void close() {
         ConnectDB.getInstance().disconnect();
+    }
+    
+    public String timTenGaTheoMa(String maGa) {
+        String tenGa = null;
+        try (Connection con = ConnectDB.getConnection()) {
+            String sql = "SELECT tenGa FROM Ga WHERE maGa = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maGa);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                tenGa = rs.getString("tenGa");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenGa;
     }
 }
