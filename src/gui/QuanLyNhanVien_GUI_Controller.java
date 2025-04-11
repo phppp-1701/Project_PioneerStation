@@ -183,6 +183,27 @@ public class QuanLyNhanVien_GUI_Controller {
     @FXML
     private TextField txtTimSoDienThoai;
 
+    private void setupTableColumns() {
+        colStt.setCellValueFactory(cellData ->
+            new SimpleStringProperty(String.valueOf(tbDanhSachNhanVien.getItems().indexOf(cellData.getValue()) + 1)));
+        colMaNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaNhanVien()));
+        colTenNV.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTenNhanVien()));
+        colSoDienThoai.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoDienThoai()));
+        colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+        colGioiTinh.setCellValueFactory(cellData -> {
+            GioiTinh gioiTinh = cellData.getValue().getGioiTinh();
+            return new SimpleStringProperty(gioiTinh == GioiTinh.nam ? "Nam" : "Nữ");
+        });
+        colChucVu.setCellValueFactory(cellData -> {
+            ChucVu chucVu = cellData.getValue().getChucVu();
+            return new SimpleStringProperty(chucVu == ChucVu.quanLy ? "Quản lý" : "Bán vé");
+        });
+        colTrangThai.setCellValueFactory(cellData -> {
+            TrangThaiNhanVien trangThai = cellData.getValue().getTrangThaiNhanVien();
+            return new SimpleStringProperty(trangThai == TrangThaiNhanVien.hoatDong ? "Hoạt động" : "Vô hiệu hóa");
+        });
+    }
+
     @FXML
     private void btnTimClicked() {
         // Lấy giá trị từ các TextField
@@ -221,7 +242,7 @@ public class QuanLyNhanVien_GUI_Controller {
             // Hiển thị kết quả trên TableView
             tbDanhSachNhanVien.getItems().clear();
             tbDanhSachNhanVien.setItems(FXCollections.observableArrayList(ketQuaTimKiem));
-            
+            setupTableColumns();
         } catch (Exception e) {
             e.printStackTrace();
             showErrorAlert("Lỗi khi tìm kiếm nhân viên","image/canhBao.png");

@@ -13,7 +13,7 @@ CREATE TABLE KhachHang (
     trangThaiKhachHang VARCHAR(20) CHECK (trangThaiKhachHang IN ('hoatDong','voHieuHoa'))
 );
 go
-
+-- KhachHang
 INSERT INTO KhachHang (maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiThanhVien, trangThaiKhachHang)
 VALUES
 -- Khách hàng thân thiết với CCCD 12 số (theo quy định mới) và email hợp lệ
@@ -426,13 +426,13 @@ INSERT INTO Toa (maToa, tenToa, loaiToa, trangThai, maTau) VALUES
 GO
 
 CREATE TABLE ChuyenTau (
-    maChuyenTau VARCHAR(12) PRIMARY KEY, -- Mã chuyến tàu, khóa chính
+    maChuyenTau VARCHAR(30) PRIMARY KEY, -- Mã chuyến tàu, khóa chính
     ngayKhoiHanh DATE NOT NULL,         -- Ngày khởi hành
     gioKhoiHanh TIME NOT NULL,          -- Giờ khởi hành
     ngayDuKien DATE NOT NULL,           -- Ngày dự kiến đến
     gioDuKien TIME NOT NULL,            -- Giờ dự kiến đến
-    maTau VARCHAR(12) NOT NULL,         -- Mã tàu, khóa ngoại
-    maTuyen VARCHAR(12) NOT NULL,    -- Mã tuyến tàu, khóa ngoại
+    maTau VARCHAR(20) NOT NULL,         -- Sửa thành VARCHAR(20)
+    maTuyen VARCHAR(20) NOT NULL,       -- Sửa thành VARCHAR(20)
 
     -- Ràng buộc khóa ngoại
     CONSTRAINT FK_ChuyenTau_Tau FOREIGN KEY (maTau) 
@@ -449,27 +449,261 @@ CREATE TABLE ChuyenTau (
 );
 GO
 
-INSERT INTO ChuyenTau (maChuyenTau, ngayKhoiHanh, gioKhoiHanh, ngayDuKien, gioDuKien, maTau, maTuyen) VALUES
--- Tàu SE (SHIP)
-('080020250411SE1', '2025-04-11', '08:00:00', '2025-04-12', '18:32:00', '2025SE000001', '2025TT0001'), -- Hà Nội - Sài Gòn (1726 km, 34.52 giờ)
-('100020250412SE2', '2025-04-12', '10:00:00', '2025-04-13', '02:00:00', '2025SE000002', '2025TT0002'), -- Hà Nội - Đà Nẵng (800 km, 16 giờ)
-('120020250413SE3', '2025-04-13', '12:00:00', '2025-04-14', '01:00:00', '2025SE000003', '2025TT0003'), -- Hà Nội - Huế (650 km, 13 giờ)
-('140020250414SE4', '2025-04-14', '14:00:00', '2025-04-15', '16:00:00', '2025SE000004', '2025TT0004'), -- Hà Nội - Nha Trang (1300 km, 26 giờ)
-('160020250415SE5', '2025-04-15', '16:00:00', '2025-04-16', '02:00:00', '2025SE000005', '2025TT0005'), -- Hà Nội - Đồng Hới (500 km, 10 giờ)
-('180020250416SE6', '2025-04-16', '18:00:00', '2025-04-16', '21:00:00', '2025SE000006', '2025TT0006'), -- Hà Nội - Thanh Hóa (150 km, 3 giờ)
-('200020250417SE7', '2025-04-17', '20:00:00', '2025-04-18', '02:00:00', '2025SE000007', '2025TT0007'), -- Hà Nội - Vinh (300 km, 6 giờ)
-('220020250418SE8', '2025-04-18', '22:00:00', '2025-04-19', '00:00:00', '2025SE000008', '2025TT0008'), -- Hà Nội - Hải Phòng (100 km, 2 giờ)
-('060020250419SE9', '2025-04-19', '06:00:00', '2025-04-20', '12:00:00', '2025SE000009', '2025TT0009'), -- Hà Nội - Đà Lạt (1500 km, 30 giờ)
-('080020250420SE10', '2025-04-20', '08:00:00', '2025-04-21', '18:32:00', '2025SE000010', '2025TT0010'), -- Sài Gòn - Hà Nội (1726 km, 34.52 giờ)
--- Tàu TN
-('100020250421TN1', '2025-04-21', '10:00:00', '2025-04-22', '04:00:00', '2025TN000001', '2025TT0011'), -- Sài Gòn - Đà Nẵng (900 km, 18 giờ)
-('120020250422TN2', '2025-04-22', '12:00:00', '2025-04-23', '09:32:00', '2025TN000002', '2025TT0012'), -- Sài Gòn - Huế (1076 km, 21.52 giờ)
-('140020250423TN3', '2025-04-23', '14:00:00', '2025-04-23', '22:00:00', '2025TN000003', '2025TT0013'), -- Sài Gòn - Nha Trang (400 km, 8 giờ)
-('160020250424TN4', '2025-04-24', '16:00:00', '2025-04-25', '16:32:00', '2025TN000004', '2025TT0014'), -- Sài Gòn - Đồng Hới (1226 km, 24.52 giờ)
-('180020250425TN5', '2025-04-25', '18:00:00', '2025-04-26', '19:32:00', '2025TN000005', '2025TT0015'), -- Sài Gòn - Thanh Hóa (1576 km, 31.52 giờ)
-('200020250426TN6', '2025-04-26', '20:00:00', '2025-04-27', '20:32:00', '2025TN000006', '2025TT0016'), -- Sài Gòn - Vinh (1426 km, 28.52 giờ)
-('220020250427TN7', '2025-04-27', '22:00:00', '2025-04-29', '00:32:00', '2025TN000007', '2025TT0017'), -- Sài Gòn - Hải Phòng (1826 km, 36.52 giờ)
-('060020250428TN8', '2025-04-28', '06:00:00', '2025-04-28', '18:00:00', '2025TN000008', '2025TT0018'), -- Sài Gòn - Đà Lạt (600 km, 12 giờ)
-('080020250429TN9', '2025-04-29', '08:00:00', '2025-04-30', '00:00:00', '2025TN000009', '2025TT0019'), -- Đà Nẵng - Hà Nội (800 km, 16 giờ)
-('100020250430TN10', '2025-04-30', '10:00:00', '2025-04-30', '22:00:00', '2025TN000010', '2025TT0020'); -- Đà Nẵng - Sài Gòn (900 km, 18 giờ)
+-- Bước 1: Xóa dữ liệu cũ trong bảng ChuyenTau
+DELETE FROM ChuyenTau;
+GO
+
+-- Bước 2: Xóa thủ tục GenerateChuyenTauData nếu đã tồn tại
+IF EXISTS (SELECT * FROM sys.procedures WHERE name = 'GenerateChuyenTauData')
+    DROP PROCEDURE GenerateChuyenTauData;
+GO
+
+-- Bước 3: Tạo lại thủ tục để sinh dữ liệu
+CREATE PROCEDURE GenerateChuyenTauData
+AS
+BEGIN
+    DECLARE @startDate DATE = '2025-04-11'; -- Ngày bắt đầu
+    DECLARE @endDate DATE = '2025-06-11';   -- Ngày kết thúc
+    DECLARE @currentDate DATE;
+    DECLARE @hour INT;
+    DECLARE @tuyenIndex INT = 1;
+    DECLARE @tauIndex INT;
+    DECLARE @maChuyenTau VARCHAR(30);
+    DECLARE @ngayKhoiHanh DATE;
+    DECLARE @gioKhoiHanh TIME;
+    DECLARE @ngayDuKien DATE;
+    DECLARE @gioDuKien TIME;
+    DECLARE @maTau VARCHAR(20);
+    DECLARE @maTuyen VARCHAR(20);
+    DECLARE @khoangCach FLOAT;
+    DECLARE @travelTime FLOAT;
+    DECLARE @travelDays INT;
+    DECLARE @travelHours INT;
+    DECLARE @travelMinutes INT;
+    DECLARE @maTauSuffix VARCHAR(6);
+    DECLARE @seCount INT;
+    DECLARE @tnCount INT;
+    DECLARE @errorMessage NVARCHAR(4000);
+
+    -- Kiểm tra số lượng tàu SE và TN đang hoạt động
+    SET @seCount = (SELECT COUNT(*) FROM Tau WHERE loaiTau = 'SE' AND trangThai = 'hoatDong');
+    SET @tnCount = (SELECT COUNT(*) FROM Tau WHERE loaiTau = 'TN' AND trangThai = 'hoatDong');
+
+    -- Nếu không có tàu SE hoặc TN nào hoạt động, báo lỗi và thoát
+    IF @seCount = 0 OR @tnCount = 0
+    BEGIN
+        SET @errorMessage = 'Không có tàu SE hoặc TN nào đang hoạt động để tạo chuyến tàu.';
+        THROW 50001, @errorMessage, 1;
+        RETURN;
+    END;
+
+    SET @currentDate = @startDate;
+
+    WHILE @currentDate <= @endDate
+    BEGIN
+        SET @hour = 0; -- Bắt đầu từ 00:00
+        SET @tauIndex = 1; -- Bắt đầu từ tàu đầu tiên
+        WHILE @hour < 20 -- 20 chuyến/ngày, từ 00:00 đến 19:00
+        BEGIN
+            -- Lấy tuyến tàu từ TuyenTau (lặp từ 1 đến 90)
+            SET @maTuyen = (SELECT maTuyen FROM (
+                SELECT ROW_NUMBER() OVER (ORDER BY maTuyen) AS rn, maTuyen
+                FROM TuyenTau
+            ) AS numbered WHERE rn = @tuyenIndex);
+            SET @khoangCach = (SELECT khoangCach FROM TuyenTau WHERE maTuyen = @maTuyen);
+
+            -- Phân bổ tàu dựa trên khoảng cách và chỉ số tàu
+            IF @khoangCach > 500
+            BEGIN
+                -- Lấy tàu SE, tuần hoàn trong số lượng tàu có sẵn
+                SET @maTau = (SELECT maTau FROM (
+                    SELECT ROW_NUMBER() OVER (ORDER BY maTau) AS rn, maTau
+                    FROM Tau WHERE loaiTau = 'SE' AND trangThai = 'hoatDong'
+                ) AS numbered WHERE rn = (@tauIndex % @seCount) + 1);
+            END
+            ELSE
+            BEGIN
+                -- Lấy tàu TN, tuần hoàn trong số lượng tàu có sẵn
+                SET @maTau = (SELECT maTau FROM (
+                    SELECT ROW_NUMBER() OVER (ORDER BY maTau) AS rn, maTau
+                    FROM Tau WHERE loaiTau = 'TN' AND trangThai = 'hoatDong'
+                ) AS numbered WHERE rn = (@tauIndex % @tnCount) + 1);
+            END
+
+            -- Kiểm tra nếu không lấy được mã tàu
+            IF @maTau IS NULL
+            BEGIN
+                SET @errorMessage = 'Không thể lấy mã tàu cho chuyến tàu tại giờ ' + 
+                                    CAST(@hour AS VARCHAR(2)) + ' ngày ' + 
+                                    CONVERT(VARCHAR(10), @currentDate, 23) + '.';
+                THROW 50002, @errorMessage, 1;
+                RETURN;
+            END;
+
+            -- Lấy 6 số cuối của mã tàu và bỏ số 0 thừa ở đầu
+            SET @maTauSuffix = RIGHT(@maTau, 6);
+            SET @maTauSuffix = CAST(CAST(@maTauSuffix AS INT) AS VARCHAR(6)); -- Chuyển thành số để bỏ 0 thừa
+
+            -- Tạo mã chuyến tàu theo định dạng mới
+            SET @maChuyenTau = CONCAT(
+                FORMAT(@hour, '00'), '00', -- HHMM
+                FORMAT(@currentDate, 'yyyyMMdd'), -- YYYYMMDD
+                SUBSTRING(@maTau, 5, 2), -- SE hoặc TN (lấy từ vị trí thứ 5, dài 2 ký tự)
+                @maTauSuffix -- 6 số cuối của mã tàu, bỏ 0 thừa
+            );
+
+            -- Thiết lập giờ khởi hành
+            SET @ngayKhoiHanh = @currentDate;
+            SET @gioKhoiHanh = DATEADD(HOUR, @hour, '00:00:00');
+
+            -- Tính thời gian chạy (khoangCach / 50 giờ)
+            SET @travelTime = @khoangCach / 50.0; -- Tốc độ 50 km/h
+            SET @travelDays = FLOOR(@travelTime / 24);
+            SET @travelHours = FLOOR(@travelTime - (@travelDays * 24));
+            SET @travelMinutes = ROUND((@travelTime - FLOOR(@travelTime)) * 60, 0);
+
+            -- Tính ngày và giờ dự kiến
+            SET @ngayDuKien = DATEADD(DAY, @travelDays, @ngayKhoiHanh);
+            SET @gioDuKien = DATEADD(MINUTE, @travelMinutes, DATEADD(HOUR, @travelHours, @gioKhoiHanh));
+            IF DATEDIFF(SECOND, @gioDuKien, '00:00:00') < 0
+                SET @ngayDuKien = DATEADD(DAY, 1, @ngayDuKien);
+
+            -- Chèn dữ liệu vào bảng ChuyenTau
+            INSERT INTO ChuyenTau (maChuyenTau, ngayKhoiHanh, gioKhoiHanh, ngayDuKien, gioDuKien, maTau, maTuyen)
+            VALUES (@maChuyenTau, @ngayKhoiHanh, @gioKhoiHanh, @ngayDuKien, @gioDuKien, @maTau, @maTuyen);
+
+            -- Tăng giờ, chỉ số tàu và chỉ số tuyến
+            SET @hour = @hour + 1;
+            SET @tauIndex = @tauIndex + 1;
+            SET @tuyenIndex = @tuyenIndex + 1;
+            IF @tuyenIndex > 90
+                SET @tuyenIndex = 1; -- Quay lại tuyến đầu tiên nếu vượt quá 90
+        END
+        SET @currentDate = DATEADD(DAY, 1, @currentDate); -- Tăng ngày
+    END
+END;
+GO
+
+-- Thực thi thủ tục để sinh dữ liệu
+EXEC GenerateChuyenTauData;
+GO
+
+-- Tạo bảng ChoNgoi
+CREATE TABLE ChoNgoi (
+    maChoNgoi VARCHAR(30) PRIMARY KEY, -- Mã chỗ ngồi, khóa chính
+    tenCho VARCHAR(10) NOT NULL,       -- Tên chỗ (ví dụ: A01, B02)
+    trangThai VARCHAR(10) NOT NULL,    -- Trạng thái: đã đặt, đang đặt, chưa đặt
+    maChuyenTau VARCHAR(30) NOT NULL,  -- Mã chuyến tàu, tham chiếu đến ChuyenTau
+
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT FK_ChoNgoi_ChuyenTau FOREIGN KEY (maChuyenTau) 
+        REFERENCES ChuyenTau(maChuyenTau) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Ràng buộc trạng thái
+    CONSTRAINT CHK_TrangThai_ChoNgoi 
+        CHECK (trangThai IN ('daDat', 'dangDat', 'chuaDat'))
+);
+GO
+
+-- Xóa thủ tục GenerateChoNgoiData nếu đã tồn tại
+IF EXISTS (SELECT * FROM sys.procedures WHERE name = 'GenerateChoNgoiData')
+    DROP PROCEDURE GenerateChoNgoiData;
+GO
+
+-- Tạo thủ tục GenerateChoNgoiData
+CREATE PROCEDURE GenerateChoNgoiData
+AS
+BEGIN
+    DECLARE @maChuyenTau VARCHAR(30);
+    DECLARE @maTau VARCHAR(20);
+    DECLARE @maToa VARCHAR(20);
+    DECLARE @loaiToa VARCHAR(20);
+    DECLARE @trangThaiToa VARCHAR(20);
+    DECLARE @maChoNgoi VARCHAR(30);
+    DECLARE @tenCho VARCHAR(10);
+    DECLARE @seatCount INT;
+    DECLARE @seatIndex INT;
+    DECLARE @toaSuffix VARCHAR(2);
+    DECLARE @randomStatus VARCHAR(10);
+
+    -- Cursor để lặp qua tất cả các chuyến tàu trong ChuyenTau
+    DECLARE chuyenTau_cursor CURSOR FOR
+    SELECT maChuyenTau, maTau
+    FROM ChuyenTau;
+
+    OPEN chuyenTau_cursor;
+    FETCH NEXT FROM chuyenTau_cursor INTO @maChuyenTau, @maTau;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Cursor để lặp qua các toa của tàu
+        DECLARE toa_cursor CURSOR FOR
+        SELECT maToa, loaiToa, trangThai
+        FROM Toa
+        WHERE maTau = @maTau;
+
+        OPEN toa_cursor;
+        FETCH NEXT FROM toa_cursor INTO @maToa, @loaiToa, @trangThaiToa;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            -- Chỉ tạo chỗ ngồi cho toa có trạng thái hoatDong
+            IF @trangThaiToa = 'hoatDong'
+            BEGIN
+                -- Xác định số lượng chỗ ngồi dựa trên loại toa
+                IF @loaiToa = 'giuongNamDieuHoa'
+                    SET @seatCount = 40; -- Tàu SE: Giường nằm điều hòa
+                ELSE IF @loaiToa = 'ngoiMemDieuHoa'
+                    SET @seatCount = CASE 
+                        WHEN (SELECT loaiTau FROM Tau WHERE maTau = @maTau) = 'SE' THEN 50 -- Tàu SE: Ghế mềm điều hòa
+                        ELSE 40 -- Tàu TN: Ghế mềm điều hòa
+                    END;
+                ELSE IF @loaiToa = 'gheCungDieuHoa'
+                    SET @seatCount = 40; -- Tàu TN: Ghế cứng điều hòa
+                ELSE
+                    SET @seatCount = 0; -- Không tạo chỗ ngồi cho loại toa không hợp lệ
+
+                -- Lấy 2 số cuối của mã toa
+                SET @toaSuffix = RIGHT(@maToa, 2);
+
+                -- Tạo chỗ ngồi
+                SET @seatIndex = 1;
+                WHILE @seatIndex <= @seatCount
+                BEGIN
+                    -- Tạo mã chỗ ngồi: maChuyenTau + T + 2 số cuối mã toa + số thứ tự ghế
+                    SET @maChoNgoi = CONCAT(@maChuyenTau, 'T', @toaSuffix, FORMAT(@seatIndex, '00'));
+
+                    -- Tạo tên chỗ: Chỉ là số thứ tự (1, 2, 3, ...)
+                    SET @tenCho = CAST(@seatIndex AS VARCHAR(10));
+
+                    -- Gán trạng thái ngẫu nhiên: 50% chuaDat, 50% daDat
+                    SET @randomStatus = CASE 
+                        WHEN RAND() < 0.5 THEN 'chuaDat'
+                        ELSE 'daDat'
+                    END;
+
+                    -- Chèn dữ liệu vào bảng ChoNgoi
+                    INSERT INTO ChoNgoi (maChoNgoi, tenCho, trangThai, maChuyenTau)
+                    VALUES (@maChoNgoi, @tenCho, @randomStatus, @maChuyenTau);
+
+                    SET @seatIndex = @seatIndex + 1;
+                END;
+            END;
+
+            FETCH NEXT FROM toa_cursor INTO @maToa, @loaiToa, @trangThaiToa;
+        END;
+
+        CLOSE toa_cursor;
+        DEALLOCATE toa_cursor;
+
+        FETCH NEXT FROM chuyenTau_cursor INTO @maChuyenTau, @maTau;
+    END;
+
+    CLOSE chuyenTau_cursor;
+    DEALLOCATE chuyenTau_cursor;
+END;
+GO
+
+-- Thực thi thủ tục để sinh dữ liệu
+EXEC GenerateChoNgoiData;
 GO

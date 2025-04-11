@@ -166,7 +166,7 @@
             <Font name="Tahoma" size="16.0" />
          </font>
       </CheckBox>
-      <Button layoutX="955.0" layoutY="135.0" mnemonicParsing="false" prefWidth="90.0" styleClass="btn-tim" text="Tìm" textFill="WHITE">
+      <Button fx:id="btnTim" layoutX="955.0" layoutY="135.0" mnemonicParsing="false" onAction="#btnTimClicked" prefWidth="90.0" styleClass="btn-tim" text="Tìm" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>

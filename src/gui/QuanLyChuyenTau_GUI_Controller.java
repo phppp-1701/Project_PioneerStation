@@ -137,8 +137,122 @@ public class QuanLyChuyenTau_GUI_Controller {
         cboGioKhoiHanh_ChuyenTau.setDisable(isMaChuyenTauEmpty);
     }
     
+    private void populateChuyenTauFields(ChuyenTau chuyenTau) {
+        try {
+            // Lấy thông tin tàu
+            Tau_DAO tau_DAO = new Tau_DAO();
+            Tau tau = tau_DAO.timTauTheoMa(chuyenTau.getMaTau());
+            if (tau != null) {
+                txtTenTau_ChuyenTau.setText(tau.getTenTau());
+                cboLoaiTau_ChuyenTau.setValue(tau.getLoaiTau());
+            } else {
+                txtTenTau_ChuyenTau.setText("");
+                cboLoaiTau_ChuyenTau.setValue(null);
+            }
+            txtMaChuyenTau.setText(chuyenTau.getMaChuyenTau());
+            // Lấy thông tin ga
+            TuyenTau_DAO tuyenTau_DAO = new TuyenTau_DAO();
+
+            // Ga đi
+            String maGaDi = tuyenTau_DAO.getMaGaDiTheoMaTuyen(chuyenTau.getMaTuyen());
+            Ga gaDi = null;
+            if (maGaDi != null) {
+                gaDi = cboGaDi_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getMaGa().equals(maGaDi))
+                        .findFirst()
+                        .orElse(null);
+            }
+            cboGaDi_ChuyenTau.setValue(gaDi);
+
+            // Ga đến
+            String maGaDen = tuyenTau_DAO.getMaGaDenTheoMaTuyen(chuyenTau.getMaTuyen());
+            Ga gaDen = null;
+            if (maGaDen != null) {
+                gaDen = cboGaDen_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getMaGa().equals(maGaDen))
+                        .findFirst()
+                        .orElse(null);
+            }
+            cboGaDen_ChuyenTau.setValue(gaDen);
+
+            // Ngày khởi hành và ngày dự kiến
+            dpNgayKhoihanh_ChuyenTau.setValue(chuyenTau.getNgayKhoiHanh());
+            dpNgayDuKien_ChuyenTau.setValue(chuyenTau.getNgayDuKien());
+
+            // Giờ dự kiến
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            txtGioDuKien_ChuyenTau.setText(chuyenTau.getGioDuKien().format(timeFormatter));
+
+            // Khởi tạo cboGioKhoiHanh_ChuyenTau nếu chưa có giá trị
+            if (cboGioKhoiHanh_ChuyenTau.getItems().isEmpty()) {
+                cboGioKhoiHanh_ChuyenTau.setItems(FXCollections.observableArrayList(
+                    "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
+                ));
+            }
+            String gioKhoiHanh = chuyenTau.getGioKhoiHanh().format(timeFormatter);
+            cboGioKhoiHanh_ChuyenTau.setValue(gioKhoiHanh);
+
+            // Kích hoạt các trường nếu cần (nếu bạn có logic vô hiệu hóa trước đó)
+            updateFieldsState(false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi khi hiển thị thông tin chuyến tàu: " + e.getMessage(), "image/loi.png");
+        }
+    }
+    
     @FXML
     public void initialize() {
+    	// Thêm sự kiện nhấp chuột cho tbDanhSachChuyenTau
+        tbDanhSachChuyenTau.setOnMouseClicked(event -> {
+            ChuyenTau selectedChuyenTau = tbDanhSachChuyenTau.getSelectionModel().getSelectedItem();
+            if (selectedChuyenTau != null) {
+                // Gọi phương thức để điền dữ liệu vào các trường
+                populateChuyenTauFields(selectedChuyenTau);
+            }
+        });
+    	// Khởi tạo cboLoaiTau_ChuyenTau với các giá trị từ enum LoaiTau
+        cboLoaiTau_ChuyenTau.setItems(FXCollections.observableArrayList(LoaiTau.values()));
+
+        // Khởi tạo cboGaDi_ChuyenTau và cboGaDen_ChuyenTau với tất cả các ga
+        Ga_DAO ga_DAO = new Ga_DAO();
+        TuyenTau_DAO tuyenTau_dao = new TuyenTau_DAO();
+        List<Ga> tatCaGa = ga_DAO.timGaTheoTen(""); // Lấy tất cả các ga
+        ObservableList<Ga> danhSachTatCaGa = FXCollections.observableArrayList(tatCaGa);
+        cboGaDi_ChuyenTau.setItems(danhSachTatCaGa);
+        cboGaDen_ChuyenTau.setItems(danhSachTatCaGa);
+
+        // Thiết lập StringConverter để hiển thị tên ga trong cboGaDi_ChuyenTau
+        cboGaDi_ChuyenTau.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return cboGaDi_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getTenGa().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        // Thiết lập StringConverter để hiển thị tên ga trong cboGaDen_ChuyenTau
+        cboGaDen_ChuyenTau.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return cboGaDen_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getTenGa().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     	
     	// Khởi tạo cboTimLoaiTau với các giá trị từ enum LoaiTau
         ObservableList<LoaiTau> loaiTauList = FXCollections.observableArrayList(LoaiTau.values());
@@ -155,14 +269,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         txtMaChuyenTau.textProperty().addListener((observable, oldValue, newValue) -> {
             updateFieldsState(newValue.trim().isEmpty());
         });
-    	
-    	// Khởi tạo Ga_DAO và TuyenTau_DAO
-        Ga_DAO ga_DAO = new Ga_DAO();
-        TuyenTau_DAO tuyenTau_DAO = new TuyenTau_DAO();
 
-        // Lấy danh sách tất cả các ga
-        List<Ga> tatCaGa = ga_DAO.timGaTheoTen(""); // Truy vấn với "" để lấy tất cả ga
-        ObservableList<Ga> danhSachTatCaGa = FXCollections.observableArrayList(tatCaGa);
 
         // Thiết lập hiển thị tên ga cho cboTimGaDi và cboTimGaDen
         cboTimGaDi.setConverter(new StringConverter<Ga>() {
@@ -203,7 +310,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         cboTimGaDi.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Lấy danh sách ga đến dựa trên ga đi
-                List<Ga> danhSachGaDen = tuyenTau_DAO.getDanhSachGaDenTheoGaDi(newValue.getMaGa());
+                List<Ga> danhSachGaDen = tuyenTau_dao.getDanhSachGaDenTheoGaDi(newValue.getMaGa());
                 ObservableList<Ga> danhSachGaDenObservable = FXCollections.observableArrayList(danhSachGaDen);
                 cboTimGaDen.setItems(danhSachGaDenObservable);
 
@@ -221,7 +328,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         cboTimGaDen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Lấy danh sách ga đi dựa trên ga đến
-                List<Ga> danhSachGaDi = tuyenTau_DAO.getDanhSachGaDiTheoGaDen(newValue.getMaGa());
+                List<Ga> danhSachGaDi = tuyenTau_dao.getDanhSachGaDiTheoGaDen(newValue.getMaGa());
                 ObservableList<Ga> danhSachGaDiObservable = FXCollections.observableArrayList(danhSachGaDi);
                 cboTimGaDi.setItems(danhSachGaDiObservable);
 
