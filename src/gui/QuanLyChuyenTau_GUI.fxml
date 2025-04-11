@@ -216,7 +216,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="btnTimTau" layoutX="306.0" layoutY="118.0" mnemonicParsing="false" onAction="#btnTimTauClicked" prefHeight="28.0" prefWidth="79.0" text="Tìm">
+                              <Button fx:id="btnTimTau" layoutX="306.0" layoutY="118.0" mnemonicParsing="false" onAction="#btnTimTauClicked" prefHeight="28.0" prefWidth="79.0" styleClass="btn-timTau" text="Tìm" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -282,22 +282,22 @@
                                  </font>
                               </Label>
                               <ComboBox fx:id="cboLoaiToa" layoutX="288.0" layoutY="277.0" prefHeight="28.0" prefWidth="196.0" styleClass="tab" />
-                              <Button fx:id="btnThem" layoutX="644.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnThemTauClicked" prefHeight="28.0" prefWidth="79.0" text="Thêm">
+                              <Button fx:id="btnThem" layoutX="644.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnThemTauClicked" prefHeight="28.0" prefWidth="79.0" styleClass="btn-themTau" text="Thêm" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnCapNhatTau" layoutX="743.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnCapNhatTauClicked" prefHeight="28.0" prefWidth="79.0" text="Cập nhật">
+                              <Button fx:id="btnCapNhatTau" layoutX="743.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnCapNhatTauClicked" prefHeight="28.0" prefWidth="79.0" styleClass="btn-capNhatTau" text="Cập nhật" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnCapNhatToa" layoutX="747.0" layoutY="277.0" mnemonicParsing="false" onAction="#btnCapNhatToaClicked" text="Cập nhật">
+                              <Button fx:id="btnCapNhatToa" layoutX="747.0" layoutY="277.0" mnemonicParsing="false" onAction="#btnCapNhatToaClicked" styleClass="btn-capNhatToa" text="Cập nhật" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnLamRong" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnLamRongClicked" prefHeight="28.0" prefWidth="79.0" text="Làm rỗng">
+                              <Button fx:id="btnLamRong" layoutX="544.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnLamRongClicked" prefHeight="28.0" prefWidth="79.0" styleClass="btn-lamRongTau" text="Làm rỗng" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -343,7 +343,7 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </TextField>
-                              <Button fx:id="btnTimGa" layoutX="373.0" layoutY="116.0" mnemonicParsing="false" onAction="#btnTimGaClicked" prefHeight="28.0" prefWidth="77.0" text="Tìm">
+                              <Button fx:id="btnTimGa" layoutX="373.0" layoutY="116.0" mnemonicParsing="false" onAction="#btnTimGaClicked" prefHeight="28.0" prefWidth="77.0" styleClass="btn-timGa" text="Tìm" textFill="WHITE">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -409,17 +409,17 @@
                               </TextArea>
                            </children>
                         </AnchorPane>
-                        <Button fx:id="btnCapNhatGa" layoutX="762.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnCapNhatGaClicked" prefHeight="28.0" prefWidth="77.0" text="Cập nhật">
+                        <Button fx:id="btnCapNhatGa" layoutX="762.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnCapNhatGaClicked" prefHeight="28.0" prefWidth="77.0" styleClass="btn-capNhatGa" text="Cập nhật" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnThemGa" layoutX="872.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnThemGaClicked" prefHeight="28.0" prefWidth="77.0" text="Thêm">
+                        <Button fx:id="btnThemGa" layoutX="872.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnThemGaClicked" prefHeight="28.0" prefWidth="77.0" styleClass="btn-themGa" text="Thêm" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnLamRongGa" layoutX="981.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnLamRongGaClicked" prefHeight="28.0" prefWidth="79.0" text="Làm rỗng">
+                        <Button fx:id="btnLamRongGa" layoutX="981.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnLamRongGaClicked" prefHeight="28.0" prefWidth="79.0" styleClass="btn-lamRongGa" text="Làm rỗng" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="14.0" />
                            </font>
@@ -464,7 +464,7 @@
                                  </font>
                               </Label>
                               <ComboBox fx:id="cboTimLoaiTau" layoutX="125.0" layoutY="210.0" prefHeight="26.0" prefWidth="137.0" />
-                              <Button fx:id="btnTimChuyenTau" layoutX="433.0" layoutY="253.0" mnemonicParsing="false" onAction="#btnTimChuyenTauClicked" prefHeight="30.0" prefWidth="77.0" text="Tìm">
+                              <Button fx:id="btnTimChuyenTau" layoutX="433.0" layoutY="253.0" mnemonicParsing="false" onAction="#btnTimChuyenTauClicked" prefHeight="30.0" prefWidth="77.0" styleClass="btn-timChuyenTau" text="Tìm" textFill="WHITE">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

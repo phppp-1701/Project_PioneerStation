@@ -38,15 +38,6 @@
     -fx-cursor: hand; 	
 }
 
-.btn-xuatDanhSach{
-	-fx-background-color: #2E7D32;	
-}
-
-.btn-xuatDanhSach:hover{
-    -fx-background-color: #FFD700;
-    -fx-cursor: hand; 	
-}
-
 .btn-themKhachHang{
 	-fx-background-color: #00FA9A;
 }
@@ -63,15 +54,6 @@
 .btn-capNhatKhachHang:hover{
 	-fx-background-color: #FFD700; /* Màu nền khi hover */
     -fx-cursor: hand;  
-}
-
-.btn-voHieuHoa{
-	-fx-background-color: #CD3700;
-}
-
-.btn-voHieuHoa:hover{
-    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
-    -fx-cursor: hand;	
 }
 
 .btn-lamRong{

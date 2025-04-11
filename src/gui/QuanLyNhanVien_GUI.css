@@ -58,29 +58,11 @@
     -fx-cursor: hand;  
 }
 
-.btn-xoaNhanVien{
-	-fx-background-color: #d40c0c;
-}
-
-.btn-xoaNhanVien:hover{
-	-fx-background-color: #FFD700; /* Màu nền khi hover */
-    -fx-cursor: hand;  
-}
-
 .btn-capNhatNhanVien{
 	-fx-background-color: #2E7D32;
 }
 
 .btn-capNhatNhanVien:hover{
-	-fx-background-color: #FFD700; /* Màu nền khi hover */
-    -fx-cursor: hand;  
-}
-
-.btn-xuatDanhSach{
-	-fx-background-color: #2E7D32;
-}
-
-.btn-xuatDanhSach:hover{
 	-fx-background-color: #FFD700; /* Màu nền khi hover */
     -fx-cursor: hand;  
 }

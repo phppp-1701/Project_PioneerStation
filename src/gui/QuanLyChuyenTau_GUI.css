@@ -29,6 +29,96 @@
     -fx-arc-height: 0;
 }
 
+.btn-timTau{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-timTau:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-themTau{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-themTau:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-capNhatTau{
+	-fx-background-color: #2E7D32;
+}
+
+.btn-capNhatTau:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-lamRongTau{
+	-fx-background-color:#FF8C00;
+}
+
+.btn-lamRongTau:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-capNhatToa{
+	-fx-background-color: #2E7D32;
+}
+
+.btn-capNhatToa:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-timGa{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-timGa:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-themGa{
+	-fx-background-color: #00FA9A;
+}
+
+.btn-themGa:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-capNhatGa{
+	-fx-background-color: #2E7D32;
+}
+
+.btn-capNhatGa:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
+.btn-lamRongGa{
+	-fx-background-color:#FF8C00;
+}
+
+.btn-lamRongGa:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-timChuyenTau{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-timChuyenTau:hover{
+	-fx-background-color: #FFD700; /* Màu nền khi hover */
+    -fx-cursor: hand;  
+}
+
 .rec-tieuDe{
 	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
 }
