@@ -13,7 +13,7 @@ CREATE TABLE KhachHang (
     trangThaiKhachHang VARCHAR(20) CHECK (trangThaiKhachHang IN ('hoatDong','voHieuHoa'))
 );
 go
-
+-- KhachHang
 INSERT INTO KhachHang (maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiThanhVien, trangThaiKhachHang)
 VALUES
 -- Khách hàng thân thiết với CCCD 12 số (theo quy định mới) và email hợp lệ
