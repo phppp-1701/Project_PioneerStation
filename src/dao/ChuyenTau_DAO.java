@@ -108,10 +108,11 @@ public class ChuyenTau_DAO {
                 "INNER JOIN TuyenTau tt ON ct.maTuyen = tt.maTuyen " +
                 "INNER JOIN Ga g1 ON tt.maGaDi = g1.maGa " +
                 "INNER JOIN Ga g2 ON tt.maGaDen = g2.maGa " +
-                "WHERE 1=1"
+                "WHERE t.trangThai = ?"
             );
 
             List<Object> params = new ArrayList<>();
+            params.add("hoatDong"); // Trạng thái từ bảng Tau
 
             if (tenGaDi != null && !tenGaDi.isEmpty()) {
                 sql.append(" AND g1.tenGa LIKE ?");
@@ -223,4 +224,6 @@ public class ChuyenTau_DAO {
 
         return chuyenTau;
     }
+    
+    
 }

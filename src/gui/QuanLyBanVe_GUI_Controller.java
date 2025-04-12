@@ -1,22 +1,33 @@
 package gui;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.ChoNgoi_DAO;
 import dao.ChuyenTau_DAO;
 import dao.Ga_DAO;
 import dao.NhanVien_DAO;
 import dao.Tau_DAO;
+import dao.Toa_DAO;
 import dao.TuyenTau_DAO;
+import entity.ChoNgoi;
+import entity.ChoNgoi.TrangThaiChoNgoi;
 import entity.ChuyenTau;
 import entity.Ga;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
 import entity.Tau;
+import entity.Tau.LoaiTau;
+import entity.Toa;
+import entity.Toa.LoaiToa;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -28,9 +39,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -60,12 +70,19 @@ public class QuanLyBanVe_GUI_Controller {
     @FXML
     private Label lblQuanLyChuyenTau;
     
-    @FXML
+    @FXML 
+    private Button btnThemVe;
+    
     public void initialize() {
-    	// Initialize DatePickers and CheckBox
+        // Initialize DatePickers and CheckBox
         initializeDatePickersAndCheckBox();
-    	// Initialize ComboBoxes for gaDi and gaDen
+        // Initialize ComboBoxes for gaDi and gaDen
         initializeComboBoxes();
+        // Vô hiệu hóa các nút "Chọn tất cả" và "Bỏ chọn tất cả" ban đầu
+        btnChonTatCa.setDisable(true);
+        btnBoChonTatCa.setDisable(true);
+        btnThemVe.setDisable(true);
+        
         // Handler cho quản lý chuyến tàu
         lblQuanLyChuyenTau.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý chuyến tàu");
@@ -77,7 +94,7 @@ public class QuanLyBanVe_GUI_Controller {
                 e.printStackTrace();
             }
         });
-    	// Thêm vào phương thức initialize()
+        // Thêm vào phương thức initialize()
         lblQuanLyVe.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý vé");
             try {
@@ -90,7 +107,7 @@ public class QuanLyBanVe_GUI_Controller {
             }
         });
         
-     // Thêm vào phương thức initialize() trong Home_GUI_Controller.java
+        // Thêm vào phương thức initialize() trong Home_GUI_Controller.java
         lblQuanLyHoaDon.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý hóa đơn");
             try {
@@ -103,7 +120,7 @@ public class QuanLyBanVe_GUI_Controller {
             }
         });
         
-     // Handler cho Quản lý khách hàng
+        // Handler cho Quản lý khách hàng
         lblQuanLyKhachHang.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý khách hàng");
             try {
@@ -115,7 +132,7 @@ public class QuanLyBanVe_GUI_Controller {
             }
         });
         
-     // Handler cho Quản lý nhân viên
+        // Handler cho Quản lý nhân viên
         lblQuanLyNhanVien.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý nhân viên");
             try {
@@ -126,7 +143,6 @@ public class QuanLyBanVe_GUI_Controller {
                 e.printStackTrace();
             }
         });
-        
         
         // Handler cho thống kê
         lblThongKe.setOnMouseClicked(event -> {
@@ -151,7 +167,6 @@ public class QuanLyBanVe_GUI_Controller {
                 e.printStackTrace();
             }
         });
-    	
     }
 
     private void initializeComboBoxes() {
@@ -337,21 +352,47 @@ public class QuanLyBanVe_GUI_Controller {
     private Button btnTim;
     
     @FXML
-    private void btnTimClicked() {
-    	if(kiemTraThongTinTim()) {
-    		String tenGaDi = cboGaDi.getValue().getTenGa();
-    		String tenGaDen = cboGaDen.getValue().getTenGa();
-    		LocalDate ngayKhoiHanh = dpNgayDi.getValue();
-    		
-    		List<ChuyenTau> dsct = timChuyenTauTheo(tenGaDi, tenGaDen, ngayKhoiHanh);
-    		if(dsct.isEmpty()) {
-    			showWarningAlert("Không tìm thấy chuyến tàu phù hợp!", "image/canhBao.png");
-    			return;
-    		}
-    		int soLuongChuyenTau = dsct.size();
-        	pnChuyenTau.setPrefWidth(160*soLuongChuyenTau + 14);
-    		taoPaneChuyenTau(dsct);
-    	}
+    private void btnTimClicked() throws SQLException {
+        if(kiemTraThongTinTim()) {
+            pnToa.getChildren().clear();
+            pnChoNgoi.getChildren().clear(); // Xóa sơ đồ chỗ ngồi cũ khi tìm chuyến mới
+            selectedChoNgoiAnchorPanes.clear(); // Reset danh sách chỗ ngồi được chọn
+
+            String tenGaDi = cboGaDi.getValue().getTenGa();
+            String tenGaDen = cboGaDen.getValue().getTenGa();
+            LocalDate ngayKhoiHanh = dpNgayDi.getValue();
+            
+            List<ChuyenTau> dsct = timChuyenTauTheo(tenGaDi, tenGaDen, ngayKhoiHanh);
+            if(dsct.isEmpty()) {
+                showWarningAlert("Không tìm thấy chuyến tàu phù hợp!", "image/canhBao.png");
+                return;
+            }
+            int soLuongChuyenTau = dsct.size();
+            pnChuyenTau.setPrefWidth(160*soLuongChuyenTau + 14);
+            taoPaneChuyenTau(dsct);
+        }
+    }
+    
+    @FXML
+    private Pane pnToa;
+    
+    private List<Toa> dstoa;
+    
+    private double tinhPaneToa(List<Toa> toaList) {
+        // Khai báo các hằng số
+        double widthPerPane = 200.0; // Chiều rộng của mỗi toa
+        double spacing = 5.0;        // Khoảng cách giữa các toa
+        double initialX = 82.0;      // Tọa độ X ban đầu
+        double finalSpacing = 10.0;  // Khoảng cách thêm ở cuối
+
+        // Tính số lượng toa (nếu toaList null thì số lượng bằng 0)
+        int soLuongToa = (toaList != null) ? toaList.size() : 0;
+
+        // Tính tổng chiều rộng:
+        // initialX + (số toa * chiều rộng mỗi toa) + (khoảng cách giữa các toa) + khoảng cách cuối
+        double totalWidth = initialX + (soLuongToa * widthPerPane) + (Math.max(0, soLuongToa - 1) * spacing) + finalSpacing;
+
+        return totalWidth;
     }
     
     private boolean kiemTraThongTinTim() {
@@ -377,11 +418,11 @@ public class QuanLyBanVe_GUI_Controller {
     }
     
     private List<ChuyenTau> timChuyenTauTheo(String tenGaDi, String tenGaDen, LocalDate ngayKhoiHanh) {
-		List<ChuyenTau> dsct = new ArrayList<ChuyenTau>();
-		ChuyenTau_DAO chuyenTau_DAO = new ChuyenTau_DAO();
-		dsct = chuyenTau_DAO.timChuyenTauTheoTenGaVaNgay(tenGaDi, tenGaDen, ngayKhoiHanh);
-		return dsct;
-	}
+        List<ChuyenTau> dsct = new ArrayList<ChuyenTau>();
+        ChuyenTau_DAO chuyenTau_DAO = new ChuyenTau_DAO();
+        dsct = chuyenTau_DAO.timChuyenTauTheoTenGaVaNgay(tenGaDi, tenGaDen, ngayKhoiHanh);
+        return dsct;
+    }
     
     private void showErrorAlert(String message, String icon) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -424,6 +465,14 @@ public class QuanLyBanVe_GUI_Controller {
         }
     }
     
+    // Biến instance để theo dõi AnchorPane và ChuyenTau đã chọn
+    private AnchorPane selectedAnchorPane = null;
+    private ChuyenTau chuyenTauDangChon = null; // Biến để lưu chuyến tàu đang chọn
+    private AnchorPane selectedToaAnchorPane = null; // Biến để theo dõi AnchorPane Toa đã chọn
+    private List<AnchorPane> selectedChoNgoiAnchorPanes = new ArrayList<>(); // Danh sách các chỗ ngồi đã chọn
+    private int chonTheoDayCount = 0; // Đếm số chỗ đã chọn khi ckcChonTheoDay được bật
+    private List<ChoNgoi> chonTheoDayChoNgois = new ArrayList<>(); // Lưu tạm 2 chỗ ngồi để chọn theo dãy
+
     private void taoPaneChuyenTau(List<ChuyenTau> dsct) {
         int layoutX = 14;
         int layoutY = 14;
@@ -442,6 +491,10 @@ public class QuanLyBanVe_GUI_Controller {
         // Tạo đối tượng Tau_DAO để tìm tàu
         Tau_DAO tauDAO = new Tau_DAO();
 
+        // Đường dẫn ảnh
+        String imagePathUnselected = "image/QuanLyBanVe_TauLuaChuaChon.png";
+        String imagePathSelected = "image/QuanLyBanVe_TauLuaDaChon.png";
+
         // Duyệt qua danh sách các ChuyenTau
         int index = 0;
         for (ChuyenTau chuyenTau : dsct) {
@@ -457,10 +510,9 @@ public class QuanLyBanVe_GUI_Controller {
 
             // Tạo ImageView
             ImageView imageView = new ImageView();
-            String imagePath = "image/QuanLyBanVe_TauLuaChuaChon.png"; // Đường dẫn tương đối từ thư mục gốc dự án
             try {
-                // Load ảnh từ file hệ thống
-                File file = new File(imagePath);
+                // Load ảnh mặc định (chưa chọn) từ file hệ thống
+                File file = new File(imagePathUnselected);
                 if (!file.exists()) {
                     throw new IllegalArgumentException("Không tìm thấy file ảnh tại: " + file.getAbsolutePath());
                 }
@@ -476,29 +528,92 @@ public class QuanLyBanVe_GUI_Controller {
                 AnchorPane.setLeftAnchor(imageView, 10.0);  // Cách trái 10px
                 AnchorPane.setRightAnchor(imageView, 10.0); // Cách phải 10px
             } catch (Exception e) {
-                System.err.println("Lỗi khi tải ảnh tại " + imagePath + ": " + e.getMessage());
+                System.err.println("Lỗi khi tải ảnh tại " + imagePathUnselected + ": " + e.getMessage());
                 anchorPane.setStyle("-fx-background-color: red;"); // Màu đỏ để dễ thấy
             }
 
-            // Tạo Label 1: Ký hiệu tàu (tìm Tau theo maTau rồi gọi getKyHieuTau)
+            // Tạo Label 1: Ký hiệu tàu
             Label kyHieuLabel = new Label();
             Tau tau = tauDAO.timTauTheoMa(chuyenTau.getMaTau());
             if (tau != null) {
                 kyHieuLabel.setText(tau.getKyHieuTau());
             } else {
-                kyHieuLabel.setText("N/A"); // Nếu không tìm thấy tàu
+                kyHieuLabel.setText("N/A");
             }
-            kyHieuLabel.setLayoutX(68); // Đặt tại tọa độ x = 59
-            kyHieuLabel.setLayoutY(52); // Đặt tại tọa độ y = 57
+            kyHieuLabel.setLayoutX(68); // Đặt tại tọa độ x = 68
+            kyHieuLabel.setLayoutY(52); // Đặt tại tọa độ y = 52
 
             // Tạo Label 2: Giờ khởi hành
             Label gioKhoiHanhLabel = new Label();
             gioKhoiHanhLabel.setText(chuyenTau.getGioKhoiHanh().toString()); // Giả định getGioKhoiHanh trả về LocalTime
-            gioKhoiHanhLabel.setLayoutX(68); // Đặt tại tọa độ x = 59
-            gioKhoiHanhLabel.setLayoutY(135); // Đặt tại tọa độ y = 138
+            gioKhoiHanhLabel.setLayoutX(68); // Đặt tại tọa độ x = 68
+            gioKhoiHanhLabel.setLayoutY(135); // Đặt tại tọa độ y = 135
 
             // Thêm ImageView và các Label vào AnchorPane
             anchorPane.getChildren().addAll(imageView, kyHieuLabel, gioKhoiHanhLabel);
+
+            // Thêm hiệu ứng hover: đổi con trỏ thành hình bàn tay khi di chuột vào
+            anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
+            anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
+
+            // Thêm sự kiện click cho AnchorPane
+            anchorPane.setOnMouseClicked(event -> {
+                // Nếu có AnchorPane đã chọn trước đó, đổi ảnh của nó về "chưa chọn"
+                if (selectedAnchorPane != null && selectedAnchorPane != anchorPane) {
+                    ImageView previousImageView = (ImageView) selectedAnchorPane.getChildren().get(0); // Lấy ImageView đầu tiên
+                    try {
+                        File file = new File(imagePathUnselected);
+                        if (!file.exists()) {
+                            throw new IllegalArgumentException("Không tìm thấy file ảnh tại: " + file.getAbsolutePath());
+                        }
+                        Image image = new Image(file.toURI().toString());
+                        previousImageView.setImage(image);
+                        System.out.println("Đã đổi ảnh về chưa chọn cho AnchorPane trước đó");
+                    } catch (Exception e) {
+                        System.err.println("Lỗi khi tải ảnh chưa chọn: " + e.getMessage());
+                    }
+                }
+
+                // Đổi ảnh của AnchorPane hiện tại sang "đã chọn"
+                try {
+                    File file = new File(imagePathSelected);
+                    if (!file.exists()) {
+                        throw new IllegalArgumentException("Không tìm thấy file ảnh tại: " + file.getAbsolutePath());
+                    }
+                    Image image = new Image(file.toURI().toString());
+                    imageView.setImage(image);
+                    System.out.println("Đã đổi ảnh thành công cho ChuyenTau " + chuyenTau.getMaChuyenTau());
+                } catch (Exception e) {
+                    System.err.println("Lỗi khi tải ảnh đã chọn tại " + imagePathSelected + ": " + e.getMessage());
+                }
+
+                // Cập nhật AnchorPane được chọn
+                selectedAnchorPane = anchorPane;
+
+                // Lưu chuyến tàu được chọn vào biến chuyenTauDangChon
+                chuyenTauDangChon = chuyenTau;
+                System.out.println("Đã chọn chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+                
+                
+                // Vô hiệu hóa các nút khi chọn chuyến tàu mới
+                btnBoChonTatCa.setDisable(true);
+                btnChonTatCa.setDisable(true);
+                btnThemVe.setDisable(true);
+                
+                // Lấy danh sách toa cho tàu của chuyến tàu được chọn
+                try {
+                    Toa_DAO toa_DAO = new Toa_DAO();
+                    dstoa = toa_DAO.getToaByMaTau(chuyenTauDangChon.getMaTau());
+                    if (dstoa == null || dstoa.isEmpty()) {
+                        showWarningAlert("Không tìm thấy toa cho chuyến tàu này!", "image/canhBao.png");
+                        return;
+                    }
+                    taoPaneToa(dstoa);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    showErrorAlert("Lỗi khi lấy danh sách toa: " + e.getMessage(), "image/canhBao.png");
+                }
+            });
 
             // Thêm AnchorPane vào pnChuyenTau
             pnChuyenTau.getChildren().add(anchorPane);
@@ -508,6 +623,616 @@ public class QuanLyBanVe_GUI_Controller {
         }
     }
     
-	@FXML
-	private Pane pnChuyenTau;
+    @FXML
+    private Pane pnChuyenTau;
+    
+    private void taoPaneToa(List<Toa> dstoa) throws SQLException {
+        // Xóa các node cũ trong pnToa để tránh trùng lặp
+    	
+        pnToa.getChildren().clear();
+
+        // Đặt selectedToaAnchorPane về null khi tạo mới danh sách toa
+        selectedToaAnchorPane = null;
+        selectedChoNgoiAnchorPanes.clear(); // Reset danh sách chỗ ngồi được chọn khi tạo mới danh sách toa
+        chonTheoDayCount = 0; // Reset đếm chọn theo dãy
+        chonTheoDayChoNgois.clear(); // Reset danh sách tạm chọn theo dãy
+
+        // Tính chiều rộng của pnToa dựa trên danh sách toa được truyền vào
+        pnToa.setPrefWidth(tinhPaneToa(dstoa));
+
+        // Thêm ảnh QuanLyBanVe_ToaTauLai.png một lần duy nhất tại tọa độ (0, 5)
+        try {
+            File file = new File("image/QuanLyBanVe_ToaTauLai.png");
+            if (!file.exists()) {
+                throw new IllegalArgumentException("Không tìm thấy file ảnh tại: " + file.getAbsolutePath());
+            }
+            Image image = new Image(file.toURI().toString());
+            ImageView imageView = new ImageView(image);
+
+            // Đặt kích thước ImageView thành 70x70
+            imageView.setFitWidth(70.0);
+            imageView.setFitHeight(70.0);
+            imageView.setPreserveRatio(false);
+
+            // Đặt tọa độ (0, 5) trong pnToa
+            imageView.setLayoutX(0.0);
+            imageView.setLayoutY(5.0);
+            // Xoay ảnh 180 độ để đầu xe hướng sang trái
+            imageView.setScaleX(-1);
+
+            // Thêm ImageView vào pnToa
+            pnToa.getChildren().add(imageView);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tải ảnh QuanLyBanVe_ToaTauLai.png: " + e.getMessage());
+            // Thêm Rectangle màu đỏ để báo lỗi
+            Rectangle errorRect = new Rectangle(70.0, 70.0); // Cập nhật kích thước Rectangle để khớp với ảnh
+            errorRect.setFill(javafx.scene.paint.Color.RED);
+            errorRect.setLayoutX(0.0);
+            errorRect.setLayoutY(5.0);
+            pnToa.getChildren().add(errorRect);
+        }
+
+        // Nếu dstoa rỗng hoặc null, không tạo AnchorPane
+        if (dstoa == null || dstoa.isEmpty()) {
+            return;
+        }
+
+        // Khởi tạo tọa độ x ban đầu cho các AnchorPane
+        double x = 82.0;
+        double y = 6.0;
+        double width = 200.0;
+        double height = 70.0;
+        double spacing = 5.0;
+
+        // Tạo AnchorPane cho từng Toa
+        for (Toa toa : dstoa) {
+            AnchorPane anchorPane = new AnchorPane();
+            anchorPane.setPrefSize(width, height);
+            anchorPane.setLayoutX(x);
+            anchorPane.setLayoutY(y);
+
+            // Tạo Rectangle màu trắng có kích thước y hệt AnchorPane
+            Rectangle whiteRect = new Rectangle(width, height);
+            whiteRect.setFill(javafx.scene.paint.Color.WHITE); // Đặt màu trắng
+
+            // Tạo Rectangle màu #ccdaf5, kích thước 200x15, tại tọa độ (0, 0)
+            Rectangle blueRect = new Rectangle(200.0, 15.0);
+            blueRect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Màu mặc định
+            blueRect.setLayoutX(0.0);
+            blueRect.setLayoutY(0.0);
+
+            // Thêm cả hai Rectangle vào AnchorPane (whiteRect trước, blueRect sau để nằm trên)
+            anchorPane.getChildren().addAll(whiteRect, blueRect);
+
+            // Thêm hiệu ứng hover: đổi con trỏ thành hình bàn tay khi di chuột vào
+            anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
+            anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
+
+            // Thêm sự kiện click cho AnchorPane
+            anchorPane.setOnMouseClicked(event -> {
+            	btnChonTatCa.setDisable(false);
+                toaDangChon = toa;
+                ChoNgoi_DAO choNgoi_DAO = new ChoNgoi_DAO();
+                danhSachChoNgoi = choNgoi_DAO.timChoNgoiTheoMaToaVaMaChuyenTau(toaDangChon.getMaToa(), chuyenTauDangChon.getMaChuyenTau());
+                Tau_DAO tau_DAO = new Tau_DAO();
+                Tau tauDangChon = tau_DAO.timTauTheoMa(chuyenTauDangChon.getMaTau());
+                if(tauDangChon.getLoaiTau() == LoaiTau.SE) {
+                	if(toaDangChon.getLoaiToa() == LoaiToa.giuongNamDieuHoa) {
+                		taoChoNgoi7x5(danhSachChoNgoi);
+                	}else {
+                		taoChoNgoi5x10(danhSachChoNgoi);
+                	}
+                }else {
+                	if(toaDangChon.getLoaiToa() == LoaiToa.gheCungDieuHoa) {
+                		taoChoNgoi5x10(danhSachChoNgoi);
+                	}else {
+                		taoChoNgoi4x10(danhSachChoNgoi);
+                	}
+                }
+                
+                
+                // Nếu có AnchorPane Toa đã chọn trước đó, đổi màu của nó về #ccdaf5
+                if (selectedToaAnchorPane != null && selectedToaAnchorPane != anchorPane) {
+                    Rectangle previousBlueRect = (Rectangle) selectedToaAnchorPane.getChildren().get(1); // Lấy blueRect (thứ 2 trong danh sách children)
+                    previousBlueRect.setFill(javafx.scene.paint.Color.web("#ccdaf5"));
+                    System.out.println("Đã đổi màu về #ccdaf5 cho AnchorPane Toa trước đó");
+                }
+
+                // Đổi màu của blueRect trong AnchorPane hiện tại sang #2e7d32
+                blueRect.setFill(javafx.scene.paint.Color.web("#2e7d32"));
+                System.out.println("Đã đổi màu thành #2e7d32 cho AnchorPane Toa hiện tại");
+
+                // Cập nhật AnchorPane Toa được chọn
+                selectedToaAnchorPane = anchorPane;
+
+                // Vô hiệu hóa các nút khi chọn toa mới
+                btnBoChonTatCa.setDisable(true);
+                btnThemVe.setDisable(true);
+            });
+            
+            String tenToa = "Toa: " + toa.getTenToa(); 
+            Label lblTenToa = new Label(tenToa);
+            lblTenToa.setLayoutX(14);
+            lblTenToa.setLayoutY(19);
+            lblTenToa.setFont(Font.font("Tahoma"));
+            anchorPane.getChildren().add(lblTenToa);
+            
+            String loaiToa = "";
+            if(toa.getLoaiToa().equals(LoaiToa.gheCungDieuHoa)) {
+                loaiToa = "Ghế cứng điều hòa";
+            } else if(toa.getLoaiToa().equals(LoaiToa.ngoiMemDieuHoa)) {
+                loaiToa = "Ngồi mềm điều hòa";
+            } else {
+                loaiToa = "Giường nằm điều hòa";
+            }
+            Label lblLoaiToa = new Label(loaiToa);
+            lblLoaiToa.setFont(Font.font("Tahoma"));
+            lblLoaiToa.setLayoutX(14);
+            lblLoaiToa.setLayoutY(37);
+            anchorPane.getChildren().add(lblLoaiToa);
+            
+            ChoNgoi_DAO choNgoi_DAO = new ChoNgoi_DAO();
+            List<ChoNgoi> tinhGia = choNgoi_DAO.timChoNgoiTheoMaToaVaMaChuyenTau(toa.getMaToa(), chuyenTauDangChon.getMaChuyenTau());
+            BigDecimal giaCho = tinhGia.get(0).getGiaCho();
+            Label lblGiaCho = new Label(giaCho+ " vnđ");
+            lblGiaCho.setFont(Font.font("Tahoma"));
+            lblGiaCho.setLayoutX(14);
+            lblGiaCho.setLayoutY(53);
+            anchorPane.getChildren().add(lblGiaCho);
+            
+            int soCho = choNgoi_DAO.demSoChoNgoiChuaDat(chuyenTauDangChon.getMaChuyenTau(), toa.getMaToa());
+            Label lblSoCho = new Label("Còn: " + soCho + " chỗ");
+            lblSoCho.setFont(Font.font("Tahoma"));
+            lblSoCho.setLayoutX(119);
+            lblSoCho.setLayoutY(18);
+            anchorPane.getChildren().add(lblSoCho);
+            
+            // Thêm AnchorPane vào pnToa
+            pnToa.getChildren().add(anchorPane);
+
+            // Cập nhật tọa độ x cho AnchorPane tiếp theo
+            x += width + spacing;
+        }
+    }
+    
+    private Toa toaDangChon = null;
+    
+    @FXML
+    private AnchorPane pnChoNgoi;
+    
+    @FXML
+    private Button btnChonTatCa;
+    
+    @FXML
+    private Button btnBoChonTatCa;
+    
+    @FXML
+    private CheckBox ckcChonTheoDay;
+    
+    private List<ChoNgoi> danhSachChoNgoi = null;
+    
+    private void taoChoNgoi7x5(List<ChoNgoi> danhSachChoNgoi) {
+        pnChoNgoi.getChildren().clear(); // Xóa các node cũ
+        selectedChoNgoiAnchorPanes.clear(); // Reset danh sách chỗ ngồi được chọn
+        chonTheoDayCount = 0;
+        chonTheoDayChoNgois.clear();
+
+        // Kích thước và khoảng cách được tính toán để phù hợp với 370x160
+        double width = 38.0; // Chiều rộng mỗi chỗ
+        double height = 18.0; // Chiều cao mỗi chỗ
+        double spacingX = 8.0; // Khoảng cách ngang
+        double spacingY = 5.0; // Khoảng cách dọc
+        double startX = 15.0; // Tọa độ X bắt đầu
+        double startY = 10.0; // Tọa độ Y bắt đầu
+
+        int rows = 7;
+        int cols = 5;
+        int choNgoiIndex = 0;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (choNgoiIndex >= danhSachChoNgoi.size()) {
+                    break; // Thoát nếu hết chỗ ngồi
+                }
+                ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+
+                AnchorPane anchorPane = new AnchorPane();
+                anchorPane.setPrefSize(width, height);
+                double x = startX + col * (width + spacingX);
+                double y = startY + row * (height + spacingY);
+                anchorPane.setLayoutX(x);
+                anchorPane.setLayoutY(y);
+
+                // Tạo hình chữ nhật đại diện chỗ ngồi
+                Rectangle rect = new Rectangle(width, height);
+                switch (choNgoi.getTrangThai()) {
+                    case daDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#992b15")); // Đã đặt
+                        break;
+                    case dangDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#2e7d32")); // Đang đặt
+                        break;
+                    case chuaDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Chưa đặt
+                        break;
+                }
+                rect.setStroke(javafx.scene.paint.Color.BLACK);
+                rect.setStrokeWidth(1.0);
+
+                // Label số ghế
+                Label lblSoGhe = new Label(choNgoi.getTenChoNgoi());
+                lblSoGhe.setLayoutX(5);
+                lblSoGhe.setLayoutY(1);
+                lblSoGhe.setFont(Font.font("Tahoma", 10));
+
+                anchorPane.getChildren().addAll(rect, lblSoGhe);
+
+                // Hiệu ứng hover
+                anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
+                anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
+
+                // Sự kiện click
+                if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
+                    anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                }
+
+                pnChoNgoi.getChildren().add(anchorPane);
+                choNgoiIndex++;
+            }
+        }
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+    }
+    
+    private void taoChoNgoi5x10(List<ChoNgoi> danhSachChoNgoi) {
+        pnChoNgoi.getChildren().clear(); // Xóa các node cũ
+        selectedChoNgoiAnchorPanes.clear(); // Reset danh sách chỗ ngồi được chọn
+        chonTheoDayCount = 0;
+        chonTheoDayChoNgois.clear();
+
+        // Kích thước và khoảng cách được tính toán để phù hợp với 370x160
+        double width = 30.0; // Chiều rộng mỗi chỗ
+        double height = 22.0; // Chiều cao mỗi chỗ
+        double spacingX = 6.0; // Khoảng cách ngang
+        double spacingY = 6.0; // Khoảng cách dọc
+        double startX = 10.0; // Tọa độ X bắt đầu
+        double startY = 15.0; // Tọa độ Y bắt đầu
+
+        int rows = 5;
+        int cols = 10;
+        int choNgoiIndex = 0;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (choNgoiIndex >= danhSachChoNgoi.size()) {
+                    break; // Thoát nếu hết chỗ ngồi
+                }
+                ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+
+                AnchorPane anchorPane = new AnchorPane();
+                anchorPane.setPrefSize(width, height);
+                double x = startX + col * (width + spacingX);
+                double y = startY + row * (height + spacingY);
+                anchorPane.setLayoutX(x);
+                anchorPane.setLayoutY(y);
+
+                // Tạo hình chữ nhật đại diện chỗ ngồi
+                Rectangle rect = new Rectangle(width, height);
+                switch (choNgoi.getTrangThai()) {
+                    case daDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#992b15")); // Đã đặt
+                        break;
+                    case dangDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#2e7d32")); // Đang đặt
+                        break;
+                    case chuaDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Chưa đặt
+                        break;
+                }
+                rect.setStroke(javafx.scene.paint.Color.BLACK);
+                rect.setStrokeWidth(1.0);
+
+                // Label số ghế
+                Label lblSoGhe = new Label(choNgoi.getTenChoNgoi());
+                lblSoGhe.setLayoutX(5);
+                lblSoGhe.setLayoutY(3);
+                lblSoGhe.setFont(Font.font("Tahoma", 9));
+
+                anchorPane.getChildren().addAll(rect, lblSoGhe);
+
+                // Hiệu ứng hover
+                anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
+                anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
+
+                // Sự kiện click
+                if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
+                    anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                }
+
+                pnChoNgoi.getChildren().add(anchorPane);
+                choNgoiIndex++;
+            }
+        }
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+    }
+    
+    private void taoChoNgoi4x10(List<ChoNgoi> danhSachChoNgoi) {
+        pnChoNgoi.getChildren().clear(); // Xóa các node cũ
+        selectedChoNgoiAnchorPanes.clear(); // Reset danh sách chỗ ngồi được chọn
+        chonTheoDayCount = 0;
+        chonTheoDayChoNgois.clear();
+
+        // Kích thước và khoảng cách được tính toán để phù hợp với 370x160
+        double width = 32.0; // Chiều rộng mỗi chỗ
+        double height = 28.0; // Chiều cao mỗi chỗ
+        double spacingX = 5.0; // Khoảng cách ngang
+        double spacingY = 6.0; // Khoảng cách dọc
+        double startX = 10.0; // Tọa độ X bắt đầu
+        double startY = 15.0; // Tọa độ Y bắt đầu
+
+        int rows = 4;
+        int cols = 10;
+        int choNgoiIndex = 0;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (choNgoiIndex >= danhSachChoNgoi.size()) {
+                    break; // Thoát nếu hết chỗ ngồi
+                }
+                ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+
+                AnchorPane anchorPane = new AnchorPane();
+                anchorPane.setPrefSize(width, height);
+                double x = startX + col * (width + spacingX);
+                double y = startY + row * (height + spacingY);
+                anchorPane.setLayoutX(x);
+                anchorPane.setLayoutY(y);
+
+                // Tạo hình chữ nhật đại diện chỗ ngồi
+                Rectangle rect = new Rectangle(width, height);
+                switch (choNgoi.getTrangThai()) {
+                    case daDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#992b15")); // Đã đặt
+                        break;
+                    case dangDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#2e7d32")); // Đang đặt
+                        break;
+                    case chuaDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Chưa đặt
+                        break;
+                }
+                rect.setStroke(javafx.scene.paint.Color.BLACK);
+                rect.setStrokeWidth(1.0);
+
+                // Label số ghế
+                Label lblSoGhe = new Label(choNgoi.getTenChoNgoi());
+                lblSoGhe.setLayoutX(5);
+                lblSoGhe.setLayoutY(5);
+                lblSoGhe.setFont(Font.font("Tahoma", 9));
+
+                anchorPane.getChildren().addAll(rect, lblSoGhe);
+
+                // Hiệu ứng hover
+                anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
+                anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
+
+                // Sự kiện click
+                if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
+                    anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                }
+
+                pnChoNgoi.getChildren().add(anchorPane);
+                choNgoiIndex++;
+            }
+        }
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+    }
+    
+    private int extractSoCho(String tenCho) {
+        // Tách số từ cuối chuỗi, ví dụ "A12" -> 12
+        try {
+            return Integer.parseInt(tenCho.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return -1; // nếu lỗi
+        }
+    }
+
+    
+    private void xuLyChonChoNgoi(AnchorPane anchorPane, ChoNgoi choNgoi) {
+        Rectangle rect = (Rectangle) anchorPane.getChildren().get(0);
+
+        if (ckcChonTheoDay.isSelected()) {
+            // Chọn theo dãy
+            if (chonTheoDayCount < 2) { // Chỉ cho phép chọn tối đa 2 chỗ
+                chonTheoDayChoNgois.add(choNgoi);
+                choNgoiDangChon.add(choNgoi); // Thêm vào danh sách đang chọn
+                chonTheoDayCount++;
+                rect.setFill(javafx.scene.paint.Color.web("#ffa500")); // Màu khi chọn
+                selectedChoNgoiAnchorPanes.add(anchorPane);
+            }
+
+            if (chonTheoDayCount == 2) {
+                // Sắp xếp lại danh sách theo thứ tự tên chỗ ngồi
+                chonTheoDayChoNgois.sort((c1, c2) -> {
+                    return extractSoCho(c1.getTenChoNgoi()) - extractSoCho(c2.getTenChoNgoi());
+                });
+
+                ChoNgoi start = chonTheoDayChoNgois.get(0);
+                ChoNgoi end = chonTheoDayChoNgois.get(1);
+
+                int soStart = extractSoCho(start.getTenChoNgoi());
+                int soEnd = extractSoCho(end.getTenChoNgoi());
+
+                // Chọn toàn bộ dãy trong khoảng
+                for (Node node : pnChoNgoi.getChildren()) {
+                    if (node instanceof AnchorPane) {
+                        AnchorPane pane = (AnchorPane) node;
+                        Label lbl = (Label) pane.getChildren().get(1); // lấy tên ghế
+                        int so = extractSoCho(lbl.getText());
+                        if (so >= soStart && so <= soEnd) {
+                            ChoNgoi cg = danhSachChoNgoi.stream()
+                                .filter(cn -> cn.getTenChoNgoi().equals(lbl.getText()))
+                                .findFirst().orElse(null);
+                            if (cg != null && cg.getTrangThai() == TrangThaiChoNgoi.chuaDat) {
+                                Rectangle r = (Rectangle) pane.getChildren().get(0);
+                                r.setFill(javafx.scene.paint.Color.web("#ffa500"));
+                                pane.setUserData(cg);
+                                if (!selectedChoNgoiAnchorPanes.contains(pane)) {
+                                    selectedChoNgoiAnchorPanes.add(pane);
+                                    choNgoiDangChon.add(cg);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Reset tạm
+                chonTheoDayCount = 0;
+                chonTheoDayChoNgois.clear();
+            }
+
+        } else {
+            // Chọn từng chỗ
+            if (selectedChoNgoiAnchorPanes.contains(anchorPane)) {
+                // Bỏ chọn
+                rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Trở về màu chưa đặt
+                selectedChoNgoiAnchorPanes.remove(anchorPane);
+                choNgoiDangChon.remove(choNgoi); // Xóa khỏi danh sách đang chọn
+            } else {
+                // Chọn
+                rect.setFill(javafx.scene.paint.Color.web("#ffa500")); // Màu khi chọn
+                selectedChoNgoiAnchorPanes.add(anchorPane);
+                choNgoiDangChon.add(choNgoi); // Thêm vào danh sách đang chọn
+            }
+        }
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+
+        // Kiểm tra và hiển thị danh sách chỗ ngồi đang chọn
+        kiemTraChoNgoiDangChon();
+    }
+    
+ // Phương thức phụ trợ để kiểm tra và hiển thị nội dung của choNgoiDangChon
+    private void kiemTraChoNgoiDangChon() {
+        System.out.println("Danh sách chỗ ngồi đang chọn:");
+        if (choNgoiDangChon.isEmpty()) {
+            System.out.println("  Không có chỗ ngồi nào được chọn.");
+        } else {
+            for (ChoNgoi choNgoi : choNgoiDangChon) {
+                System.out.println("  - Chỗ: " + choNgoi.getTenChoNgoi() +
+                                   ", Toa: " + toaDangChon.getTenToa() +
+                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+            }
+        }
+    }
+
+    private void capNhatTrangThaiNut() {
+        // Kích hoạt nút "Chọn tất cả" nếu có ít nhất một chỗ ngồi chưa đặt
+        boolean coChoChuaDat = danhSachChoNgoi != null && 
+                              danhSachChoNgoi.stream().anyMatch(cho -> cho.getTrangThai() == TrangThaiChoNgoi.chuaDat);
+        btnChonTatCa.setDisable(!coChoChuaDat);
+        
+        // Kích hoạt nút "Bỏ chọn tất cả" nếu có chỗ đang được chọn
+        btnBoChonTatCa.setDisable(selectedChoNgoiAnchorPanes.isEmpty());
+        
+        // Kích hoạt nút "Thêm vé" nếu có chỗ đang được chọn
+        btnThemVe.setDisable(selectedChoNgoiAnchorPanes.isEmpty());
+    }
+    
+    private List<ChoNgoi> choNgoiDangChon = new ArrayList<ChoNgoi>();
+    
+    @FXML
+    private void btnChonTatCaClicked() {
+        if (danhSachChoNgoi == null || danhSachChoNgoi.isEmpty()) {
+            showWarningAlert("Không có chỗ ngồi nào để chọn!", "image/canhBao.png");
+            return;
+        }
+
+        // Xóa tất cả các chỗ đã chọn trước đó
+        selectedChoNgoiAnchorPanes.clear();
+        choNgoiDangChon.clear();
+
+        // Duyệt qua tất cả các chỗ ngồi trong pnChoNgoi
+        for (Node node : pnChoNgoi.getChildren()) {
+            if (node instanceof AnchorPane) {
+                AnchorPane choPane = (AnchorPane) node;
+                ChoNgoi choNgoi = (ChoNgoi) choPane.getUserData();
+                
+                // Nếu chưa có userData, tìm trong danhSachChoNgoi
+                if (choNgoi == null) {
+                    Label lbl = (Label) choPane.getChildren().get(1); // Lấy label số ghế
+                    for (ChoNgoi cn : danhSachChoNgoi) {
+                        if (cn.getTenChoNgoi().equals(lbl.getText())) {
+                            choNgoi = cn;
+                            choPane.setUserData(choNgoi); // Lưu vào userData
+                            break;
+                        }
+                    }
+                }
+
+                // Chỉ chọn nếu chỗ ngồi chưa đặt
+                if (choNgoi != null && choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) {
+                    Rectangle rect = (Rectangle) choPane.getChildren().get(0);
+                    rect.setFill(javafx.scene.paint.Color.web("#FFA500")); // Màu đang chọn
+                    selectedChoNgoiAnchorPanes.add(choPane);
+                    choNgoiDangChon.add(choNgoi);
+                }
+            }
+        }
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+        
+        // Log để kiểm tra
+        System.out.println("Đã chọn tất cả chỗ ngồi chưa đặt");
+        kiemTraChoNgoiDangChon();
+    }
+    
+    @FXML
+    private void btnBoChonTatCaClicked() {
+        if (selectedChoNgoiAnchorPanes.isEmpty()) {
+            showWarningAlert("Không có chỗ ngồi nào được chọn để bỏ!", "image/canhBao.png");
+            return;
+        }
+
+        // Duyệt qua tất cả các chỗ đang được chọn
+        for (AnchorPane choPane : selectedChoNgoiAnchorPanes) {
+            ChoNgoi choNgoi = (ChoNgoi) choPane.getUserData();
+            if (choNgoi != null) {
+                Rectangle rect = (Rectangle) choPane.getChildren().get(0);
+                
+                // Đặt lại màu theo trạng thái ban đầu
+                switch (choNgoi.getTrangThai()) {
+                    case chuaDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Chưa đặt
+                        break;
+                    case dangDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#2e7d32")); // Đang đặt
+                        break;
+                    case daDat:
+                        rect.setFill(javafx.scene.paint.Color.web("#992b15")); // Đã đặt
+                        break;
+                }
+            }
+        }
+
+        // Xóa tất cả các chỗ đã chọn
+        selectedChoNgoiAnchorPanes.clear();
+        choNgoiDangChon.clear();
+        chonTheoDayCount = 0;
+        chonTheoDayChoNgois.clear();
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+        
+        // Log để kiểm tra
+        System.out.println("Đã bỏ chọn tất cả chỗ ngồi");
+        kiemTraChoNgoiDangChon();
+    }
 }
