@@ -141,85 +141,85 @@ public class QuanLyBanVe_GUI_Controller {
         
         // Handler cho quản lý chuyến tàu
         lblQuanLyChuyenTau.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Quản lý chuyến tàu");
+
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         // Thêm vào phương thức initialize()
         lblQuanLyVe.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Quản lý vé");
+
             try {
                 // Tạo Stage mới cho QuanLyVe_GUI
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new QuanLyVe_GUI(currentStage, maNhanVien); // Truyền maNhanVien nếu cần
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở QuanLyVe_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         
         // Thêm vào phương thức initialize() trong Home_GUI_Controller.java
         lblQuanLyHoaDon.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Quản lý hóa đơn");
+
             try {
                 // Tạo Stage mới cho QuanLyHoaDon_GUI
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new QuanLyHoaDon_GUI(currentStage, maNhanVien); // Truyền maNhanVien nếu cần
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở QuanLyHoaDon_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         
         // Handler cho Quản lý khách hàng
         lblQuanLyKhachHang.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Quản lý khách hàng");
+
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new QuanLyKhachHang_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở QuanLyKhachHang_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         
         // Handler cho Quản lý nhân viên
         lblQuanLyNhanVien.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Quản lý nhân viên");
+
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new QuanLyNhanVien_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở QuanLyNhanVien_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         
         // Handler cho thống kê
         lblThongKe.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Thống kê");
+
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new ThongKe_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở ThongKe_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
         
         // Handler cho thống kê
         lblTrangChu.setOnMouseClicked(event -> {
-            System.out.println("Đã nhấp vào Home");
+
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 new Home_GUI(currentStage, maNhanVien);
             } catch (Exception e) {
-                System.err.println("Lỗi khi mở Home_GUI: " + e.getMessage());
+
                 e.printStackTrace();
             }
         });
@@ -514,10 +514,10 @@ public class QuanLyBanVe_GUI_Controller {
                 Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
                 stage.getIcons().add(new Image(file.toURI().toString()));
             } catch (Exception e) {
-                System.err.println("Lỗi khi tải ảnh: " + e.getMessage());
+
             }
         } else {
-            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+
         }
     }
     
@@ -535,14 +535,12 @@ public class QuanLyBanVe_GUI_Controller {
 
         // Xóa các node cũ trong pnChuyenTau để tránh trùng lặp
         pnChuyenTau.getChildren().clear();
-        System.out.println("Đã xóa các node cũ trong pnChuyenTau");
 
         // Kiểm tra danh sách ChuyenTau
         if (dsct == null || dsct.isEmpty()) {
-            System.out.println("Danh sách ChuyenTau rỗng hoặc null");
+
             return;
         }
-        System.out.println("Số lượng ChuyenTau: " + dsct.size());
 
         // Tạo đối tượng Tau_DAO để tìm tàu
         Tau_DAO tauDAO = new Tau_DAO();
@@ -559,7 +557,6 @@ public class QuanLyBanVe_GUI_Controller {
             anchorPane.setPrefSize(160, 160); // Giữ kích thước AnchorPane là 160x160
             anchorPane.setLayoutX(layoutX);
             anchorPane.setLayoutY(layoutY);
-            System.out.println("Tạo AnchorPane " + index + " tại (" + anchorPane.getLayoutX() + ", " + anchorPane.getLayoutY() + ")");
 
             // Tăng layoutX để đặt AnchorPane tiếp theo
             layoutX += 160; // Giữ khoảng cách giữa các AnchorPane
@@ -577,14 +574,13 @@ public class QuanLyBanVe_GUI_Controller {
                 imageView.setFitWidth(140);  // Đặt chiều rộng là 140
                 imageView.setFitHeight(140); // Đặt chiều cao là 140
                 imageView.setPreserveRatio(false); // Không giữ tỷ lệ, lấp đầy 140x140
-                System.out.println("Load ảnh thành công cho ChuyenTau " + chuyenTau.getMaChuyenTau());
 
                 // Căn giữa ImageView trong AnchorPane
                 AnchorPane.setTopAnchor(imageView, 0.0);    // Cách đỉnh 0px
                 AnchorPane.setLeftAnchor(imageView, 10.0);  // Cách trái 10px
                 AnchorPane.setRightAnchor(imageView, 10.0); // Cách phải 10px
             } catch (Exception e) {
-                System.err.println("Lỗi khi tải ảnh tại " + imagePathUnselected + ": " + e.getMessage());
+
                 anchorPane.setStyle("-fx-background-color: red;"); // Màu đỏ để dễ thấy
             }
 
@@ -624,9 +620,9 @@ public class QuanLyBanVe_GUI_Controller {
                         }
                         Image image = new Image(file.toURI().toString());
                         previousImageView.setImage(image);
-                        System.out.println("Đã đổi ảnh về chưa chọn cho AnchorPane trước đó");
+
                     } catch (Exception e) {
-                        System.err.println("Lỗi khi tải ảnh chưa chọn: " + e.getMessage());
+
                     }
                 }
 
@@ -638,9 +634,9 @@ public class QuanLyBanVe_GUI_Controller {
                     }
                     Image image = new Image(file.toURI().toString());
                     imageView.setImage(image);
-                    System.out.println("Đã đổi ảnh thành công cho ChuyenTau " + chuyenTau.getMaChuyenTau());
+
                 } catch (Exception e) {
-                    System.err.println("Lỗi khi tải ảnh đã chọn tại " + imagePathSelected + ": " + e.getMessage());
+
                 }
 
                 // Cập nhật AnchorPane được chọn
@@ -648,9 +644,7 @@ public class QuanLyBanVe_GUI_Controller {
 
                 // Lưu chuyến tàu được chọn vào biến chuyenTauDangChon
                 chuyenTauDangChon = chuyenTau;
-                System.out.println("Đã chọn chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
-                
-                
+
                 // Vô hiệu hóa các nút khi chọn chuyến tàu mới
                 btnBoChonTatCa.setDisable(true);
                 btnChonTatCa.setDisable(true);
@@ -673,7 +667,6 @@ public class QuanLyBanVe_GUI_Controller {
 
             // Thêm AnchorPane vào pnChuyenTau
             pnChuyenTau.getChildren().add(anchorPane);
-            System.out.println("Đã thêm AnchorPane " + index + " vào pnChuyenTau");
 
             index++;
         }
@@ -719,7 +712,7 @@ public class QuanLyBanVe_GUI_Controller {
             // Thêm ImageView vào pnToa
             pnToa.getChildren().add(imageView);
         } catch (Exception e) {
-            System.err.println("Lỗi khi tải ảnh QuanLyBanVe_ToaTauLai.png: " + e.getMessage());
+
             // Thêm Rectangle màu đỏ để báo lỗi
             Rectangle errorRect = new Rectangle(70.0, 70.0); // Cập nhật kích thước Rectangle để khớp với ảnh
             errorRect.setFill(javafx.scene.paint.Color.RED);
@@ -791,12 +784,11 @@ public class QuanLyBanVe_GUI_Controller {
                 if (selectedToaAnchorPane != null && selectedToaAnchorPane != anchorPane) {
                     Rectangle previousBlueRect = (Rectangle) selectedToaAnchorPane.getChildren().get(1); // Lấy blueRect (thứ 2 trong danh sách children)
                     previousBlueRect.setFill(javafx.scene.paint.Color.web("#ccdaf5"));
-                    System.out.println("Đã đổi màu về #ccdaf5 cho AnchorPane Toa trước đó");
+
                 }
 
                 // Đổi màu của blueRect trong AnchorPane hiện tại sang #2e7d32
                 blueRect.setFill(javafx.scene.paint.Color.web("#2e7d32"));
-                System.out.println("Đã đổi màu thành #2e7d32 cho AnchorPane Toa hiện tại");
 
                 // Cập nhật AnchorPane Toa được chọn
                 selectedToaAnchorPane = anchorPane;
@@ -891,6 +883,7 @@ public class QuanLyBanVe_GUI_Controller {
                     break; // Thoát nếu hết chỗ ngồi
                 }
                 ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+//                System.out.println(choNgoi.getMaChoNgoi());
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.setPrefSize(width, height);
@@ -931,6 +924,7 @@ public class QuanLyBanVe_GUI_Controller {
                 // Sự kiện click
                 if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
                     anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                    System.out.println(choNgoi.getMaChoNgoi());
                 }
 
                 pnChoNgoi.getChildren().add(anchorPane);
@@ -966,6 +960,7 @@ public class QuanLyBanVe_GUI_Controller {
                     break; // Thoát nếu hết chỗ ngồi
                 }
                 ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+//                System.out.println(choNgoi.getMaChoNgoi());
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.setPrefSize(width, height);
@@ -1006,6 +1001,7 @@ public class QuanLyBanVe_GUI_Controller {
                 // Sự kiện click
                 if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
                     anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                    System.out.println(choNgoi.getMaChoNgoi());
                 }
 
                 pnChoNgoi.getChildren().add(anchorPane);
@@ -1041,6 +1037,7 @@ public class QuanLyBanVe_GUI_Controller {
                     break; // Thoát nếu hết chỗ ngồi
                 }
                 ChoNgoi choNgoi = danhSachChoNgoi.get(choNgoiIndex);
+//                System.out.println(choNgoi.getMaChoNgoi());
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.setPrefSize(width, height);
@@ -1081,6 +1078,7 @@ public class QuanLyBanVe_GUI_Controller {
                 // Sự kiện click
                 if (choNgoi.getTrangThai() == TrangThaiChoNgoi.chuaDat) { // Chỉ cho phép chọn chỗ chưa đặt
                     anchorPane.setOnMouseClicked(event -> xuLyChonChoNgoi(anchorPane, choNgoi));
+                    System.out.println(choNgoi.getMaChoNgoi());
                 }
 
                 pnChoNgoi.getChildren().add(anchorPane);
@@ -1103,6 +1101,9 @@ public class QuanLyBanVe_GUI_Controller {
 
     
     private void xuLyChonChoNgoi(AnchorPane anchorPane, ChoNgoi choNgoi) {
+//    	System.out.println("Mã chỗ ngồi: " + choNgoi.getTenChoNgoi() + 
+//                ", Trạng thái: " + choNgoi.getTrangThai());
+
         // Kiểm tra nếu chỗ ngồi đã được xác nhận
         boolean daXacNhan = danhSachVeXacNhan.stream()
             .anyMatch(ve -> ve.getMaChoNgoi().equals(choNgoi.getTenChoNgoi()));
@@ -1198,43 +1199,32 @@ public class QuanLyBanVe_GUI_Controller {
     }
     
     private void kiemTraDanhSachVeTam() {
-        System.out.println("Danh sách vé tạm đang chọn:");
+
         if (danhSachVeTam.isEmpty()) {
-            System.out.println("  Không có vé tạm nào được chọn.");
+
         } else {
             for (VeTam veTam : danhSachVeTam) {
-                System.out.println("  - Chỗ: " + veTam.getMaChoNgoi() +
-                                   ", Loại khách hàng: " + veTam.getLoaiKhachHang() +
-                                   ", Giá tiền: " + veTam.getGiaTien() +
-                                   ", Toa: " + toaDangChon.getTenToa() +
-                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+
             }
         }
 
-        System.out.println("Danh sách vé đã xác nhận:");
         if (danhSachVeXacNhan.isEmpty()) {
-            System.out.println("  Không có vé nào được xác nhận.");
+
         } else {
             for (VeTam veTam : danhSachVeXacNhan) {
-                System.out.println("  - Chỗ: " + veTam.getMaChoNgoi() +
-                                   ", Loại khách hàng: " + veTam.getLoaiKhachHang() +
-                                   ", Giá tiền: " + veTam.getGiaTien() +
-                                   ", Toa: " + toaDangChon.getTenToa() +
-                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+
             }
         }
     }
     
  // Phương thức phụ trợ để kiểm tra và hiển thị nội dung của choNgoiDangChon
     private void kiemTraChoNgoiDangChon() {
-        System.out.println("Danh sách chỗ ngồi đang chọn:");
+
         if (choNgoiDangChon.isEmpty()) {
-            System.out.println("  Không có chỗ ngồi nào được chọn.");
+
         } else {
             for (ChoNgoi choNgoi : choNgoiDangChon) {
-                System.out.println("  - Chỗ: " + choNgoi.getTenChoNgoi() +
-                                   ", Toa: " + toaDangChon.getTenToa() +
-                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+               
             }
         }
     }
@@ -1301,7 +1291,7 @@ public class QuanLyBanVe_GUI_Controller {
         capNhatGiaTamTinh();
         
         // Log để kiểm tra
-        System.out.println("Đã chọn tất cả chỗ ngồi chưa đặt");
+
         kiemTraDanhSachVeTam();
     }
     
@@ -1351,7 +1341,7 @@ public class QuanLyBanVe_GUI_Controller {
         capNhatGiaTamTinh();
         
         // Log để kiểm tra
-        System.out.println("Đã bỏ chọn tất cả chỗ ngồi và vé xác nhận");
+
         kiemTraDanhSachVeTam();
     }
     
@@ -1400,24 +1390,21 @@ public class QuanLyBanVe_GUI_Controller {
         }
         
      // In mã chỗ ngồi của các vé tạm trước khi thêm
-        System.out.println("Thêm các vé tạm vào giỏ vé:");
+
         for (VeTam veTam : danhSachVeTam) {
-            System.out.println(" - Mã chỗ ngồi: " + veTam.getMaChoNgoi());
+
         }
 
         // Thêm các vé tạm vào danhSachVeXacNhan
         danhSachVeXacNhan.addAll(danhSachVeTam);
-        System.out.println("Đã thêm " + danhSachVeTam.size() + " vé vào danhSachVeXacNhan");
 
         // Xóa các node cũ trong pnGioVe
         pnGioVe.getChildren().clear();
-        System.out.println("Đã xóa các node cũ trong pnGioVe");
 
         // Tính chiều cao cho pnGioVe dựa trên danhSachVeXacNhan
         int soVeXacNhan = danhSachVeXacNhan.size();
         double chieuCao = 10 + (soVeXacNhan * 200) + (Math.max(0, soVeXacNhan - 1) * 10) + 10;
         pnGioVe.setPrefHeight(chieuCao);
-        System.out.println("Đã đặt chiều cao pnGioVe: " + chieuCao);
 
         // Lấy thông tin tàu
         Tau_DAO tauDAO = new Tau_DAO();
@@ -1491,8 +1478,7 @@ public class QuanLyBanVe_GUI_Controller {
             btnXoa.setPrefSize(40, 25);
             btnXoa.setOnAction(e -> {
                 // In mã chỗ ngồi của vé trước khi xóa
-                System.out.println("Xóa vé khỏi giỏ vé:");
-                System.out.println(" - Mã chỗ ngồi: " + veTam.getMaChoNgoi());
+
 
                 // Xóa vé khỏi danhSachVeXacNhan
                 danhSachVeXacNhan.remove(veTam);
@@ -1514,7 +1500,7 @@ public class QuanLyBanVe_GUI_Controller {
                 // Cập nhật trạng thái nút
                 capNhatTrangThaiNut();
                 // Log
-                System.out.println("Đã xóa vé: " + veTam.getMaChoNgoi());
+
                 kiemTraDanhSachVeTam();
             });
 
@@ -1523,7 +1509,6 @@ public class QuanLyBanVe_GUI_Controller {
 
             // Thêm AnchorPane vào pnGioVe
             pnGioVe.getChildren().add(anchorPane);
-            System.out.println("Đã thêm AnchorPane cho vé xác nhận: " + veTam.getMaChoNgoi());
 
             // Cập nhật tọa độ Y cho AnchorPane tiếp theo
             y += 200 + 10;
@@ -1548,7 +1533,7 @@ public class QuanLyBanVe_GUI_Controller {
         capNhatGiaTamTinh();
 
         // Log để kiểm tra
-        System.out.println("Tổng số vé xác nhận: " + soVeXacNhan);
+
     }
     
     private List<VeTam> danhSachVeXacNhan = new ArrayList<>();
