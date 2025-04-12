@@ -28,33 +28,25 @@ public class ChoNgoi_DAO {
         int soLuong = -1;
         
         try {
-            // Lấy kết nối từ ConnectDB
             con = ConnectDB.getConnection();
-            
-            // Câu lệnh SQL đếm số chỗ ngồi chưa đặt
             String sql = "SELECT COUNT(*) AS so_luong " +
                          "FROM ChoNgoi " +
                          "WHERE maChuyenTau = ? AND maToa = ? AND trangThai = ?";
-            
             stmt = con.prepareStatement(sql);
             stmt.setString(1, maChuyenTau);
             stmt.setString(2, maToa);
             stmt.setString(3, ChoNgoi.TrangThaiChoNgoi.chuaDat.name());
-            
             rs = stmt.executeQuery();
             
             if (rs.next()) {
                 soLuong = rs.getInt("so_luong");
             }
-            
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi đếm số chỗ ngồi chưa đặt", ex);
-            soLuong = -1; // Trả về -1 nếu có lỗi
+            soLuong = -1;
         } finally {
-            // Đóng các resource
             closeResources(rs, stmt);
         }
-        
         return soLuong;
     }
     
@@ -70,41 +62,28 @@ public class ChoNgoi_DAO {
         ResultSet rs = null;
         
         try {
-            // Lấy kết nối từ ConnectDB
             con = ConnectDB.getConnection();
-            
-            // Câu lệnh SQL lấy tất cả chỗ ngồi theo mã toa
             String sql = "SELECT * FROM ChoNgoi WHERE maToa = ?";
-            
             stmt = con.prepareStatement(sql);
             stmt.setString(1, maToa);
-            
             rs = stmt.executeQuery();
             
-            // Duyệt qua kết quả và tạo danh sách chỗ ngồi
             while (rs.next()) {
                 String maChoNgoi = rs.getString("maChoNgoi");
                 String tenChoNgoi = rs.getString("tenChoNgoi");
                 String trangThaiStr = rs.getString("trangThai");
                 String maChuyenTau = rs.getString("maChuyenTau");
                 BigDecimal giaCho = rs.getBigDecimal("giaCho");
-                
-                // Chuyển đổi trạng thái từ String sang enum TrangThaiChoNgoi
                 ChoNgoi.TrangThaiChoNgoi trangThai = ChoNgoi.TrangThaiChoNgoi.valueOf(trangThaiStr);
-                
-                // Tạo đối tượng ChoNgoi
                 ChoNgoi choNgoi = new ChoNgoi(maChoNgoi, tenChoNgoi, trangThai, maToa, maChuyenTau, giaCho);
                 dsChoNgoi.add(choNgoi);
             }
-            
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi tìm chỗ ngồi theo mã toa: " + maToa, ex);
-            return new ArrayList<>(); // Trả về danh sách rỗng nếu có lỗi
+            return new ArrayList<>();
         } finally {
-            // Đóng các resource
             closeResources(rs, stmt);
         }
-        
         return dsChoNgoi;
     }
     
@@ -121,42 +100,62 @@ public class ChoNgoi_DAO {
         ResultSet rs = null;
         
         try {
-            // Lấy kết nối từ ConnectDB
             con = ConnectDB.getConnection();
-            
-            // Câu lệnh SQL lấy tất cả chỗ ngồi theo mã toa và mã chuyến tàu
             String sql = "SELECT * FROM ChoNgoi WHERE maToa = ? AND maChuyenTau = ?";
-            
             stmt = con.prepareStatement(sql);
             stmt.setString(1, maToa);
             stmt.setString(2, maChuyenTau);
-            
             rs = stmt.executeQuery();
             
-            // Duyệt qua kết quả và tạo danh sách chỗ ngồi
             while (rs.next()) {
                 String maChoNgoi = rs.getString("maChoNgoi");
                 String tenChoNgoi = rs.getString("tenChoNgoi");
                 String trangThaiStr = rs.getString("trangThai");
                 BigDecimal giaCho = rs.getBigDecimal("giaCho");
-                
-                // Chuyển đổi trạng thái từ String sang enum TrangThaiChoNgoi
                 ChoNgoi.TrangThaiChoNgoi trangThai = ChoNgoi.TrangThaiChoNgoi.valueOf(trangThaiStr);
-                
-                // Tạo đối tượng ChoNgoi
                 ChoNgoi choNgoi = new ChoNgoi(maChoNgoi, tenChoNgoi, trangThai, maToa, maChuyenTau, giaCho);
                 dsChoNgoi.add(choNgoi);
             }
-            
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi tìm chỗ ngồi theo mã toa: " + maToa + " và mã chuyến tàu: " + maChuyenTau, ex);
-            return new ArrayList<>(); // Trả về danh sách rỗng nếu có lỗi
+            return new ArrayList<>();
         } finally {
-            // Đóng các resource
             closeResources(rs, stmt);
         }
-        
         return dsChoNgoi;
+    }
+    
+    /**
+     * Cập nhật trạng thái chỗ ngồi theo mã chỗ ngồi và mã chuyến tàu
+     * @param maChoNgoi Mã chỗ ngồi cần cập nhật
+     * @param trangThai Trạng thái mới của chỗ ngồi
+     * @param maChuyenTau Mã chuyến tàu liên quan
+     * @return true nếu cập nhật thành công, false nếu thất bại
+     */
+    public boolean capNhatTrangThaiChoNgoi(String maChoNgoi, ChoNgoi.TrangThaiChoNgoi trangThai, String maChuyenTau) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        boolean result = false;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "UPDATE ChoNgoi SET trangThai = ? WHERE maChoNgoi = ? AND maChuyenTau = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, trangThai.name());
+            stmt.setString(2, maChoNgoi);
+            stmt.setString(3, maChuyenTau);
+            
+            int rowsAffected = stmt.executeUpdate();
+            result = rowsAffected > 0;
+            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Lỗi khi cập nhật trạng thái chỗ ngồi: " + maChoNgoi, ex);
+            result = false;
+        } finally {
+            closeResources(null, stmt);
+        }
+        
+        return result;
     }
     
     /**
@@ -184,33 +183,22 @@ public class ChoNgoi_DAO {
         BigDecimal giaCho = null;
         
         try {
-            // Lấy kết nối từ ConnectDB
             con = ConnectDB.getConnection();
-            
-            // Câu lệnh SQL lấy giá chỗ ngồi theo mã toa và mã chuyến tàu
             String sql = "SELECT giaCho FROM ChoNgoi WHERE maToa = ? AND maChuyenTau = ? LIMIT 1";
-            
             stmt = con.prepareStatement(sql);
             stmt.setString(1, maToa);
             stmt.setString(2, maChuyenTau);
-            
             rs = stmt.executeQuery();
             
-            // Lấy giá chỗ nếu có kết quả
             if (rs.next()) {
                 giaCho = rs.getBigDecimal("giaCho");
             }
-            
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi tìm giá chỗ ngồi theo mã toa: " + maToa + " và mã chuyến tàu: " + maChuyenTau, ex);
-            return null; // Trả về null nếu có lỗi
+            return null;
         } finally {
-            // Đóng các resource
             closeResources(rs, stmt);
         }
-        
         return giaCho;
     }
-    
-    
 }
