@@ -24,6 +24,8 @@ import entity.NhanVien.ChucVu;
 import entity.Tau;
 import entity.Tau.LoaiTau;
 import entity.Toa;
+import entity.VeTam;
+import entity.VeTam.LoaiKhachHang;
 import entity.Toa.LoaiToa;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -35,6 +37,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -74,6 +77,59 @@ public class QuanLyBanVe_GUI_Controller {
     private Button btnThemVe;
     
     public void initialize() {
+    	
+    	cboLoaiKhachHang.setItems(FXCollections.observableArrayList(VeTam.LoaiKhachHang.values()));
+    	cboLoaiKhachHang.setConverter(new StringConverter<VeTam.LoaiKhachHang>() {
+    	    @Override
+    	    public String toString(VeTam.LoaiKhachHang loai) {
+    	        if (loai == null) return "";
+    	        switch (loai) {
+    	            case treEm:
+    	                return "Trẻ em";
+    	            case nguoiLon:
+    	                return "Người lớn";
+    	            case nguoiCaoTuoi:
+    	                return "Người cao tuổi";
+    	            case sinhVien:
+    	                return "Sinh viên";
+    	            default:
+    	                return loai.toString();
+    	        }
+    	    }
+
+    	    @Override
+    	    public VeTam.LoaiKhachHang fromString(String string) {
+    	        return null; // Không cần thiết vì người dùng không nhập trực tiếp
+    	    }
+    	});
+    	cboLoaiKhachHang.setValue(VeTam.LoaiKhachHang.nguoiLon);
+    	
+    	// Listener cho cboLoaiKhachHang
+    	cboLoaiKhachHang.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+    	    if (newValue != null && !danhSachVeTam.isEmpty()) {
+    	        // Cập nhật loại khách hàng cho tất cả vé tạm
+    	        List<VeTam> newDanhSachVeTam = new ArrayList<>();
+    	        for (VeTam veTam : danhSachVeTam) {
+    	            ChoNgoi choNgoi = danhSachChoNgoi.stream()
+    	                .filter(cn -> cn.getTenChoNgoi().equals(veTam.getMaChoNgoi()))
+    	                .findFirst().orElse(null);
+    	            if (choNgoi != null) {
+    	                VeTam newVeTam = new VeTam(veTam.getMaChoNgoi(), choNgoi.getGiaCho(), newValue);
+    	                newDanhSachVeTam.add(newVeTam);
+    	            }
+    	        }
+    	        danhSachVeTam.clear();
+    	        danhSachVeTam.addAll(newDanhSachVeTam);
+    	        // Cập nhật giá tiền tạm tính
+    	        capNhatGiaTamTinh();
+    	        // Log để kiểm tra
+    	        kiemTraDanhSachVeTam();
+    	    }
+    	});
+    	
+    	txtGiaTamTinh.setEditable(false);
+    	dpNgayDi.setEditable(false);
+    	dpNgayVe.setEditable(false);
         // Initialize DatePickers and CheckBox
         initializeDatePickersAndCheckBox();
         // Initialize ComboBoxes for gaDi and gaDen
@@ -866,6 +922,7 @@ public class QuanLyBanVe_GUI_Controller {
                 lblSoGhe.setFont(Font.font("Tahoma", 10));
 
                 anchorPane.getChildren().addAll(rect, lblSoGhe);
+                anchorPane.setUserData(choNgoi); // Lưu ChoNgoi vào userData
 
                 // Hiệu ứng hover
                 anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
@@ -940,6 +997,7 @@ public class QuanLyBanVe_GUI_Controller {
                 lblSoGhe.setFont(Font.font("Tahoma", 9));
 
                 anchorPane.getChildren().addAll(rect, lblSoGhe);
+                anchorPane.setUserData(choNgoi); // Lưu ChoNgoi vào userData
 
                 // Hiệu ứng hover
                 anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
@@ -1014,6 +1072,7 @@ public class QuanLyBanVe_GUI_Controller {
                 lblSoGhe.setFont(Font.font("Tahoma", 9));
 
                 anchorPane.getChildren().addAll(rect, lblSoGhe);
+                anchorPane.setUserData(choNgoi); // Lưu ChoNgoi vào userData
 
                 // Hiệu ứng hover
                 anchorPane.setOnMouseEntered(event -> anchorPane.setCursor(Cursor.HAND));
@@ -1044,13 +1103,22 @@ public class QuanLyBanVe_GUI_Controller {
 
     
     private void xuLyChonChoNgoi(AnchorPane anchorPane, ChoNgoi choNgoi) {
+        // Kiểm tra nếu chỗ ngồi đã được xác nhận
+        boolean daXacNhan = danhSachVeXacNhan.stream()
+            .anyMatch(ve -> ve.getMaChoNgoi().equals(choNgoi.getTenChoNgoi()));
+        if (daXacNhan) {
+            showWarningAlert("Chỗ ngồi này đã được xác nhận!", "image/canhBao.png");
+            return;
+        }
+
         Rectangle rect = (Rectangle) anchorPane.getChildren().get(0);
 
         if (ckcChonTheoDay.isSelected()) {
             // Chọn theo dãy
             if (chonTheoDayCount < 2) { // Chỉ cho phép chọn tối đa 2 chỗ
                 chonTheoDayChoNgois.add(choNgoi);
-                choNgoiDangChon.add(choNgoi); // Thêm vào danh sách đang chọn
+                VeTam veTam = new VeTam(choNgoi.getTenChoNgoi(), choNgoi.getGiaCho(), cboLoaiKhachHang.getValue());
+                danhSachVeTam.add(veTam); // Thêm vào danh sách đang chọn
                 chonTheoDayCount++;
                 rect.setFill(javafx.scene.paint.Color.web("#ffa500")); // Màu khi chọn
                 selectedChoNgoiAnchorPanes.add(anchorPane);
@@ -1079,12 +1147,18 @@ public class QuanLyBanVe_GUI_Controller {
                                 .filter(cn -> cn.getTenChoNgoi().equals(lbl.getText()))
                                 .findFirst().orElse(null);
                             if (cg != null && cg.getTrangThai() == TrangThaiChoNgoi.chuaDat) {
-                                Rectangle r = (Rectangle) pane.getChildren().get(0);
-                                r.setFill(javafx.scene.paint.Color.web("#ffa500"));
-                                pane.setUserData(cg);
-                                if (!selectedChoNgoiAnchorPanes.contains(pane)) {
-                                    selectedChoNgoiAnchorPanes.add(pane);
-                                    choNgoiDangChon.add(cg);
+                                // Kiểm tra nếu chỗ ngồi chưa được xác nhận
+                                boolean chuaXacNhan = danhSachVeXacNhan.stream()
+                                    .noneMatch(ve -> ve.getMaChoNgoi().equals(cg.getTenChoNgoi()));
+                                if (chuaXacNhan) {
+                                    Rectangle r = (Rectangle) pane.getChildren().get(0);
+                                    r.setFill(javafx.scene.paint.Color.web("#ffa500"));
+                                    pane.setUserData(cg);
+                                    if (!selectedChoNgoiAnchorPanes.contains(pane)) {
+                                        selectedChoNgoiAnchorPanes.add(pane);
+                                        VeTam veTam = new VeTam(cg.getTenChoNgoi(), cg.getGiaCho(), cboLoaiKhachHang.getValue());
+                                        danhSachVeTam.add(veTam);
+                                    }
                                 }
                             }
                         }
@@ -1102,20 +1176,53 @@ public class QuanLyBanVe_GUI_Controller {
                 // Bỏ chọn
                 rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Trở về màu chưa đặt
                 selectedChoNgoiAnchorPanes.remove(anchorPane);
-                choNgoiDangChon.remove(choNgoi); // Xóa khỏi danh sách đang chọn
+                // Xóa VeTam tương ứng
+                danhSachVeTam.removeIf(ve -> ve.getMaChoNgoi().equals(choNgoi.getTenChoNgoi()));
             } else {
                 // Chọn
                 rect.setFill(javafx.scene.paint.Color.web("#ffa500")); // Màu khi chọn
                 selectedChoNgoiAnchorPanes.add(anchorPane);
-                choNgoiDangChon.add(choNgoi); // Thêm vào danh sách đang chọn
+                VeTam veTam = new VeTam(choNgoi.getTenChoNgoi(), choNgoi.getGiaCho(), cboLoaiKhachHang.getValue());
+                danhSachVeTam.add(veTam); // Thêm vào danh sách đang chọn
             }
         }
 
         // Cập nhật trạng thái các nút
         capNhatTrangThaiNut();
 
-        // Kiểm tra và hiển thị danh sách chỗ ngồi đang chọn
-        kiemTraChoNgoiDangChon();
+        // Cập nhật giá tiền tạm tính
+        capNhatGiaTamTinh();
+
+        // Kiểm tra và hiển thị danh sách vé tạm đang chọn
+        kiemTraDanhSachVeTam();
+    }
+    
+    private void kiemTraDanhSachVeTam() {
+        System.out.println("Danh sách vé tạm đang chọn:");
+        if (danhSachVeTam.isEmpty()) {
+            System.out.println("  Không có vé tạm nào được chọn.");
+        } else {
+            for (VeTam veTam : danhSachVeTam) {
+                System.out.println("  - Chỗ: " + veTam.getMaChoNgoi() +
+                                   ", Loại khách hàng: " + veTam.getLoaiKhachHang() +
+                                   ", Giá tiền: " + veTam.getGiaTien() +
+                                   ", Toa: " + toaDangChon.getTenToa() +
+                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+            }
+        }
+
+        System.out.println("Danh sách vé đã xác nhận:");
+        if (danhSachVeXacNhan.isEmpty()) {
+            System.out.println("  Không có vé nào được xác nhận.");
+        } else {
+            for (VeTam veTam : danhSachVeXacNhan) {
+                System.out.println("  - Chỗ: " + veTam.getMaChoNgoi() +
+                                   ", Loại khách hàng: " + veTam.getLoaiKhachHang() +
+                                   ", Giá tiền: " + veTam.getGiaTien() +
+                                   ", Toa: " + toaDangChon.getTenToa() +
+                                   ", Chuyến tàu: " + chuyenTauDangChon.getMaChuyenTau());
+            }
+        }
     }
     
  // Phương thức phụ trợ để kiểm tra và hiển thị nội dung của choNgoiDangChon
@@ -1156,7 +1263,7 @@ public class QuanLyBanVe_GUI_Controller {
 
         // Xóa tất cả các chỗ đã chọn trước đó
         selectedChoNgoiAnchorPanes.clear();
-        choNgoiDangChon.clear();
+        danhSachVeTam.clear();
 
         // Duyệt qua tất cả các chỗ ngồi trong pnChoNgoi
         for (Node node : pnChoNgoi.getChildren()) {
@@ -1181,7 +1288,8 @@ public class QuanLyBanVe_GUI_Controller {
                     Rectangle rect = (Rectangle) choPane.getChildren().get(0);
                     rect.setFill(javafx.scene.paint.Color.web("#FFA500")); // Màu đang chọn
                     selectedChoNgoiAnchorPanes.add(choPane);
-                    choNgoiDangChon.add(choNgoi);
+                    VeTam veTam = new VeTam(choNgoi.getTenChoNgoi(), choNgoi.getGiaCho(), cboLoaiKhachHang.getValue());
+                    danhSachVeTam.add(veTam);
                 }
             }
         }
@@ -1189,15 +1297,18 @@ public class QuanLyBanVe_GUI_Controller {
         // Cập nhật trạng thái các nút
         capNhatTrangThaiNut();
         
+        // Cập nhật giá tiền tạm tính
+        capNhatGiaTamTinh();
+        
         // Log để kiểm tra
         System.out.println("Đã chọn tất cả chỗ ngồi chưa đặt");
-        kiemTraChoNgoiDangChon();
+        kiemTraDanhSachVeTam();
     }
     
     @FXML
     private void btnBoChonTatCaClicked() {
-        if (selectedChoNgoiAnchorPanes.isEmpty()) {
-            showWarningAlert("Không có chỗ ngồi nào được chọn để bỏ!", "image/canhBao.png");
+        if (selectedChoNgoiAnchorPanes.isEmpty() && danhSachVeXacNhan.isEmpty()) {
+            showWarningAlert("Không có chỗ ngồi hoặc vé nào được chọn để bỏ!", "image/canhBao.png");
             return;
         }
 
@@ -1222,17 +1333,223 @@ public class QuanLyBanVe_GUI_Controller {
             }
         }
 
-        // Xóa tất cả các chỗ đã chọn
+        // Xóa tất cả các chỗ đã chọn và vé tạm
         selectedChoNgoiAnchorPanes.clear();
-        choNgoiDangChon.clear();
+        danhSachVeTam.clear();
+        chonTheoDayCount = 0;
+        chonTheoDayChoNgois.clear();
+
+        // Xóa tất cả vé xác nhận và cập nhật pnGioVe
+        danhSachVeXacNhan.clear();
+        pnGioVe.getChildren().clear();
+        pnGioVe.setPrefHeight(0);
+
+        // Cập nhật trạng thái các nút
+        capNhatTrangThaiNut();
+        
+        // Cập nhật giá tiền tạm tính
+        capNhatGiaTamTinh();
+        
+        // Log để kiểm tra
+        System.out.println("Đã bỏ chọn tất cả chỗ ngồi và vé xác nhận");
+        kiemTraDanhSachVeTam();
+    }
+    
+    @FXML
+    private TextField txtGiaTamTinh;
+    
+    private BigDecimal tinhTongGiaTien() {
+        BigDecimal giaTien = BigDecimal.ZERO;
+        for (VeTam veTam : danhSachVeTam) {
+            giaTien = giaTien.add(veTam.getGiaTien());
+        }
+        return giaTien;
+    }
+    
+    private void capNhatGiaTamTinh() {
+        BigDecimal tongGia = BigDecimal.ZERO;
+        // Tính tổng giá từ danhSachVeXacNhan
+        for (VeTam veTam : danhSachVeXacNhan) {
+            tongGia = tongGia.add(veTam.getGiaTien());
+        }
+        // Tính tổng giá từ danhSachVeTam
+        for (VeTam veTam : danhSachVeTam) {
+            tongGia = tongGia.add(veTam.getGiaTien());
+        }
+        // Định dạng giá tiền với dấu phẩy ngăn cách hàng nghìn
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        String giaFormatted = decimalFormat.format(tongGia) + " VNĐ";
+        txtGiaTamTinh.setText(giaFormatted);
+    }
+    
+    private List<VeTam> danhSachVeTam = new ArrayList<VeTam>();
+    
+    @FXML
+    private ComboBox<LoaiKhachHang> cboLoaiKhachHang;
+    
+    @FXML
+    private AnchorPane pnGioVe;
+    //Kích thước của pnGioVe là 470 rộng và chiều dài tự phát sinh
+    
+    @FXML
+    private void btnThemVeClicked() {
+        // Kiểm tra nếu danhSachVeTam rỗng
+        if (danhSachVeTam.isEmpty()) {
+            showWarningAlert("Không có vé tạm nào được chọn để thêm!", "image/canhBao.png");
+            return;
+        }
+        
+     // In mã chỗ ngồi của các vé tạm trước khi thêm
+        System.out.println("Thêm các vé tạm vào giỏ vé:");
+        for (VeTam veTam : danhSachVeTam) {
+            System.out.println(" - Mã chỗ ngồi: " + veTam.getMaChoNgoi());
+        }
+
+        // Thêm các vé tạm vào danhSachVeXacNhan
+        danhSachVeXacNhan.addAll(danhSachVeTam);
+        System.out.println("Đã thêm " + danhSachVeTam.size() + " vé vào danhSachVeXacNhan");
+
+        // Xóa các node cũ trong pnGioVe
+        pnGioVe.getChildren().clear();
+        System.out.println("Đã xóa các node cũ trong pnGioVe");
+
+        // Tính chiều cao cho pnGioVe dựa trên danhSachVeXacNhan
+        int soVeXacNhan = danhSachVeXacNhan.size();
+        double chieuCao = 10 + (soVeXacNhan * 200) + (Math.max(0, soVeXacNhan - 1) * 10) + 10;
+        pnGioVe.setPrefHeight(chieuCao);
+        System.out.println("Đã đặt chiều cao pnGioVe: " + chieuCao);
+
+        // Lấy thông tin tàu
+        Tau_DAO tauDAO = new Tau_DAO();
+        Tau tau = tauDAO.timTauTheoMa(chuyenTauDangChon.getMaTau());
+
+        // Tạo các AnchorPane cho tất cả vé trong danhSachVeXacNhan
+        double y = 10.0; // Tọa độ Y bắt đầu
+        for (VeTam veTam : danhSachVeXacNhan) {
+            AnchorPane anchorPane = new AnchorPane();
+            anchorPane.setPrefSize(450, 200);
+            anchorPane.setLayoutX(10); // Căn giữa trong pnGioVe (470 - 450)/2 = 10
+            anchorPane.setLayoutY(y);
+
+            // Tạo Rectangle màu trắng
+            Rectangle rect = new Rectangle(450, 200);
+            rect.setFill(javafx.scene.paint.Color.WHITE);
+            rect.setStroke(javafx.scene.paint.Color.BLACK);
+            rect.setStrokeWidth(1.0);
+
+            // Tạo Label cho cột trái
+            String loaiKhachHang = "";
+            switch (veTam.getLoaiKhachHang()) {
+                case treEm:
+                    loaiKhachHang = "Trẻ em";
+                    break;
+                case nguoiLon:
+                    loaiKhachHang = "Người lớn";
+                    break;
+                case nguoiCaoTuoi:
+                    loaiKhachHang = "Người cao tuổi";
+                    break;
+                case sinhVien:
+                    loaiKhachHang = "Sinh viên";
+                    break;
+            }
+            DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+            String giaVe = decimalFormat.format(veTam.getGiaTien()) + " VNĐ";
+            String gaDi = cboGaDi.getValue() != null ? cboGaDi.getValue().getTenGa() : "N/A";
+            String ngayKhoiHanh = dpNgayDi.getValue() != null ? dpNgayDi.getValue().toString() : "N/A";
+            String tenTau = (tau != null) ? tau.getKyHieuTau() : "N/A";
+            String tenToa = toaDangChon != null ? toaDangChon.getTenToa() : "N/A";
+
+            String thongTinTrai = "Ga đi: " + gaDi +
+                                 "\nNgày khởi hành: " + ngayKhoiHanh +
+                                 "\nTên tàu: " + tenTau +
+                                 "\nTên toa: " + tenToa +
+                                 "\nLoại khách hàng: " + loaiKhachHang +
+                                 "\nGiá vé: " + giaVe +
+                                 "\nChỗ ngồi: " + veTam.getMaChoNgoi();
+            Label labelTrai = new Label(thongTinTrai);
+            labelTrai.setLayoutX(10);
+            labelTrai.setLayoutY(10);
+            labelTrai.setFont(Font.font("Tahoma", 11));
+
+            // Tạo Label cho cột phải
+            String gaDen = cboGaDen.getValue() != null ? cboGaDen.getValue().getTenGa() : "N/A";
+            String gioKhoiHanh = chuyenTauDangChon.getGioKhoiHanh() != null 
+                ? chuyenTauDangChon.getGioKhoiHanh().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")) 
+                : "N/A";
+            String thongTinPhai = "Ga đến: " + gaDen +
+                                 "\nGiờ khởi hành: " + gioKhoiHanh;
+            Label labelPhai = new Label(thongTinPhai);
+            labelPhai.setLayoutX(300);
+            labelPhai.setLayoutY(10);
+            labelPhai.setFont(Font.font("Tahoma", 11));
+
+         // Tạo nút Xóa ở góc dưới bên phải
+            Button btnXoa = new Button("Xóa");
+            btnXoa.setLayoutX(400); // Cách mép phải 10px
+            btnXoa.setLayoutY(165); // Cách mép dưới 10px (200 - 25 - 10)
+            btnXoa.setPrefSize(40, 25);
+            btnXoa.setOnAction(e -> {
+                // In mã chỗ ngồi của vé trước khi xóa
+                System.out.println("Xóa vé khỏi giỏ vé:");
+                System.out.println(" - Mã chỗ ngồi: " + veTam.getMaChoNgoi());
+
+                // Xóa vé khỏi danhSachVeXacNhan
+                danhSachVeXacNhan.remove(veTam);
+                // Xóa AnchorPane tương ứng khỏi pnGioVe
+                pnGioVe.getChildren().remove(anchorPane);
+                // Cập nhật tọa độ Y cho các AnchorPane còn lại
+                double newY = 10.0;
+                for (Node node : pnGioVe.getChildren()) {
+                    if (node instanceof AnchorPane) {
+                        node.setLayoutY(newY);
+                        newY += 200 + 10;
+                    }
+                }
+                // Cập nhật chiều cao pnGioVe
+                double newChieuCao = 10 + (danhSachVeXacNhan.size() * 200) + (Math.max(0, danhSachVeXacNhan.size() - 1) * 10) + 10;
+                pnGioVe.setPrefHeight(newChieuCao);
+                // Cập nhật giá tạm tính
+                capNhatGiaTamTinh();
+                // Cập nhật trạng thái nút
+                capNhatTrangThaiNut();
+                // Log
+                System.out.println("Đã xóa vé: " + veTam.getMaChoNgoi());
+                kiemTraDanhSachVeTam();
+            });
+
+            // Thêm Rectangle, Label và Button vào AnchorPane
+            anchorPane.getChildren().addAll(rect, labelTrai, labelPhai, btnXoa);
+
+            // Thêm AnchorPane vào pnGioVe
+            pnGioVe.getChildren().add(anchorPane);
+            System.out.println("Đã thêm AnchorPane cho vé xác nhận: " + veTam.getMaChoNgoi());
+
+            // Cập nhật tọa độ Y cho AnchorPane tiếp theo
+            y += 200 + 10;
+        }
+
+        // Xóa các chỗ ngồi đã chọn trong giao diện
+        for (AnchorPane choPane : selectedChoNgoiAnchorPanes) {
+            Rectangle rect = (Rectangle) choPane.getChildren().get(0);
+            rect.setFill(javafx.scene.paint.Color.web("#2e7d32")); // Đặt màu "đang đặt"
+        }
+
+        // Reset danhSachVeTam và các biến liên quan
+        selectedChoNgoiAnchorPanes.clear();
+        danhSachVeTam.clear();
         chonTheoDayCount = 0;
         chonTheoDayChoNgois.clear();
 
         // Cập nhật trạng thái các nút
         capNhatTrangThaiNut();
-        
+
+        // Cập nhật giá tiền tạm tính
+        capNhatGiaTamTinh();
+
         // Log để kiểm tra
-        System.out.println("Đã bỏ chọn tất cả chỗ ngồi");
-        kiemTraChoNgoiDangChon();
+        System.out.println("Tổng số vé xác nhận: " + soVeXacNhan);
     }
+    
+    private List<VeTam> danhSachVeXacNhan = new ArrayList<>();
 }
