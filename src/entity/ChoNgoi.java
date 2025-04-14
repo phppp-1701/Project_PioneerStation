@@ -21,8 +21,19 @@ public class ChoNgoi {
         dangDat,   // Chỗ ngồi đang trong quá trình đặt
         daDat      // Chỗ ngồi đã được đặt chính thức
     }
+    
+    
 
-    // Constructor đầy đủ
+    public ChoNgoi(String maChoNgoi, String tenChoNgoi, TrangThaiChoNgoi trangThai, String maToa, String maChuyenTau) {
+		super();
+		this.maChoNgoi = maChoNgoi;
+		this.tenChoNgoi = tenChoNgoi;
+		this.trangThai = trangThai;
+		this.maToa = maToa;
+		this.maChuyenTau = maChuyenTau;
+	}
+
+	// Constructor đầy đủ
     public ChoNgoi(String maChoNgoi, String tenChoNgoi, TrangThaiChoNgoi trangThai, 
                    String maToa, String maChuyenTau, BigDecimal giaCho) {
         setMaChoNgoi(maChoNgoi); // Sử dụng setter để kiểm tra hợp lệ

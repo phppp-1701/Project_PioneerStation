@@ -621,6 +621,10 @@ public class QuanLyBanVe_GUI_Controller {
         }
 
         if (dstoa == null || dstoa.isEmpty()) {
+            Label emptyLabel = new Label("Không có toa nào để hiển thị");
+            emptyLabel.setLayoutX(100.0);
+            emptyLabel.setLayoutY(50.0);
+            pnToa.getChildren().add(emptyLabel);
             return;
         }
 
@@ -630,6 +634,7 @@ public class QuanLyBanVe_GUI_Controller {
         double height = 70.0;
         double spacing = 5.0;
 
+        ChoNgoi_DAO choNgoi_DAO = new ChoNgoi_DAO();
         for (Toa toa : dstoa) {
             AnchorPane anchorPane = new AnchorPane();
             anchorPane.setPrefSize(width, height);
@@ -652,24 +657,23 @@ public class QuanLyBanVe_GUI_Controller {
             anchorPane.setOnMouseClicked(event -> {
                 btnChonTatCa.setDisable(false);
                 toaDangChon = toa;
-                ChoNgoi_DAO choNgoi_DAO = new ChoNgoi_DAO();
                 danhSachChoNgoi = choNgoi_DAO.timChoNgoiTheoMaToaVaMaChuyenTau(toaDangChon.getMaToa(), chuyenTauDangChon.getMaChuyenTau());
                 Tau_DAO tau_DAO = new Tau_DAO();
                 Tau tauDangChon = tau_DAO.timTauTheoMa(chuyenTauDangChon.getMaTau());
-                if(tauDangChon.getLoaiTau() == LoaiTau.SE) {
-                    if(toaDangChon.getLoaiToa() == LoaiToa.giuongNamDieuHoa) {
+                if (tauDangChon.getLoaiTau() == LoaiTau.SE) {
+                    if (toaDangChon.getLoaiToa() == LoaiToa.giuongNamDieuHoa) {
                         taoChoNgoi7x5(danhSachChoNgoi);
                     } else {
                         taoChoNgoi5x10(danhSachChoNgoi);
                     }
                 } else {
-                    if(toaDangChon.getLoaiToa() == LoaiToa.gheCungDieuHoa) {
+                    if (toaDangChon.getLoaiToa() == LoaiToa.gheCungDieuHoa) {
                         taoChoNgoi5x10(danhSachChoNgoi);
                     } else {
                         taoChoNgoi4x10(danhSachChoNgoi);
                     }
                 }
-                
+
                 if (selectedToaAnchorPane != null && selectedToaAnchorPane != anchorPane) {
                     Rectangle previousBlueRect = (Rectangle) selectedToaAnchorPane.getChildren().get(1);
                     previousBlueRect.setFill(javafx.scene.paint.Color.web("#ccdaf5"));
@@ -681,18 +685,18 @@ public class QuanLyBanVe_GUI_Controller {
                 btnBoChonTatCa.setDisable(true);
                 btnThemVe.setDisable(true);
             });
-            
-            String tenToa = "Toa: " + toa.getTenToa(); 
+
+            String tenToa = "Toa: " + toa.getTenToa();
             Label lblTenToa = new Label(tenToa);
             lblTenToa.setLayoutX(14);
             lblTenToa.setLayoutY(19);
             lblTenToa.setFont(Font.font("Tahoma"));
             anchorPane.getChildren().add(lblTenToa);
-            
+
             String loaiToa = "";
-            if(toa.getLoaiToa().equals(LoaiToa.gheCungDieuHoa)) {
+            if (toa.getLoaiToa().equals(LoaiToa.gheCungDieuHoa)) {
                 loaiToa = "Ghế cứng điều hòa";
-            } else if(toa.getLoaiToa().equals(LoaiToa.ngoiMemDieuHoa)) {
+            } else if (toa.getLoaiToa().equals(LoaiToa.ngoiMemDieuHoa)) {
                 loaiToa = "Ngồi mềm điều hòa";
             } else {
                 loaiToa = "Giường nằm điều hòa";
@@ -702,23 +706,28 @@ public class QuanLyBanVe_GUI_Controller {
             lblLoaiToa.setLayoutX(14);
             lblLoaiToa.setLayoutY(37);
             anchorPane.getChildren().add(lblLoaiToa);
-            
-            ChoNgoi_DAO choNgoi_DAO = new ChoNgoi_DAO();
+
             List<ChoNgoi> tinhGia = choNgoi_DAO.timChoNgoiTheoMaToaVaMaChuyenTau(toa.getMaToa(), chuyenTauDangChon.getMaChuyenTau());
-            BigDecimal giaCho = tinhGia.get(0).getGiaCho();
-            Label lblGiaCho = new Label(giaCho+ " vnđ");
+            String giaChoText = "N/A";
+            if (!tinhGia.isEmpty()) {
+                BigDecimal giaCho = tinhGia.get(0).getGiaCho();
+                giaChoText = giaCho + " vnđ";
+            } else {
+                System.err.println("Không tìm thấy chỗ ngồi cho maToa: " + toa.getMaToa() + ", maChuyenTau: " + chuyenTauDangChon.getMaChuyenTau());
+            }
+            Label lblGiaCho = new Label(giaChoText);
             lblGiaCho.setFont(Font.font("Tahoma"));
             lblGiaCho.setLayoutX(14);
             lblGiaCho.setLayoutY(53);
             anchorPane.getChildren().add(lblGiaCho);
-            
+
             int soCho = choNgoi_DAO.demSoChoNgoiChuaDat(chuyenTauDangChon.getMaChuyenTau(), toa.getMaToa());
             Label lblSoCho = new Label("Còn: " + soCho + " chỗ");
             lblSoCho.setFont(Font.font("Tahoma"));
             lblSoCho.setLayoutX(119);
             lblSoCho.setLayoutY(18);
             anchorPane.getChildren().add(lblSoCho);
-            
+
             pnToa.getChildren().add(anchorPane);
             x += width + spacing;
         }
@@ -957,7 +966,7 @@ public class QuanLyBanVe_GUI_Controller {
     
     private void xuLyChonChoNgoi(AnchorPane anchorPane, ChoNgoi choNgoi) {
         boolean daXacNhan = danhSachVeXacNhan.stream()
-            .anyMatch(ve -> ve.getMaChoNgoi().equals(choNgoi.getTenChoNgoi()));
+            .anyMatch(ve -> ve.getMaChoNgoi().equals(choNgoi.getMaChoNgoi()));
         if (daXacNhan) {
             showWarningAlert("Chỗ ngồi này đã được xác nhận!", "image/canhBao.png");
             return;
@@ -1145,6 +1154,7 @@ public class QuanLyBanVe_GUI_Controller {
         capNhatTrangThaiNut();
         capNhatGiaTamTinh();
         kiemTraDanhSachVeTam();
+        capNhatTongVeVaTien();
     }
     
     @FXML
@@ -1294,6 +1304,7 @@ public class QuanLyBanVe_GUI_Controller {
                 }
 
                 danhSachVeXacNhan.remove(veTam);
+                capNhatTongVeVaTien();
                 pnGioVe.getChildren().remove(anchorPane);
                 
                 double newY = 10.0;
@@ -1348,6 +1359,7 @@ public class QuanLyBanVe_GUI_Controller {
 
         capNhatTrangThaiNut();
         capNhatGiaTamTinh();
+        capNhatTongVeVaTien();
 
         // Làm mới lại sơ đồ chỗ ngồi
         if (toaDangChon != null && chuyenTauDangChon != null) {
@@ -1369,5 +1381,32 @@ public class QuanLyBanVe_GUI_Controller {
         }
     }
     
+    @FXML 
+    private TextField txtTongSoVe;
+    
+    @FXML 
+    private TextField txtTongTienTamTinh;
+    
     private List<VeTam> danhSachVeXacNhan = new ArrayList<>();
+    
+
+    private void capNhatTongVeVaTien() {
+        // Đếm số lượng vé
+        int soLuongVe = danhSachVeXacNhan.size();
+        
+        // Tính tổng tiền
+        BigDecimal tongTien = BigDecimal.ZERO;
+        for (VeTam veTam : danhSachVeXacNhan) {
+            tongTien = tongTien.add(veTam.getGiaTien());
+        }
+        
+        // Định dạng tổng tiền
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        String tongTienFormatted = decimalFormat.format(tongTien) + " VNĐ";
+        
+        // Cập nhật giá trị lên TextField
+        txtTongSoVe.setText(String.valueOf(soLuongVe));
+        txtTongTienTamTinh.setText(tongTienFormatted);
+    }
+    
 }

@@ -89,6 +89,46 @@ public class Tau_DAO {
         return dsTau;
     }
     
+    public Tau timTauTheoTenVaLoai(String tenTau, LoaiTau loaiTau) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Tau tau = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Tau WHERE tenTau = ? AND loaiTau = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTau);
+            stmt.setString(2, loaiTau.name()); // Giả sử LoaiTau là enum SE, TN
+            
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                tau = new Tau();
+                tau.setMaTau(rs.getString("maTau"));
+                tau.setTenTau(rs.getString("tenTau"));
+                
+                String loai = rs.getString("loaiTau");
+                tau.setLoaiTau("SE".equals(loai) ? LoaiTau.SE : LoaiTau.TN);
+                
+                String trangThai = rs.getString("trangThai");
+                tau.setTrangThaiTau("baoTri".equals(trangThai) ? TrangThaiTau.baoTri : TrangThaiTau.hoatDong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return tau;
+    }
+
 
     
     // Tìm tàu theo tên (tìm kiếm gần đúng)
@@ -135,6 +175,23 @@ public class Tau_DAO {
         
         return dsTau;
     }
+    
+    public List<String> getTatCaTenTau() {
+        List<String> tenTaus = new ArrayList<>();
+        try {
+            Connection conn = ConnectDB.getConnection();
+            String sql = "SELECT DISTINCT tenTau FROM Tau";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tenTaus.add(rs.getString("tenTau"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenTaus;
+    }
+
     
     // Thêm tàu mới
     public boolean themTau(Tau tau) {
