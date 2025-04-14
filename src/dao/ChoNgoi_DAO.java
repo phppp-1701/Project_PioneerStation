@@ -16,6 +16,42 @@ public class ChoNgoi_DAO {
     private static final Logger logger = Logger.getLogger(ChoNgoi_DAO.class.getName());
     
     /**
+     * Tìm chỗ ngồi theo mã chỗ ngồi
+     * @param maChoNgoi Mã chỗ ngồi cần tìm
+     * @return Đối tượng ChoNgoi nếu tìm thấy, null nếu không tìm thấy hoặc có lỗi
+     */
+    public ChoNgoi timChoNgoiTheoMaChoNgoi(String maChoNgoi) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ChoNgoi choNgoi = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM ChoNgoi WHERE maChoNgoi = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maChoNgoi);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                String tenChoNgoi = rs.getString("tenChoNgoi");
+                String trangThaiStr = rs.getString("trangThai");
+                String maToa = rs.getString("maToa");
+                String maChuyenTau = rs.getString("maChuyenTau");
+                BigDecimal giaCho = rs.getBigDecimal("giaCho");
+                ChoNgoi.TrangThaiChoNgoi trangThai = ChoNgoi.TrangThaiChoNgoi.valueOf(trangThaiStr);
+                choNgoi = new ChoNgoi(maChoNgoi, tenChoNgoi, trangThai, maToa, maChuyenTau, giaCho);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Lỗi khi tìm chỗ ngồi theo mã chỗ ngồi: " + maChoNgoi, ex);
+            return null;
+        } finally {
+            closeResources(rs, stmt);
+        }
+        return choNgoi;
+    }
+    
+    /**
      * Đếm số chỗ ngồi chưa đặt theo mã chuyến tàu và mã toa
      * @param maChuyenTau Mã chuyến tàu cần kiểm tra
      * @param maToa Mã toa cần kiểm tra
@@ -176,6 +212,12 @@ public class ChoNgoi_DAO {
         }
     }
     
+    /**
+     * Tìm giá chỗ ngồi theo mã toa và mã chuyến tàu
+     * @param maToa Mã toa
+     * @param maChuyenTau Mã chuyến tàu
+     * @return Giá chỗ ngồi, null nếu không tìm thấy hoặc có lỗi
+     */
     public BigDecimal timGiaChoTheoMaToaVaMaChuyenTau(String maToa, String maChuyenTau) {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -200,5 +242,48 @@ public class ChoNgoi_DAO {
             closeResources(rs, stmt);
         }
         return giaCho;
+    }
+    
+    /**
+     * Tìm danh sách chỗ ngồi trong khoảng từ mã chỗ ngồi 1 đến mã chỗ ngồi 2
+     * @param maChoNgoi1 Mã chỗ ngồi bắt đầu
+     * @param maChoNgoi2 Mã chỗ ngồi kết thúc
+     * @return Danh sách các chỗ ngồi, trả về danh sách rỗng nếu không tìm thấy hoặc có lỗi
+     */
+    public List<ChoNgoi> timDanhSachChoNgoiTuMaDenMa(String maChoNgoi1, String maChoNgoi2) {
+        List<ChoNgoi> dsChoNgoi = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM ChoNgoi " +
+                         "WHERE maChoNgoi BETWEEN ? AND ? " +
+                         "ORDER BY maChoNgoi";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maChoNgoi1.compareTo(maChoNgoi2) <= 0 ? maChoNgoi1 : maChoNgoi2);
+            stmt.setString(2, maChoNgoi1.compareTo(maChoNgoi2) <= 0 ? maChoNgoi2 : maChoNgoi1);
+            
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                String maChoNgoi = rs.getString("maChoNgoi");
+                String tenChoNgoi = rs.getString("tenChoNgoi");
+                String trangThaiStr = rs.getString("trangThai");
+                String maToa = rs.getString("maToa");
+                String maChuyenTau = rs.getString("maChuyenTau");
+                BigDecimal giaCho = rs.getBigDecimal("giaCho");
+                ChoNgoi.TrangThaiChoNgoi trangThai = ChoNgoi.TrangThaiChoNgoi.valueOf(trangThaiStr);
+                ChoNgoi choNgoi = new ChoNgoi(maChoNgoi, tenChoNgoi, trangThai, maToa, maChuyenTau, giaCho);
+                dsChoNgoi.add(choNgoi);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Lỗi khi tìm chỗ ngồi từ mã " + maChoNgoi1 + " đến mã " + maChoNgoi2, ex);
+            return new ArrayList<>();
+        } finally {
+            closeResources(rs, stmt);
+        }
+        return dsChoNgoi;
     }
 }

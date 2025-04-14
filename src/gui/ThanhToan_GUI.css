@@ -48,10 +48,19 @@
 }
 
 .btn-themKhachHang{
-	-fx-background-color: #66CCCC;
+	-fx-background-color: #2E7D32;
 }
 
 .btn-themKhachHang:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand; 
+}
+
+.btn-capNhatKhachHang{
+	-fx-background-color: #66CCCC;
+}
+
+.btn-capNhatKhachHang:hover{
 	-fx-background-color: #FFD700;
 	-fx-cursor: hand; 
 }

@@ -484,7 +484,7 @@ public class QuanLyKhachHang_GUI_Controller {
                 e.printStackTrace();
             }
         });
-		cboLoaiKhachHang.getItems().setAll(LoaiThanhVien.values());
+		cboLoaiKhachHang.getItems().setAll(LoaiThanhVien.thanThiet, LoaiThanhVien.vip);
 	    cboLoaiKhachHang.setValue(LoaiThanhVien.thanThiet); 
 	    
 	    cboTrangThai.getItems().setAll(TrangThaiKhachHang.values());

@@ -247,7 +247,7 @@
                   <Font name="Tahoma" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnThemVe" layoutX="431.0" layoutY="141.0" mnemonicParsing="false" onAction="#btnThemVeClicked" prefHeight="26.0" prefWidth="94.0" styleClass="btn-themVe" text="Thêm vé" textFill="WHITE">
+            <Button fx:id="btnThemVe" layoutX="481.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnThemVeClicked" prefHeight="26.0" prefWidth="94.0" styleClass="btn-themVe" text="Thêm vé" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
@@ -305,9 +305,9 @@
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
-            <ScrollPane layoutY="60.0" prefHeight="419.0" prefWidth="471.0" styleClass="scr-GioVe">
+            <ScrollPane layoutY="60.0" prefHeight="419.0" prefWidth="471.0" style="-fx-background-color: #FFFFFF;" styleClass="scr-GioVe">
               <content>
-                <AnchorPane fx:id="pnGioVe" minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="470.0" style="-fx-background-color: #FFFFFF;" />
+                <AnchorPane fx:id="pnGioVe" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="470.0" style="-fx-background-color: #FFFFFF;" />
               </content>
             </ScrollPane>
          </children>
@@ -315,7 +315,7 @@
       <AnchorPane layoutX="1070.0" layoutY="609.0" prefHeight="175.0" prefWidth="471.0" styleClass="pn-TongTienTamTinh">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="175.0" stroke="#dcdada" strokeType="INSIDE" width="471.0" />
-            <Button layoutX="357.0" layoutY="125.0" mnemonicParsing="false" styleClass="btn-tiepTheo" text="Tiếp theo" textFill="WHITE">
+            <Button fx:id="btnTiepTheo" layoutX="357.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnTiepTheoClicked" styleClass="btn-tiepTheo" text="Tiếp theo" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="18.0" />
                </font>
@@ -325,16 +325,26 @@
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
-            <Label id="lblTongSoVe" fx:id="lblTongSoVe" layoutX="14.0" layoutY="49.0" text="Tổng số vé: ">
+            <Label id="lblTongSoVe" fx:id="lblTongSoVe" layoutX="14.0" layoutY="60.0" text="Tổng số vé: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <Label id="lblTongTienTamTinh" fx:id="lblTongTienTamTinh" layoutX="14.0" layoutY="78.0" text="Tổng tiền tạm tính: ">
+            <Label id="lblTongTienTamTinh" fx:id="lblTongTienTamTinh" layoutX="14.0" layoutY="98.0" text="Tổng tiền tạm tính: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
+            <TextField fx:id="txtTongSoVe" layoutX="92.0" layoutY="55.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtTongTienTamTinh" layoutX="139.0" layoutY="93.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </TextField>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
