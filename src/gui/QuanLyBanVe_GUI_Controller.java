@@ -4,11 +4,13 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import dao.ChoNgoi_DAO;
 import dao.ChuyenTau_DAO;
@@ -87,126 +89,125 @@ public class QuanLyBanVe_GUI_Controller {
     
     private List<VeTam> danhSachVeXacNhan = new ArrayList<>();
     
-// Sửa phương thức initialize để vô hiệu hóa btnTiepTheo ban đầu
-public void initialize() {
-    btnTiepTheo.setDisable(true); // Vô hiệu hóa btnTiepTheo ban đầu
-    cboLoaiKhachHang.setItems(FXCollections.observableArrayList(VeTam.LoaiKhachHang.values()));
-    cboLoaiKhachHang.setConverter(new StringConverter<VeTam.LoaiKhachHang>() {
-        @Override
-        public String toString(VeTam.LoaiKhachHang loai) {
-            if (loai == null) return "";
-            switch (loai) {
-                case treEm:
-                    return "Trẻ em";
-                case nguoiLon:
-                    return "Người lớn";
-                case nguoiCaoTuoi:
-                    return "Người cao tuổi";
-                case sinhVien:
-                    return "Sinh viên";
-                default:
-                    return loai.toString();
-            }
-        }
-
-        @Override
-        public VeTam.LoaiKhachHang fromString(String string) {
-            return null;
-        }
-    });
-    cboLoaiKhachHang.setValue(VeTam.LoaiKhachHang.nguoiLon);
-    
-    cboLoaiKhachHang.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-        if (newValue != null && !danhSachVeTam.isEmpty()) {
-            List<VeTam> newDanhSachVeTam = new ArrayList<>();
-            for (VeTam veTam : danhSachVeTam) {
-                ChoNgoi choNgoi = danhSachChoNgoi.stream()
-                    .filter(cn -> cn.getMaChoNgoi().equals(veTam.getMaChoNgoi()))
-                    .findFirst().orElse(null);
-                if (choNgoi != null) {
-                    VeTam newVeTam = new VeTam(veTam.getMaChoNgoi(), choNgoi.getGiaCho(), newValue);
-                    newDanhSachVeTam.add(newVeTam);
+    public void initialize() {
+        btnTiepTheo.setDisable(true);
+        cboLoaiKhachHang.setItems(FXCollections.observableArrayList(VeTam.LoaiKhachHang.values()));
+        cboLoaiKhachHang.setConverter(new StringConverter<VeTam.LoaiKhachHang>() {
+            @Override
+            public String toString(VeTam.LoaiKhachHang loai) {
+                if (loai == null) return "";
+                switch (loai) {
+                    case treEm:
+                        return "Trẻ em";
+                    case nguoiLon:
+                        return "Người lớn";
+                    case nguoiCaoTuoi:
+                        return "Người cao tuổi";
+                    case sinhVien:
+                        return "Sinh viên";
+                    default:
+                        return loai.toString();
                 }
             }
-            danhSachVeTam.clear();
-            danhSachVeTam.addAll(newDanhSachVeTam);
-            capNhatGiaTamTinh();
-        }
-    });
-    
-    txtGiaTamTinh.setEditable(false);
-    dpNgayDi.setEditable(false);
-    dpNgayVe.setEditable(false);
-    initializeDatePickersAndCheckBox();
-    initializeComboBoxes();
-    btnChonTatCa.setDisable(true);
-    btnBoChonTatCa.setDisable(true);
-    btnThemVe.setDisable(true);
-    
-    // Các xử lý sự kiện cho menu điều hướng
-    lblQuanLyChuyenTau.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblQuanLyVe.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new QuanLyVe_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblQuanLyHoaDon.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new QuanLyHoaDon_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblQuanLyKhachHang.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new QuanLyKhachHang_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblQuanLyNhanVien.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new QuanLyNhanVien_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblThongKe.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new ThongKe_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-    
-    lblTrangChu.setOnMouseClicked(event -> {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            new Home_GUI(currentStage, maNhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    });
-}
+
+            @Override
+            public VeTam.LoaiKhachHang fromString(String string) {
+                return null;
+            }
+        });
+        cboLoaiKhachHang.setValue(VeTam.LoaiKhachHang.nguoiLon);
+        
+        cboLoaiKhachHang.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null && !danhSachVeTam.isEmpty()) {
+                List<VeTam> newDanhSachVeTam = new ArrayList<>();
+                for (VeTam veTam : danhSachVeTam) {
+                    ChoNgoi choNgoi = danhSachChoNgoi.stream()
+                        .filter(cn -> cn.getMaChoNgoi().equals(veTam.getMaChoNgoi()))
+                        .findFirst().orElse(null);
+                    if (choNgoi != null) {
+                        VeTam newVeTam = new VeTam(veTam.getMaChoNgoi(), choNgoi.getGiaCho(), newValue);
+                        newDanhSachVeTam.add(newVeTam);
+                    }
+                }
+                danhSachVeTam.clear();
+                danhSachVeTam.addAll(newDanhSachVeTam);
+                capNhatGiaTamTinh();
+            }
+        });
+        
+        txtGiaTamTinh.setEditable(false);
+        dpNgayDi.setEditable(false);
+        dpNgayVe.setEditable(false);
+        initializeDatePickersAndCheckBox();
+        initializeComboBoxes();
+        btnChonTatCa.setDisable(true);
+        btnBoChonTatCa.setDisable(true);
+        btnThemVe.setDisable(true);
+        
+        lblQuanLyChuyenTau.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyChuyenTau_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblQuanLyVe.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyVe_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblQuanLyHoaDon.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyHoaDon_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblQuanLyKhachHang.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyKhachHang_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblQuanLyNhanVien.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new QuanLyNhanVien_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblThongKe.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new ThongKe_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        lblTrangChu.setOnMouseClicked(event -> {
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                new Home_GUI(currentStage, maNhanVien);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     private void initializeComboBoxes() {
         Ga_DAO gaDAO = new Ga_DAO();
         TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
@@ -534,9 +535,8 @@ public void initialize() {
             anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
 
             anchorPane.setOnMouseClicked(event -> {
-                // Kiểm tra vé tạm trước khi chuyển
                 if (!xacNhanChuyenToaHoacChuyenTau()) {
-                    return; // Người dùng chọn quay lại, không làm gì
+                    return;
                 }
 
                 if (selectedAnchorPane != null && selectedAnchorPane != anchorPane) {
@@ -654,9 +654,8 @@ public void initialize() {
             anchorPane.setOnMouseExited(event -> anchorPane.setCursor(Cursor.DEFAULT));
 
             anchorPane.setOnMouseClicked(event -> {
-                // Kiểm tra vé tạm trước khi chuyển
                 if (!xacNhanChuyenToaHoacChuyenTau()) {
-                    return; // Người dùng chọn quay lại, không làm gì
+                    return;
                 }
 
                 btnChonTatCa.setDisable(false);
@@ -756,7 +755,7 @@ public void initialize() {
 
         double width = 38.0;
         double height = 18.0;
-        double spacingX = 8.0;
+        double spacings = 8.0;
         double spacingY = 5.0;
         double startX = 15.0;
         double startY = 10.0;
@@ -774,7 +773,7 @@ public void initialize() {
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.setPrefSize(width, height);
-                double x = startX + col * (width + spacingX);
+                double x = startX + col * (width + spacingY);
                 double y = startY + row * (height + spacingY);
                 anchorPane.setLayoutX(x);
                 anchorPane.setLayoutY(y);
@@ -977,7 +976,6 @@ public void initialize() {
         if (selectedChoNgoiAnchorPanes.contains(anchorPane)) {
             rect.setFill(javafx.scene.paint.Color.web("#ccdaf5"));
             selectedChoNgoiAnchorPanes.remove(anchorPane);
-            // Sửa lại để xóa dựa trên maChoNgoi
             danhSachVeTam.removeIf(ve -> ve.getMaChoNgoi().equals(choNgoi.getMaChoNgoi()));
         } else {
             rect.setFill(javafx.scene.paint.Color.web("#ffa500"));
@@ -998,7 +996,7 @@ public void initialize() {
         btnChonTatCa.setDisable(!coChoChuaDat);
         btnBoChonTatCa.setDisable(selectedChoNgoiAnchorPanes.isEmpty());
         btnThemVe.setDisable(selectedChoNgoiAnchorPanes.isEmpty());
-        btnTiepTheo.setDisable(danhSachVeXacNhan.isEmpty()); // Bật/tắt btnTiepTheo dựa trên danhSachVeXacNhan
+        btnTiepTheo.setDisable(danhSachVeXacNhan.isEmpty());
     }
     
     private List<ChoNgoi> choNgoiDangChon = new ArrayList<ChoNgoi>();
@@ -1030,7 +1028,6 @@ public void initialize() {
 
         capNhatTrangThaiNut();
         capNhatGiaTamTinh();
-
     }
     
     @FXML
@@ -1044,8 +1041,8 @@ public void initialize() {
             ChoNgoi choNgoi = (ChoNgoi) choPane.getUserData();
             if (choNgoi != null) {
                 Rectangle rect = (Rectangle) choPane.getChildren().get(0);
-                choNgoi.setTrangThai(TrangThaiChoNgoi.chuaDat); // Cập nhật trạng thái
-                rect.setFill(javafx.scene.paint.Color.web("#ccdaf5")); // Đặt màu chưa đặt
+                choNgoi.setTrangThai(TrangThaiChoNgoi.chuaDat);
+                rect.setFill(javafx.scene.paint.Color.web("#ccdaf5"));
             }
         }
 
@@ -1118,107 +1115,133 @@ public void initialize() {
 
         pnGioVe.getChildren().clear();
 
-        int soVeXacNhan = danhSachVeXacNhan.size();
-        double chieuCao = 10 + (soVeXacNhan * 200) + (Math.max(0, soVeXacNhan - 1) * 10) + 10;
-        pnGioVe.setPrefHeight(chieuCao);
+        double paneHeight = 150.0;
+        double spacing = 10.0;
+        double padding = 10;
+        double yOffset = padding;
+        int ticketCount = danhSachVeXacNhan.size();
 
-        Tau_DAO tauDAO = new Tau_DAO();
-        Tau tau = tauDAO.timTauTheoMa(chuyenTauDangChon.getMaTau());
+        double totalHeight = (ticketCount * paneHeight) + ((ticketCount - 1) * spacing) + (2 * padding);
+        pnGioVe.setPrefHeight(totalHeight);
 
-        double y = 10.0;
-        for (VeTam veTam : danhSachVeXacNhan) {
-            AnchorPane anchorPane = new AnchorPane();
-            anchorPane.setPrefSize(450, 200);
-            anchorPane.setLayoutX(10);
-            anchorPane.setLayoutY(y);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 
-            Rectangle rect = new Rectangle(450, 200);
-            rect.setFill(javafx.scene.paint.Color.WHITE);
-            rect.setStroke(javafx.scene.paint.Color.BLACK);
-            rect.setStrokeWidth(1.0);
-
-            String loaiKhachHang = "";
-            switch (veTam.getLoaiKhachHang()) {
-                case treEm:
-                    loaiKhachHang = "Trẻ em";
-                    break;
-                case nguoiLon:
-                    loaiKhachHang = "Người lớn";
-                    break;
-                case nguoiCaoTuoi:
-                    loaiKhachHang = "Người cao tuổi";
-                    break;
-                case sinhVien:
-                    loaiKhachHang = "Sinh viên";
-                    break;
-            }
-            DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-            String giaVe = decimalFormat.format(veTam.getGiaTien()) + " VNĐ";
+        for (VeTam ve : danhSachVeXacNhan) {
+            ChoNgoi choNgoi = choNgoiDAO.timChoNgoiTheoMaChoNgoi(ve.getMaChoNgoi());
             String gaDi = cboGaDi.getValue() != null ? cboGaDi.getValue().getTenGa() : "N/A";
-            String ngayKhoiHanh = dpNgayDi.getValue() != null ? dpNgayDi.getValue().toString() : "N/A";
-            String tenTau = (tau != null) ? tau.getKyHieuTau() : "N/A";
-            String tenToa = toaDangChon != null ? toaDangChon.getTenToa() : "N/A";
-            ChoNgoi chn = choNgoiDAO.timChoNgoiTheoMaChoNgoi(veTam.getMaChoNgoi());
-            String thongTinTrai = "Ga đi: " + gaDi +
-                                 "\nNgày khởi hành: " + ngayKhoiHanh +
-                                 "\nTên tàu: " + tenTau +
-                                 "\nTên toa: " + tenToa +
-                                 "\nLoại khách hàng: " + loaiKhachHang +
-                                 "\nGiá vé: " + giaVe +
-                                 "\nChỗ ngồi: " + chn.getTenChoNgoi();
-            Label labelTrai = new Label(thongTinTrai);
-            labelTrai.setLayoutX(10);
-            labelTrai.setLayoutY(10);
-            labelTrai.setFont(Font.font("Tahoma", 11));
-
             String gaDen = cboGaDen.getValue() != null ? cboGaDen.getValue().getTenGa() : "N/A";
+            String ngayKhoiHanh = dpNgayDi.getValue() != null ? dpNgayDi.getValue().format(dateFormatter) : "N/A";
             String gioKhoiHanh = chuyenTauDangChon.getGioKhoiHanh() != null 
-                ? chuyenTauDangChon.getGioKhoiHanh().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")) 
-                : "N/A";
-            String thongTinPhai = "Ga đến: " + gaDen +
-                                 "\nGiờ khởi hành: " + gioKhoiHanh;
-            Label labelPhai = new Label(thongTinPhai);
-            labelPhai.setLayoutX(300);
-            labelPhai.setLayoutY(10);
-            labelPhai.setFont(Font.font("Tahoma", 11));
+                ? chuyenTauDangChon.getGioKhoiHanh().format(timeFormatter) : "N/A";
+            Tau_DAO tauDAO = new Tau_DAO();
+            Tau tau = tauDAO.timTauTheoMa(chuyenTauDangChon.getMaTau());
+            String tenTau = tau != null ? tau.getKyHieuTau() : "N/A";
+            String tenToa = toaDangChon != null ? toaDangChon.getTenToa() : "N/A";
+            String loaiToa = toaDangChon != null ? loaiToaToString(toaDangChon.getLoaiToa()) : "N/A";
+            String loaiKhachHang = loaiKhachHangToString(ve.getLoaiKhachHang());
+            String tenCho = choNgoi != null ? choNgoi.getTenChoNgoi() : "N/A";
+            String giaCho = currencyFormatter.format(ve.getGiaTien());
+
+            AnchorPane ticketPane = new AnchorPane();
+            ticketPane.setPrefHeight(paneHeight);
+            ticketPane.setPrefWidth(pnGioVe.getPrefWidth() - 20);
+            ticketPane.setLayoutX(10.0);
+            ticketPane.setLayoutY(yOffset);
+            ticketPane.setStyle("-fx-border-color: #cccccc; -fx-border-width: 1; -fx-background-color: #f9f9f9;");
+
+            double leftX = 10.0;
+            double rightMargin = 10.0;
+            double rowHeight = 20;
+            double labelYBase = 0.0;
+
+            Label gaDiLabel = new Label("Ga đi: "+gaDi);
+            gaDiLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setLeftAnchor(gaDiLabel, leftX);
+            AnchorPane.setTopAnchor(gaDiLabel, labelYBase);
+
+            Label gaDenLabel = new Label("Ga đến: "+gaDen);
+            gaDenLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setRightAnchor(gaDenLabel, rightMargin);
+            AnchorPane.setTopAnchor(gaDenLabel, labelYBase);
+
+            Label ngayKhoiHanhLabel = new Label("Ngày khởi hành: "+ngayKhoiHanh);
+            ngayKhoiHanhLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setLeftAnchor(ngayKhoiHanhLabel, leftX);
+            AnchorPane.setTopAnchor(ngayKhoiHanhLabel, rowHeight + labelYBase);
+
+            Label gioKhoiHanhLabel = new Label("Giờ: "+gioKhoiHanh);
+            gioKhoiHanhLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setRightAnchor(gioKhoiHanhLabel, rightMargin);
+            AnchorPane.setTopAnchor(gioKhoiHanhLabel, rowHeight + labelYBase);
+
+            Label tenTauLabel = new Label("Tàu: "+tenTau);
+            tenTauLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setLeftAnchor(tenTauLabel, leftX);
+            AnchorPane.setTopAnchor(tenTauLabel, 2 * rowHeight + labelYBase);
+
+            Label tenToaLabel = new Label("Toa: "+tenToa);
+            tenToaLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setRightAnchor(tenToaLabel, rightMargin);
+            AnchorPane.setTopAnchor(tenToaLabel, 2 * rowHeight + labelYBase);
+
+            Label loaiToaLabel = new Label("Loại: "+loaiToa);
+            loaiToaLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setLeftAnchor(loaiToaLabel, leftX);
+            AnchorPane.setTopAnchor(loaiToaLabel, 3 * rowHeight + labelYBase);
+
+            Label loaiKhachHangLabel = new Label("Loại khách hàng: "+loaiKhachHang);
+            loaiKhachHangLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setRightAnchor(loaiKhachHangLabel, rightMargin);
+            AnchorPane.setTopAnchor(loaiKhachHangLabel, 3 * rowHeight + labelYBase);
+
+            Label tenChoLabel = new Label("Chỗ: "+tenCho);
+            tenChoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setLeftAnchor(tenChoLabel, leftX);
+            AnchorPane.setTopAnchor(tenChoLabel, 4 * rowHeight + labelYBase);
+
+            Label giaChoLabel = new Label("Giá: "+giaCho);
+            giaChoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333333;");
+            AnchorPane.setRightAnchor(giaChoLabel, rightMargin);
+            AnchorPane.setTopAnchor(giaChoLabel, 4 * rowHeight + labelYBase);
 
             Button btnXoa = new Button("Xóa");
-            btnXoa.setLayoutX(400);
-            btnXoa.setLayoutY(165);
             btnXoa.setPrefSize(40, 25);
+            AnchorPane.setRightAnchor(btnXoa, 10.0);
+            AnchorPane.setBottomAnchor(btnXoa, 10.0);
             btnXoa.setOnAction(e -> {
                 ChoNgoi_DAO choNgoiDAOXoa = new ChoNgoi_DAO();
-                ChoNgoi choNgoi = danhSachChoNgoi.stream()
-                    .filter(cn -> cn.getMaChoNgoi().equals(veTam.getMaChoNgoi()))
+                ChoNgoi choNgoiXoa = danhSachChoNgoi.stream()
+                    .filter(cn -> cn.getMaChoNgoi().equals(ve.getMaChoNgoi()))
                     .findFirst()
                     .orElse(null);
-                if (choNgoi != null) {
-                    boolean updated = choNgoiDAOXoa.capNhatTrangThaiChoNgoi(choNgoi.getMaChoNgoi(), TrangThaiChoNgoi.chuaDat, chuyenTauDangChon.getMaChuyenTau());
+                if (choNgoiXoa != null) {
+                    boolean updated = choNgoiDAOXoa.capNhatTrangThaiChoNgoi(choNgoiXoa.getMaChoNgoi(), TrangThaiChoNgoi.chuaDat, chuyenTauDangChon.getMaChuyenTau());
                     if (updated) {
-                        choNgoi.setTrangThai(TrangThaiChoNgoi.chuaDat);
+                        choNgoiXoa.setTrangThai(TrangThaiChoNgoi.chuaDat);
                     } else {
-                        showErrorAlert("Không thể cập nhật trạng thái chỗ ngồi: " + choNgoi.getTenChoNgoi(), "image/canhBao.png");
+                        showErrorAlert("Không thể cập nhật trạng thái chỗ ngồi: " + choNgoiXoa.getTenChoNgoi(), "image/canhBao.png");
                         return;
                     }
                 }
 
-                danhSachVeXacNhan.remove(veTam);
-                capNhatTongVeVaTien();
-                pnGioVe.getChildren().remove(anchorPane);
-                
-                double newY = 10.0;
+                danhSachVeXacNhan.remove(ve);
+                pnGioVe.getChildren().remove(ticketPane);
+
+                double newY = padding;
                 for (Node node : pnGioVe.getChildren()) {
                     if (node instanceof AnchorPane) {
                         node.setLayoutY(newY);
-                        newY += 200 + 10;
+                        newY += paneHeight + spacing;
                     }
                 }
-                
-                double newChieuCao = 10 + (danhSachVeXacNhan.size() * 200) + (Math.max(0, danhSachVeXacNhan.size() - 1) * 10) + 10;
+
+                double newChieuCao = (danhSachVeXacNhan.size() * paneHeight) + ((danhSachVeXacNhan.size() - 1) * spacing) + (2 * padding);
                 pnGioVe.setPrefHeight(newChieuCao);
-                
-                capNhatGiaTamTinh();
-                capNhatTrangThaiNut(); // Cập nhật trạng thái nút, bao gồm btnTiepTheo
+
+                capNhatTongVeVaTien();
+                capNhatTrangThaiNut();
 
                 if (toaDangChon != null && chuyenTauDangChon != null) {
                     ChoNgoi_DAO choNgoiDAORefresh = new ChoNgoi_DAO();
@@ -1246,9 +1269,17 @@ public void initialize() {
                 }
             });
 
-            anchorPane.getChildren().addAll(rect, labelTrai, labelPhai, btnXoa);
-            pnGioVe.getChildren().add(anchorPane);
-            y += 200 + 10;
+            ticketPane.getChildren().addAll(
+                gaDiLabel, gaDenLabel,
+                ngayKhoiHanhLabel, gioKhoiHanhLabel,
+                tenTauLabel, tenToaLabel,
+                loaiToaLabel, loaiKhachHangLabel,
+                tenChoLabel, giaChoLabel,
+                btnXoa
+            );
+
+            pnGioVe.getChildren().add(ticketPane);
+            yOffset += paneHeight + spacing;
         }
 
         if (toaDangChon != null && chuyenTauDangChon != null) {
@@ -1278,18 +1309,16 @@ public void initialize() {
         selectedChoNgoiAnchorPanes.clear();
         danhSachVeTam.clear();
 
-        capNhatTrangThaiNut(); // Cập nhật trạng thái nút sau khi thêm vé
+        capNhatTrangThaiNut();
         capNhatGiaTamTinh();
         capNhatTongVeVaTien();
-    }
-    
+    }   
     @FXML 
     private TextField txtTongSoVe;
     
     @FXML 
     private TextField txtTongTienTamTinh;
     
-
     private void capNhatTongVeVaTien() {
         int soLuongVe = danhSachVeXacNhan.size();
         
@@ -1320,43 +1349,55 @@ public void initialize() {
             Optional<ButtonType> result = alert.showAndWait();
             
             if (result.isPresent() && result.get() == btnTiepTuc) {
-                // Người dùng chọn tiếp tục, xóa vé tạm
                 danhSachVeTam.clear();
                 selectedChoNgoiAnchorPanes.clear();
                 capNhatGiaTamTinh();
                 capNhatTrangThaiNut();
                 return true;
             } else {
-                // Người dùng chọn quay lại
                 return false;
             }
         }
-        return true; // Không có vé tạm, cho phép chuyển
+        return true;
     }
     
     @FXML
     private void btnTiepTheoClicked() {
         try {
-            // Tạo Stage mới cho ThanhToan_GUI
             Stage thanhToanStage = new Stage();
-            
-            // Khởi tạo ThanhToan_GUI với hai tham số
             new ThanhToan_GUI(thanhToanStage, maNhanVien, danhSachVeXacNhan);
             
-            // Căn giữa màn hình
             thanhToanStage.setOnShown(event -> {
                 thanhToanStage.setX((Screen.getPrimary().getVisualBounds().getWidth() - thanhToanStage.getWidth()) / 2);
                 thanhToanStage.setY((Screen.getPrimary().getVisualBounds().getHeight() - thanhToanStage.getHeight()) / 2);
             });
             
-            // Không cho phép thay đổi kích thước
             thanhToanStage.setResizable(false);
-            
-            // Hiển thị cửa sổ
             thanhToanStage.show();
         } catch (Exception e) {
             e.printStackTrace();
             showErrorAlert("Lỗi khi mở giao diện thanh toán: " + e.getMessage(), "image/canhBao.png");
+        }
+    }
+
+    private String loaiToaToString(LoaiToa loaiToa) {
+        if (loaiToa == null) return "Không xác định";
+        switch (loaiToa) {
+            case giuongNamDieuHoa: return "Giường nằm điều hòa";
+            case ngoiMemDieuHoa: return "Ngồi mềm điều hòa";
+            case gheCungDieuHoa: return "Ghế cứng điều hòa";
+            default: return loaiToa.toString();
+        }
+    }
+
+    private String loaiKhachHangToString(LoaiKhachHang loaiKhachHang) {
+        if (loaiKhachHang == null) return "Không xác định";
+        switch (loaiKhachHang) {
+            case nguoiLon: return "Người lớn";
+            case treEm: return "Trẻ em";
+            case sinhVien: return "Sinh viên";
+            case nguoiCaoTuoi: return "Người cao tuổi";
+            default: return loaiKhachHang.toString();
         }
     }
 }

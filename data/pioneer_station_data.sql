@@ -30,110 +30,8 @@ VALUES
 ('2024KH000008', N'Bùi Xuân Hoàng', '079123000008', '0914455667', 'buixuan.hoang@gmail.com', 'thanThiet', 'voHieuHoa'),
 ('2024KH000009', N'Ngô Thị Kim Ngân', '079123000009', '0988123456', 'ngothikim.ngan@gmail.com', 'thanThiet', 'hoatDong'),
 ('2024KH000010', N'Mai Văn Thanh Long', '079123000010', '0909876543', 'maivanthanh.long@gmail.com', 'thanThiet', 'hoatDong');
+go
 
--- Thêm 290 khách hàng nữa với tên đa dạng hơn
-DECLARE @i INT = 11;
-DECLARE @maKH VARCHAR(12);
-DECLARE @cccd VARCHAR(12);
-DECLARE @sdt VARCHAR(10);
-DECLARE @email VARCHAR(50);
-DECLARE @trangThai VARCHAR(10);
-DECLARE @loaiTV VARCHAR(10);
-
--- Danh sách họ phổ biến
-DECLARE @ho TABLE (id INT, ho NVARCHAR(20));
-INSERT INTO @ho VALUES 
-(1, N'Nguyễn'), (2, N'Trần'), (3, N'Lê'), (4, N'Phạm'), (5, N'Hoàng'),
-(6, N'Phan'), (7, N'Vũ'), (8, N'Võ'), (9, N'Đặng'), (10, N'Bùi'),
-(11, N'Đỗ'), (12, N'Hồ'), (13, N'Ngô'), (14, N'Dương'), (15, N'Lý'),
-(16, N'Đào'), (17, N'Đinh'), (18, N'Mai'), (19, N'Trương'), (20, N'Chu');
-
--- Danh sách tên đệm và tên nam
-DECLARE @tenNam TABLE (id INT, ten NVARCHAR(20));
-INSERT INTO @tenNam VALUES
-(1, N'Văn Anh'), (2, N'Văn Bình'), (3, N'Mạnh Cường'), (4, N'Đức Duy'),
-(5, N'Văn Đạt'), (6, N'Quang Hải'), (7, N'Minh Hiếu'), (8, N'Văn Khánh'),
-(9, N'Bảo Long'), (10, N'Thanh Nam'), (11, N'Văn Phúc'), (12, N'Quang Sáng'),
-(13, N'Văn Tài'), (14, N'Minh Thành'), (15, N'Văn Trường'), (16, N'Đình Tuấn'),
-(17, N'Văn Việt'), (18, N'Xuân Vũ'), (19, N'Văn Quân'), (20, N'Tiến Đạt');
-
--- Danh sách tên đệm và tên nữ
-DECLARE @tenNu TABLE (id INT, ten NVARCHAR(20));
-INSERT INTO @tenNu VALUES
-(1, N'Thị Ánh'), (2, N'Thị Bích'), (3, N'Thị Cẩm'), (4, N'Phương Diễm'),
-(5, N'Thị Giang'), (6, N'Thị Hà'), (7, N'Thị Hương'), (8, N'Thị Kiều'),
-(9, N'Thị Lan'), (10, N'Thị Mai'), (11, N'Phương Nga'), (12, N'Thị Ngọc'),
-(13, N'Thị Nhung'), (14, N'Thị Oanh'), (15, N'Thị Phương'), (16, N'Thị Quỳnh'),
-(17, N'Thị Thảo'), (18, N'Thị Uyên'), (19, N'Thị Vân'), (20, N'Thị Yến');
-
-WHILE @i <= 300
-BEGIN
-    SET @maKH = '2024KH' + RIGHT('000000' + CAST(@i AS VARCHAR(6)), 6);
-    SET @cccd = '079123' + RIGHT('000000' + CAST(@i AS VARCHAR(6)), 6);
-    SET @sdt = '09' + RIGHT('00000000' + CAST(CAST(RAND() * 99999999 AS INT) AS VARCHAR(8)), 8);
-    
-    -- Chọn ngẫu nhiên giới tính (50% nam, 50% nữ)
-    DECLARE @gioiTinh INT = CAST(RAND() * 2 AS INT) + 1;
-    
-    -- Tạo tên khách hàng
-    DECLARE @ten NVARCHAR(50);
-    DECLARE @hoKhach NVARCHAR(20);
-    DECLARE @tenDemVaTen NVARCHAR(20);
-    
-    -- Chọn họ ngẫu nhiên
-    SELECT @hoKhach = ho FROM @ho WHERE id = CAST(RAND() * 20 AS INT) + 1;
-    
-    -- Chọn tên theo giới tính
-    IF @gioiTinh = 1 -- Nam
-    BEGIN
-        SELECT @tenDemVaTen = ten FROM @tenNam WHERE id = CAST(RAND() * 20 AS INT) + 1;
-    END
-    ELSE -- Nữ
-    BEGIN
-        SELECT @tenDemVaTen = ten FROM @tenNu WHERE id = CAST(RAND() * 20 AS INT) + 1;
-    END
-    
-    SET @ten = @hoKhach + ' ' + @tenDemVaTen;
-    
--- Phần tạo email sửa lại như sau:
-SET @email = LOWER(
-    REPLACE(
-        REPLACE(
-            REPLACE(
-                REPLACE(
-                    REPLACE(
-                        REPLACE(
-                            REPLACE(
-                                REPLACE(@ten, N' ', ''),
-                                N'Đ', 'D'
-                            ),
-                            N'đ', 'd'
-                        ),
-                        N'áàảãạâấầẩẫậăắằẳẵặ', 'a'
-                    ),
-                    N'éèẻẽẹêếềểễệ', 'e'
-                ),
-                N'íìỉĩị', 'i'
-            ),
-            N'óòỏõọôốồổỗộơớờởỡợ', 'o'
-        ),
-        N'úùủũụưứừửữự', 'u'
-    ) 
-    + CAST(@i % 100 AS VARCHAR(2)) + '@gmail.com'
-);
-    
-    -- Xác định loại thành viên (80% thành thật, 20% thường)
-    SET @loaiTV = CASE WHEN @i % 5 = 0 THEN 'vip' ELSE 'thanThiet' END;
-    
-    -- Xác định trạng thái (90% hoạt động, 10% vô hiệu hóa)
-    SET @trangThai = CASE WHEN @i % 10 = 0 THEN 'voHieuHoa' ELSE 'hoatDong' END;
-    
-    INSERT INTO KhachHang (maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiThanhVien, trangThaiKhachHang)
-    VALUES (@maKH, @ten, @cccd, @sdt, @email, @loaiTV, @trangThai);
-    
-    SET @i = @i + 1;
-END;
-GO
 
 -- Tạo bảng NhanVien
 CREATE TABLE NhanVien (
@@ -193,12 +91,7 @@ VALUES
 ('2018GA0002', N'Ga Sài Gòn', N'1 Nguyễn Thông, Quận 3, TP.HCM'),
 ('2019GA0003', N'Ga Đà Nẵng', N'791 Hải Phòng, Thanh Khê, Đà Nẵng'),
 ('2021GA0004', N'Ga Huế', N'2 Bùi Thị Xuân, TP. Huế, Thừa Thiên Huế'),
-('2017GA0005', N'Ga Nha Trang', N'17 Thái Nguyên, Nha Trang, Khánh Hòa'),
-('2022GA0006', N'Ga Đồng Hới', N'20 Hữu Nghị, Đồng Hới, Quảng Bình'),
-('2020GA0007', N'Ga Thanh Hóa', N'Đường Lê Lai, TP. Thanh Hóa'),
-('2019GA0008', N'Ga Vinh', N'75 Quang Trung, TP. Vinh, Nghệ An'),
-('2021GA0009', N'Ga Hải Phòng', N'75 Lương Khánh Thiện, Hải Phòng'),
-('2018GA0010', N'Ga Đà Lạt', N'1 Quang Trung, Phường 9, Đà Lạt');
+('2021GA0009', N'Ga Hải Phòng', N'75 Lương Khánh Thiện, Hải Phòng');
 GO
 
 -- Tạo bảng TuyenTau
@@ -221,102 +114,27 @@ VALUES
 ('2025TT0001', '2020GA0001', '2018GA0002', 1726), -- Hà Nội to Sài Gòn
 ('2025TT0002', '2020GA0001', '2019GA0003', 800),  -- Hà Nội to Đà Nẵng
 ('2025TT0003', '2020GA0001', '2021GA0004', 650),  -- Hà Nội to Huế
-('2025TT0004', '2020GA0001', '2017GA0005', 1300), -- Hà Nội to Nha Trang
-('2025TT0005', '2020GA0001', '2022GA0006', 500),  -- Hà Nội to Đồng Hới
-('2025TT0006', '2020GA0001', '2020GA0007', 150),  -- Hà Nội to Thanh Hóa
-('2025TT0007', '2020GA0001', '2019GA0008', 300),  -- Hà Nội to Vinh
 ('2025TT0008', '2020GA0001', '2021GA0009', 100),  -- Hà Nội to Hải Phòng
-('2025TT0009', '2020GA0001', '2018GA0010', 1500), -- Hà Nội to Đà Lạt
 -- Sài Gòn (2018GA0002) to others
 ('2025TT0010', '2018GA0002', '2020GA0001', 1726), -- Sài Gòn to Hà Nội
 ('2025TT0011', '2018GA0002', '2019GA0003', 900),  -- Sài Gòn to Đà Nẵng
 ('2025TT0012', '2018GA0002', '2021GA0004', 1076), -- Sài Gòn to Huế
-('2025TT0013', '2018GA0002', '2017GA0005', 400),  -- Sài Gòn to Nha Trang
-('2025TT0014', '2018GA0002', '2022GA0006', 1226), -- Sài Gòn to Đồng Hới
-('2025TT0015', '2018GA0002', '2020GA0007', 1576), -- Sài Gòn to Thanh Hóa
-('2025TT0016', '2018GA0002', '2019GA0008', 1426), -- Sài Gòn to Vinh
 ('2025TT0017', '2018GA0002', '2021GA0009', 1826), -- Sài Gòn to Hải Phòng
-('2025TT0018', '2018GA0002', '2018GA0010', 600),  -- Sài Gòn to Đà Lạt
 -- Đà Nẵng (2019GA0003) to others
 ('2025TT0019', '2019GA0003', '2020GA0001', 800),  -- Đà Nẵng to Hà Nội
 ('2025TT0020', '2019GA0003', '2018GA0002', 900),  -- Đà Nẵng to Sài Gòn
 ('2025TT0021', '2019GA0003', '2021GA0004', 100),  -- Đà Nẵng to Huế
-('2025TT0022', '2019GA0003', '2017GA0005', 500),  -- Đà Nẵng to Nha Trang
-('2025TT0023', '2019GA0003', '2022GA0006', 300),  -- Đà Nẵng to Đồng Hới
-('2025TT0024', '2019GA0003', '2020GA0007', 650),  -- Đà Nẵng to Thanh Hóa
-('2025TT0025', '2019GA0003', '2019GA0008', 500),  -- Đà Nẵng to Vinh
 ('2025TT0026', '2019GA0003', '2021GA0009', 900),  -- Đà Nẵng to Hải Phòng
-('2025TT0027', '2019GA0003', '2018GA0010', 700),  -- Đà Nẵng to Đà Lạt
 -- Huế (2021GA0004) to others
 ('2025TT0028', '2021GA0004', '2020GA0001', 650),  -- Huế to Hà Nội
 ('2025TT0029', '2021GA0004', '2018GA0002', 1076), -- Huế to Sài Gòn
 ('2025TT0030', '2021GA0004', '2019GA0003', 100),  -- Huế to Đà Nẵng
-('2025TT0031', '2021GA0004', '2017GA0005', 650),  -- Huế to Nha Trang
-('2025TT0032', '2021GA0004', '2022GA0006', 150),  -- Huế to Đồng Hới
-('2025TT0033', '2021GA0004', '2020GA0007', 500),  -- Huế to Thanh Hóa
-('2025TT0034', '2021GA0004', '2019GA0008', 350),  -- Huế to Vinh
 ('2025TT0035', '2021GA0004', '2021GA0009', 750),  -- Huế to Hải Phòng
-('2025TT0036', '2021GA0004', '2018GA0010', 850),  -- Huế to Đà Lạt
--- Nha Trang (2017GA0005) to others
-('2025TT0037', '2017GA0005', '2020GA0001', 1300), -- Nha Trang to Hà Nội
-('2025TT0038', '2017GA0005', '2018GA0002', 400),  -- Nha Trang to Sài Gòn
-('2025TT0039', '2017GA0005', '2019GA0003', 500),  -- Nha Trang to Đà Nẵng
-('2025TT0040', '2017GA0005', '2021GA0004', 650),  -- Nha Trang to Huế
-('2025TT0041', '2017GA0005', '2022GA0006', 800),  -- Nha Trang to Đồng Hới
-('2025TT0042', '2017GA0005', '2020GA0007', 1150), -- Nha Trang to Thanh Hóa
-('2025TT0043', '2017GA0005', '2019GA0008', 1000), -- Nha Trang to Vinh
-('2025TT0044', '2017GA0005', '2021GA0009', 1400), -- Nha Trang to Hải Phòng
-('2025TT0045', '2017GA0005', '2018GA0010', 200),  -- Nha Trang to Đà Lạt
--- Đồng Hới (2022GA0006) to others
-('2025TT0046', '2022GA0006', '2020GA0001', 500),  -- Đồng Hới to Hà Nội
-('2025TT0047', '2022GA0006', '2018GA0002', 1226), -- Đồng Hới to Sài Gòn
-('2025TT0048', '2022GA0006', '2019GA0003', 300),  -- Đồng Hới to Đà Nẵng
-('2025TT0049', '2022GA0006', '2021GA0004', 150),  -- Đồng Hới to Huế
-('2025TT0050', '2022GA0006', '2017GA0005', 800),  -- Đồng Hới to Nha Trang
-('2025TT0051', '2022GA0006', '2020GA0007', 350),  -- Đồng Hới to Thanh Hóa
-('2025TT0052', '2022GA0006', '2019GA0008', 200),  -- Đồng Hới to Vinh
-('2025TT0053', '2022GA0006', '2021GA0009', 600),  -- Đồng Hới to Hải Phòng
-('2025TT0054', '2022GA0006', '2018GA0010', 1000), -- Đồng Hới to Đà Lạt
--- Thanh Hóa (2020GA0007) to others
-('2025TT0055', '2020GA0007', '2020GA0001', 150),  -- Thanh Hóa to Hà Nội
-('2025TT0056', '2020GA0007', '2018GA0002', 1576), -- Thanh Hóa to Sài Gòn
-('2025TT0057', '2020GA0007', '2019GA0003', 650),  -- Thanh Hóa to Đà Nẵng
-('2025TT0058', '2020GA0007', '2021GA0004', 500),  -- Thanh Hóa to Huế
-('2025TT0059', '2020GA0007', '2017GA0005', 1150), -- Thanh Hóa to Nha Trang
-('2025TT0060', '2020GA0007', '2022GA0006', 350),  -- Thanh Hóa to Đồng Hới
-('2025TT0061', '2020GA0007', '2019GA0008', 150),  -- Thanh Hóa to Vinh
-('2025TT0062', '2020GA0007', '2021GA0009', 250),  -- Thanh Hóa to Hải Phòng
-('2025TT0063', '2020GA0007', '2018GA0010', 1350), -- Thanh Hóa to Đà Lạt
--- Vinh (2019GA0008) to others
-('2025TT0064', '2019GA0008', '2020GA0001', 300),  -- Vinh to Hà Nội
-('2025TT0065', '2019GA0008', '2018GA0002', 1426), -- Vinh to Sài Gòn
-('2025TT0066', '2019GA0008', '2019GA0003', 500),  -- Vinh to Đà Nẵng
-('2025TT0067', '2019GA0008', '2021GA0004', 350),  -- Vinh to Huế
-('2025TT0068', '2019GA0008', '2017GA0005', 1000), -- Vinh to Nha Trang
-('2025TT0069', '2019GA0008', '2022GA0006', 200),  -- Vinh to Đồng Hới
-('2025TT0070', '2019GA0008', '2020GA0007', 150),  -- Vinh to Thanh Hóa
-('2025TT0071', '2019GA0008', '2021GA0009', 400),  -- Vinh to Hải Phòng
-('2025TT0072', '2019GA0008', '2018GA0010', 1200), -- Vinh to Đà Lạt
 -- Hải Phòng (2021GA0009) to others
 ('2025TT0073', '2021GA0009', '2020GA0001', 100),  -- Hải Phòng to Hà Nội
 ('2025TT0074', '2021GA0009', '2018GA0002', 1826), -- Hải Phòng to Sài Gòn
 ('2025TT0075', '2021GA0009', '2019GA0003', 900),  -- Hải Phòng to Đà Nẵng
-('2025TT0076', '2021GA0009', '2021GA0004', 750),  -- Hải Phòng to Huế
-('2025TT0077', '2021GA0009', '2017GA0005', 1400), -- Hải Phòng to Nha Trang
-('2025TT0078', '2021GA0009', '2022GA0006', 600),  -- Hải Phòng to Đồng Hới
-('2025TT0079', '2021GA0009', '2020GA0007', 250),  -- Hải Phòng to Thanh Hóa
-('2025TT0080', '2021GA0009', '2019GA0008', 400),  -- Hải Phòng to Vinh
-('2025TT0081', '2021GA0009', '2018GA0010', 1600), -- Hải Phòng to Đà Lạt
--- Đà Lạt (2018GA0010) to others
-('2025TT0082', '2018GA0010', '2020GA0001', 1500), -- Đà Lạt to Hà Nội
-('2025TT0083', '2018GA0010', '2018GA0002', 600),  -- Đà Lạt to Sài Gòn
-('2025TT0084', '2018GA0010', '2019GA0003', 700),  -- Đà Lạt to Đà Nẵng
-('2025TT0085', '2018GA0010', '2021GA0004', 850),  -- Đà Lạt to Huế
-('2025TT0086', '2018GA0010', '2017GA0005', 200),  -- Đà Lạt to Nha Trang
-('2025TT0087', '2018GA0010', '2022GA0006', 1000), -- Đà Lạt to Đồng Hới
-('2025TT0088', '2018GA0010', '2020GA0007', 1350), -- Đà Lạt to Thanh Hóa
-('2025TT0089', '2018GA0010', '2019GA0008', 1200), -- Đà Lạt to Vinh
-('2025TT0090', '2018GA0010', '2021GA0009', 1600); -- Đà Lạt to Hải Phòng
+('2025TT0076', '2021GA0009', '2021GA0004', 750);  -- Hải Phòng to Huế
 GO
 
 -- Tạo bảng Tau
@@ -328,14 +146,14 @@ CREATE TABLE Tau (
 );
 GO
 
--- Chèn 30 tàu SE (Sài Gòn Express)
+-- Chèn 15 tàu SE (Sài Gòn Express)
 DECLARE @i INT = 1;
 DECLARE @year INT;
 DECLARE @maTau VARCHAR(20);
 DECLARE @tenTau NVARCHAR(100);
 DECLARE @trangThai VARCHAR(20);
 
-WHILE @i <= 30
+WHILE @i <= 15
 BEGIN
     -- Chọn năm ngẫu nhiên từ 2015 đến 2025
     SET @year = 2015 + CAST(RAND() * 11 AS INT);
@@ -353,14 +171,14 @@ BEGIN
 END;
 GO
 
--- Chèn 30 tàu TN (Thống Nhất)
+-- Chèn 15 tàu TN (Thống Nhất)
 DECLARE @j INT = 1;
 DECLARE @yearTN INT;
 DECLARE @maTauTN VARCHAR(20);
 DECLARE @tenTauTN NVARCHAR(100);
 DECLARE @trangThaiTN VARCHAR(20);
 
-WHILE @j <= 30
+WHILE @j <= 15
 BEGIN
     -- Chọn năm ngẫu nhiên từ 2010 đến 2025
     SET @yearTN = 2010 + CAST(RAND() * 16 AS INT);
@@ -657,7 +475,7 @@ DECLARE @tenChoNgoi NVARCHAR(50);
 DECLARE @giaCho DECIMAL(10, 2);
 
 -- Cursor để duyệt qua các chuyến tàu
-DECLARE cursorChuyenTau CURSOR LOCAL FOR  -- Thêm LOCAL để tránh xung đột
+DECLARE cursorChuyenTau CURSOR LOCAL FOR
 SELECT ct.maChuyenTau, ct.maTau, t.loaiTau
 FROM ChuyenTau ct
 JOIN Tau t ON ct.maTau = t.maTau;
@@ -670,11 +488,11 @@ BEGIN
     PRINT 'Đang xử lý chuyến tàu: ' + @maChuyenTau;
     
     -- Cursor để duyệt qua các toa hoạt động của tàu
-    DECLARE cursorToa CURSOR LOCAL FOR  -- Thêm LOCAL
+    DECLARE cursorToa CURSOR LOCAL FOR
     SELECT maToa, tenToa, loaiToa
     FROM Toa
     WHERE maTau = @maTau AND trangThai = 'hoatDong'
-    ORDER BY maToa;  -- Thêm ORDER BY để đảm bảo thứ tự
+    ORDER BY maToa;
 
     OPEN cursorToa;
     FETCH NEXT FROM cursorToa INTO @maToa, @tenToa, @loaiToa;
@@ -738,7 +556,7 @@ BEGIN
     END;
 
     CLOSE cursorToa;
-    DEALLOCATE cursorToa;  -- Giải phóng cursor sau khi dùng
+    DEALLOCATE cursorToa;
 
     FETCH NEXT FROM cursorChuyenTau INTO @maChuyenTau, @maTau, @loaiTau;
 END;
@@ -748,5 +566,24 @@ DEALLOCATE cursorChuyenTau;
 
 PRINT 'Hoàn thành tạo dữ liệu chỗ ngồi';
 SET NOCOUNT OFF;
+GO
+
+CREATE TABLE KhuyenMai (
+    maKhuyenMai VARCHAR(20) PRIMARY KEY,
+    tenKhuyenMai NVARCHAR(100) NOT NULL,
+    phanTramGiamGia FLOAT NOT NULL CHECK (phanTramGiamGia >= 0 AND phanTramGiamGia <= 100),
+    ngayBatDau DATE NOT NULL,
+    ngayKetThuc DATE NOT NULL,
+    CHECK (ngayKetThuc >= ngayBatDau)
+);
+GO
+
+INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, phanTramGiamGia, ngayBatDau, ngayKetThuc)
+VALUES 
+    ('14042025KM0001', N'30/4 - 1/5 tại nhà ga', 10, '2025-04-14', '2025-05-01'),
+    ('19042025KM0002', N'Cuối tuần tháng 4 tại nhà ga', 15, '2025-04-19', '2025-04-27'),
+    ('01052025KM0003', N'Tháng 5 tại nhà ga', 20, '2025-05-01', '2025-05-31'),
+    ('29052025KM0004', N'Quốc tế Thiếu nhi 1/6 tại nhà ga', 25, '2025-05-29', '2025-06-03'),
+    ('04062025KM0005', N'Đầu tháng 6 tại nhà ga', 5, '2025-06-04', '2025-06-14');
 GO
 

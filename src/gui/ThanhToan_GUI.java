@@ -1,11 +1,13 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import entity.VeTam;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -19,6 +21,14 @@ public class ThanhToan_GUI {
         controller.setDanhSachVeXacNhan(danhSachVeXacNhan);
         controller.initializeData();
 
+        try {
+            File iconFile = new File("image/icon.png");
+            Image icon = new Image(iconFile.toURI().toString());
+            stage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.err.println("Không tải được icon: " + e.getMessage());
+        }
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Thanh Toán");
