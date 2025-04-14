@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="pnHome" fx:id="pnHome" prefHeight="795.0" prefWidth="1540.0" stylesheets="@Home_GUI.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar id="menuBar" fx:id="menuBar" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="1540.0">
+        <menus>
+          <Menu id="menuTroGiup" fx:id="menuTroGiup" mnemonicParsing="false" text="Trợ giúp">
+            <items>
+                  <MenuItem id="itemThongTinPhanMem" fx:id="itemThongTinPhanMem" mnemonicParsing="false" text="Thông tin phần mềm" />
+              <MenuItem id="itemHuongDanSuDung" fx:id="itemHuongDanSuDung" mnemonicParsing="false" text="Hướng dẫn sử dụng" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane layoutY="27.0" prefHeight="768.0" prefWidth="234.0" style="-fx-background-color: #000000;">
+         <children>
+            <Label id="lblQuanLyBanVe" fx:id="lblQuanLyBanVe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="70.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý bán vé         " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyBanVe" fx:id="imgQuanLyBanVe" fitHeight="70.0" fitWidth="60.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_QuanLyBanVe.png" />
+               </image>
+            </ImageView>
+            <Label id="lblTrangChu" fx:id="lblTrangChu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Trang chủ                 " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgTrangChu" fx:id="imgTrangChu" fitHeight="70.0" fitWidth="60.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_TrangChu.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyLichSu" fx:id="lblQuanLyLichSu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="140.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý lịch sử         " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyLichSu" fx:id="imgQuanLyLichSu" fitHeight="70.0" fitWidth="60.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_LichSuBanVe.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyVe" fx:id="lblQuanLyVe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="210.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý vé                " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyVe" fx:id="imgQuanLyVe" fitHeight="70.0" fitWidth="60.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_QuanLyVe.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyHoaDon" fx:id="lblQuanLyHoaDon" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="280.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý hóa đơn      " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyHoaDon" fx:id="imgQuanLyHoaDon" fitHeight="70.0" fitWidth="60.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_HoaDon.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyKhachHang" fx:id="lblQuanLyKhachHang" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="349.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý khách hàng " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyKhachHang" fx:id="imgQuanLyKhachHang" fitHeight="70.0" fitWidth="60.0" layoutY="354.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_KhachHang.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyNhanVien" fx:id="lblQuanLyNhanVien" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="419.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý nhân viên    " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyKhachHang" fx:id="imgQuanLyNhanVien" fitHeight="70.0" fitWidth="60.0" layoutY="424.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_NhanVien.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyChuyenTau" fx:id="lblQuanLyChuyenTau" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="489.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý chuyến tàu  " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyChuyenTau" fx:id="imgQuanLyChuyenTau" fitHeight="70.0" fitWidth="60.0" layoutY="494.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_ChuyenTau.png" />
+               </image>
+            </ImageView>
+            <Label id="lblThongKe" fx:id="lblThongKe" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="559.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Thống kê                  " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgThongKe" fx:id="imgThongKe" fitHeight="70.0" fitWidth="60.0" layoutY="564.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_ThongKe.png" />
+               </image>
+            </ImageView>
+            <Label id="lblQuanLyTaiKhoan" fx:id="lblQuanLyTaiKhoan" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="629.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý tài khoản    " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgQuanLyTaiKhoan" fx:id="imgQuanLyTaiKhoan" fitHeight="70.0" fitWidth="60.0" layoutY="634.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_TaiKhoan.png" />
+               </image>
+            </ImageView>
+            <Label id="lblDangXuat" fx:id="lblDangXuat" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="699.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Đăng xuất                " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView id="imgDangXuat" fx:id="imgDangXuat" fitHeight="70.0" fitWidth="60.0" layoutY="704.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_DangXuat.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
+         <children>
+            
+            <!-- Phần mới thêm -->
+            <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/Menu_NhanVien.png" />
+               </image>
+            </ImageView>
+            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label id="lblTenNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="25.0" text="Tên nhân viên: " textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="11.0" />
+               </font>
+            </Label>
+            <Label id="lblChucVu" fx:id="lblChucVu" layoutX="70.0" layoutY="42.0" text="Chức vụ:" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
