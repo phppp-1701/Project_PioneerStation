@@ -327,7 +327,7 @@ public class ChuyenTau_DAO {
                 LocalDateTime thoiGianCu = LocalDateTime.of(ngayCu, gioCu);
                 long khoangCachGiay = Math.abs(Duration.between(thoiGianMoi, thoiGianCu).getSeconds());
                 System.out.println("So sánh: maChuyenTau = " + maChuyenTau + ", khoangCach = " + khoangCachGiay);
-                if (khoangCachGiay < 1) {
+                if (khoangCachGiay < 86400) {
                     System.out.println("Xung đột thời gian: " + maChuyenTau);
                     return false;
                 }
