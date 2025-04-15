@@ -79,7 +79,7 @@
                   <Image url="@../../image/Menu_HoaDon.png" />
                </image>
             </ImageView>
-            <Label id="lblQuanLyKhachHang" fx:id="lblQuanLyKhachHang" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="349.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" text="Quản lý khách hàng " textFill="WHITE">
+            <Label id="lblQuanLyKhachHang" fx:id="lblQuanLyKhachHang" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="349.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" text="Quản lý khách hàng " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -89,7 +89,7 @@
                   <Image url="@../../image/Menu_KhachHang.png" />
                </image>
             </ImageView>
-            <Label id="lblQuanLyNhanVien" fx:id="lblQuanLyNhanVien" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="419.0" prefHeight="70.0" prefWidth="234.0" styleClass="now-label" stylesheets="@QuanLyBanVe_GUI.css" text="Quản lý nhân viên    " textFill="WHITE">
+            <Label id="lblQuanLyNhanVien" fx:id="lblQuanLyNhanVien" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="419.0" prefHeight="70.0" prefWidth="234.0" styleClass="menu-label" stylesheets="@QuanLyBanVe_GUI.css" text="Quản lý nhân viên    " textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -154,7 +154,7 @@
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font></Label>
-            <TextField id="txtMa" fx:id="txtMa" layoutX="216.0" layoutY="86.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtMaKhachHang" disable="true" editable="false" layoutX="216.0" layoutY="86.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font></TextField>
@@ -181,17 +181,17 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField id="txtMa" fx:id="txtMa1" layoutX="603.0" layoutY="87.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtTenKhachHang" layoutX="603.0" layoutY="87.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <TextField id="txtMa" fx:id="txtMa2" layoutX="216.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtCCCD_HoChieu" layoutX="216.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <TextField id="txtMa" fx:id="txtMa21" layoutX="216.0" layoutY="180.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtEmail" layoutX="216.0" layoutY="180.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -201,18 +201,23 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField id="txtMa" fx:id="txtMa212" layoutX="603.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
+            <TextField id="txtMa" fx:id="txtSoDienThoai" layoutX="603.0" layoutY="132.0" prefHeight="26.0" prefWidth="234.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <ComboBox layoutX="603.0" layoutY="182.0" prefHeight="26.0" prefWidth="234.0" />
+            <ComboBox fx:id="cboLoaiKhachHang" layoutX="603.0" layoutY="182.0" prefHeight="26.0" prefWidth="234.0" />
             <Label layoutX="102.0" layoutY="232.0" text="Trạng thái:">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <ComboBox layoutX="216.0" layoutY="228.0" prefHeight="26.0" prefWidth="234.0" />
+            <ComboBox fx:id="cboTrangThai" layoutX="216.0" layoutY="228.0" prefHeight="26.0" prefWidth="234.0" />
+            <Button fx:id="btnLamRong" layoutX="505.0" layoutY="227.0" mnemonicParsing="false" onAction="#btnLamRongClicked" styleClass="btn-lamRong" text="Làm rỗng" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">
@@ -220,12 +225,12 @@
             
             <!-- Phần mới thêm -->
             <Rectangle id="recThongTinNhanVien" fx:id="recThongTinNhanVien" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="70.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="recThongTinNhanVien" width="234.0" />
-            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="imgAnhNhanVien" fx:id="imgAnhNhanVien" fitHeight="60.0" fitWidth="63.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/Menu_NhanVien.png" />
                </image>
             </ImageView>
-            <Label id="lblMaNhanVien" fx:id="lblTenNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
+            <Label id="lblMaNhanVien" fx:id="lblMaNhanVien" layoutX="69.0" layoutY="5.0" text="Mã nhân viên: " textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
@@ -289,11 +294,12 @@
             <TableView fx:id="tbDanhSachKhachHang" layoutY="60.0" prefHeight="291.0" prefWidth="762.0" styleClass="tbDS">
               <columns>
                 <TableColumn fx:id="colStt" prefWidth="41.5999755859375" text="STT" />
-                  <TableColumn fx:id="colMaKhachHang" prefWidth="124.00003051757812" text="Mã khách hàng" />
-                  <TableColumn fx:id="colTen" prefWidth="154.40005493164062" text="Tên" />
-                  <TableColumn fx:id="colSoDienThoai" prefWidth="168.79998779296875" text="Số điện thoại" />
-                  <TableColumn fx:id="colEmail" prefWidth="156.800048828125" text="Email" />
-                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="116.800048828125" text="Loại khách hàng" />
+                  <TableColumn fx:id="colMaKhachHang" prefWidth="92.0" text="Mã khách hàng" />
+                  <TableColumn fx:id="colTen" prefWidth="164.79995727539062" text="Tên" />
+                  <TableColumn fx:id="colSoDienThoai" prefWidth="104.0" text="Số điện thoại" />
+                  <TableColumn fx:id="colEmail" prefWidth="183.20001220703125" text="Email" />
+                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="92.00006103515625" text="Loại" />
+                  <TableColumn fx:id="colTrangThaiKhachHang" prefWidth="85.5999755859375" text="Trạng thái" />
               </columns>
             </TableView>
          </children>
@@ -303,12 +309,12 @@
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button layoutX="1290.0" layoutY="449.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="171.0" styleClass="btn-themKhachHang" text="Thêm khách hàng" textFill="WHITE">
+      <Button fx:id="btnThemKhachHang" layoutX="1290.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnThemKhachHangClicked" prefHeight="31.0" prefWidth="171.0" styleClass="btn-themKhachHang" text="Thêm khách hàng" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
       </Button>
-      <Button layoutX="1290.0" layoutY="500.0" mnemonicParsing="false" styleClass="btn-capNhatKhachHang" text="Cập nhật khách hàng" textFill="WHITE">
+      <Button fx:id="btnCapNhat" layoutX="1290.0" layoutY="500.0" mnemonicParsing="false" onAction="#btnCapNhatClicked" styleClass="btn-capNhatKhachHang" text="Cập nhật khách hàng" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>

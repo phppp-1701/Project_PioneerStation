@@ -5,14 +5,16 @@ public class ChoNgoi {
     private String maCho;
     private String tenCho;
     private TrangThaiCho trangThaiCho;
+    private Toa maToa;
 
     public ChoNgoi() {
     }
 
-    public ChoNgoi(String maCho, String tenCho, TrangThaiCho trangThaiCho) {
+    public ChoNgoi(String maCho, String tenCho, TrangThaiCho trangThaiCho, Toa maToa) {
         this.maCho = maCho;
         this.tenCho = tenCho;
         this.trangThaiCho = trangThaiCho;
+        this.maToa = maToa;
     }
 
     public String getMaCho() {
@@ -30,8 +32,16 @@ public class ChoNgoi {
     public void setTenCho(String tenCho) {
         this.tenCho = tenCho;
     }
+   
+    public Toa getMaToa() {
+		return maToa;
+	}
 
-    public TrangThaiCho getTrangThaiCho() {
+	public void setMaToa(Toa maToa) {
+		this.maToa = maToa;
+	}
+
+	public TrangThaiCho getTrangThaiCho() {
         return trangThaiCho;
     }
 

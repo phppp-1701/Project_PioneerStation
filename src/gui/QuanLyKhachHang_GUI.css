@@ -1,29 +1,22 @@
 /* Áp dụng cho Label có class="menu-label" */
 .menu-label {
     -fx-background-color: #66CCCC;  /* Màu nền mặc định */
-    -fx-background-insets: 0;       /* Quan trọng: loại bỏ khoảng cách thừa */
-    -fx-padding: 0 10px 0 0;       /* Căn lề phải (tuỳ chỉnh theo bố cục) */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 1);
 }
 
 /* Hiệu ứng hover */
 .menu-label:hover {
     -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
     -fx-cursor: hand;                        /* Biến chuột thành bàn tay */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.5, 0, 2);
 }
 
 .now-label {
     -fx-background-color: #2E7D32;
-    -fx-background-insets: 0;     
-    -fx-padding: 0 10px 0 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 1);
 }
 
-.now-label:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.5, 0, 2);
+.now-label:hover{
+	-fx-background-color: #FFD700;
+	-fx-cursor: hand;  
 }
-
 .recThongTinNhanVien {
     -fx-fill: #66CCCC;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
@@ -77,6 +70,15 @@
 }
 
 .btn-voHieuHoa:hover{
+    -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
+    -fx-cursor: hand;	
+}
+
+.btn-lamRong{
+	-fx-background-color:#FF8C00;
+}
+
+.btn-lamRong:hover{
     -fx-background-color: #FFD700 !important; /* Màu nền khi hover */
     -fx-cursor: hand;	
 }
