@@ -182,7 +182,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="129.0" layoutY="69.0" prefHeight="28.0" prefWidth="300.0">
+            <TextField fx:id="txtTimTenKhachHang" layoutX="129.0" layoutY="69.0" prefHeight="28.0" prefWidth="300.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -192,18 +192,18 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <DatePicker layoutX="578.0" layoutY="69.0" prefHeight="28.0" prefWidth="300.0" />
+            <DatePicker fx:id="dpTimNgayLapHoaDon" layoutX="578.0" layoutY="69.0" prefHeight="28.0" prefWidth="300.0" />
             <Label layoutX="14.0" layoutY="112.0" text="Số điện thoại:">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="129.0" layoutY="107.0" prefHeight="28.0" prefWidth="300.0">
+            <TextField fx:id="txtTimSoDienThoai" layoutX="129.0" layoutY="107.0" prefHeight="28.0" prefWidth="300.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <Button layoutX="928.0" layoutY="90.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="78.0" styleClass="btn-tim" text="Tìm" textFill="WHITE">
+            <Button fx:id="btnTimHoaDon" layoutX="928.0" layoutY="90.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="78.0" onAction="#btnTimHoaDonClicked" styleClass="btn-tim" text="Tìm" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -218,16 +218,16 @@
                   <Font name="Tahoma Bold" size="16.0" />
                </font>
             </Label>
-            <TableView layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
+            <TableView fx:id="tbDanhSachHoaDon" layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
               <columns>
-                <TableColumn prefWidth="36.79998779296875" text="STT" />
-                <TableColumn prefWidth="104.0" text="Mã hóa đơn" />
-                  <TableColumn prefWidth="119.99993896484375" text="Ngày lập hóa đơn" />
-                  <TableColumn prefWidth="113.60006713867188" text="Tên khách hàng" />
-                  <TableColumn prefWidth="107.20001220703125" text="Loại khách hàng" />
-                  <TableColumn prefWidth="96.7999267578125" text="Tên nhân viên" />
-                  <TableColumn prefWidth="60.00006103515625" text="PTTT" />
-                  <TableColumn prefWidth="91.99997558593748" text="Thành tiền" />
+                <TableColumn fx:id="colStt" prefWidth="36.79998779296875" text="STT" />
+                <TableColumn fx:id="colMaHoaDon" prefWidth="104.0" text="Mã hóa đơn" />
+                  <TableColumn fx:id="colNgayLapHoaDon" prefWidth="119.99993896484375" text="Ngày lập hóa đơn" />
+                  <TableColumn fx:id="colTenKhachHang" prefWidth="113.60006713867188" text="Tên khách hàng" />
+                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="107.20001220703125" text="Loại khách hàng" />
+                  <TableColumn fx:id="colTenNhanVien" prefWidth="96.7999267578125" text="Tên nhân viên" />
+                  <TableColumn fx:id="colPTTT" prefWidth="60.00006103515625" text="PTTT" />
+                  <TableColumn fx:id="colThanhTien" prefWidth="91.99997558593748" text="Thành tiền" />
               </columns>
             </TableView>
          </children>
@@ -251,12 +251,12 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="227.0" layoutY="70.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtMaHoaDon" layoutX="227.0" layoutY="70.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </TextField>
-            <TextField layoutX="227.0" layoutY="112.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtNgayLapHoaDon" layoutX="227.0" layoutY="112.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -266,7 +266,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="227.0" layoutY="154.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtTenKhachHang" layoutX="227.0" layoutY="154.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -276,7 +276,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="227.0" layoutY="199.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtLoaiKhachHang" layoutX="227.0" layoutY="199.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -286,7 +286,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="227.0" layoutY="241.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtTenNhanVien" layoutX="227.0" layoutY="241.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -296,7 +296,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="285.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtKhuyenMai" layoutX="229.0" layoutY="285.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -306,7 +306,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="329.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtPhanTramGiamGia" layoutX="229.0" layoutY="329.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -316,7 +316,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="370.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtThanhTien" layoutX="229.0" layoutY="370.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -326,7 +326,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="410.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtPTTT" layoutX="229.0" layoutY="410.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -336,7 +336,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="455.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtTienKhachDua" layoutX="229.0" layoutY="455.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -346,7 +346,7 @@
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="229.0" layoutY="498.0" prefHeight="28.0" prefWidth="286.0">
+            <TextField fx:id="txtTienTraLai" layoutX="229.0" layoutY="498.0" prefHeight="28.0" prefWidth="286.0">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
@@ -370,22 +370,22 @@
       </Button>
       <AnchorPane layoutX="249.0" layoutY="474.0" prefHeight="246.0" prefWidth="730.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="#ffffff00" strokeType="INSIDE" width="729.0" />
+            <Rectangle fx:id="tbDanhSacchVe" arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="60.0" stroke="#ffffff00" strokeType="INSIDE" width="729.0" />
             <Label layoutX="311.0" layoutY="20.0" text="Danh sách vé" textFill="WHITE">
                <font>
                   <Font name="Tahoma Bold" size="16.0" />
                </font>
             </Label>
-            <TableView layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
+            <TableView fx:id="colGhe" layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
                <columns>
-                  <TableColumn prefWidth="36.79998779296875" text="STT" />
-                  <TableColumn prefWidth="104.0" text="Mã vé" />
-                  <TableColumn prefWidth="112.0" text="Chuyến tàu" />
-                  <TableColumn prefWidth="59.20001220703125" text="Toa" />
+                  <TableColumn fx:id="colSttVe" prefWidth="36.79998779296875" text="STT" />
+                  <TableColumn fx:id="colMaVe" prefWidth="104.0" text="Mã vé" />
+                  <TableColumn fx:id="colChuyenTau" prefWidth="112.0" text="Chuyến tàu" />
+                  <TableColumn fx:id="colToa" prefWidth="59.20001220703125" text="Toa" />
                   <TableColumn prefWidth="72.79998779296875" text="Ghế" />
-                  <TableColumn prefWidth="96.0" text="Ga đi" />
-                  <TableColumn prefWidth="96.800048828125" text="Ga đến" />
-                  <TableColumn prefWidth="161.59991455078125" text="Giá thành" />
+                  <TableColumn fx:id="colGaDi" prefWidth="96.0" text="Ga đi" />
+                  <TableColumn fx:id="colGaDen" prefWidth="96.800048828125" text="Ga đến" />
+                  <TableColumn fx:id="colGiaThanh" prefWidth="161.59991455078125" text="Giá thành" />
                </columns>
             </TableView>
          </children>

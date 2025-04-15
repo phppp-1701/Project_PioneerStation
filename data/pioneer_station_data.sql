@@ -581,7 +581,7 @@ GO
 
 INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, phanTramGiamGia, ngayBatDau, ngayKetThuc)
 VALUES 
-<<<<<<< HEAD
+
     ('14042025KM0001', N'30/4 - 1/5 tại nhà ga', 10, '2025-04-30', '2025-05-01'),
     ('19042025KM0002', N'Tháng 4 may mắn (14/04 - 20/04)', 15, '2025-04-14', '2025-04-20'),
     ('01052025KM0003', N'Tri ân tháng 5 (01/05 - 31/05)', 20, '2025-05-01', '2025-05-31'),
@@ -605,7 +605,14 @@ CREATE TABLE HoaDon (
     FOREIGN KEY (maKhachHang) REFERENCES KhachHang(maKhachHang)
 );
 go
-
+INSERT INTO HoaDon (maHoaDon, ngayTaoHoaDon, phuongThucThanhToan, phanTramGiamGia, tienKhachDua, thanhTien, tienTraLai, maKhuyenMai, maNhanVien, maKhachHang
+) VALUES 
+    ('HD001', '2025-04-14', 'tienMat', 10.00, 1000000.00, 900000.00, 100000.00, '14042025KM0001', '2024NV000001', '2024KH000001'),
+    ('HD002', '2025-04-15', 'atm', 0.00, 500000.00, 500000.00, 0.00, '14042025KM0001', '2024NV000001', 'KH002'),
+    ('HD003', '2025-04-15', 'internetBanking', 20.00, 1200000.00, 960000.00, 240000.00, '14042025KM0001', '2024NV000001', '2024KH000001'),
+    ('HD004', '2025-04-16', 'tienMat', 5.00, 300000.00, 285000.00, 15000.00, '14042025KM0001', '2024NV000001', '2024KH000001'),
+    ('HD005', '2025-04-16', 'atm', 0.00, 750000.00, 750000.00, 0.00, '14042025KM0001', '2024NV000001', '2024KH000001');
+go
 CREATE TABLE Ve (
     maVe VARCHAR(50) PRIMARY KEY,
     ngayTaoVe DATE NOT NULL,
@@ -621,12 +628,9 @@ CREATE TABLE Ve (
     FOREIGN KEY (maChoNgoi) REFERENCES ChoNgoi(maChoNgoi)
 );
 go
-=======
     ('14042025KM0001', N'30/4 - 1/5 tại nhà ga', 10, '2025-04-14', '2025-05-01'),
     ('19042025KM0002', N'Cuối tuần tháng 4 tại nhà ga', 15, '2025-04-19', '2025-04-27'),
     ('01052025KM0003', N'Tháng 5 tại nhà ga', 20, '2025-05-01', '2025-05-31'),
     ('29052025KM0004', N'Quốc tế Thiếu nhi 1/6 tại nhà ga', 25, '2025-05-29', '2025-06-03'),
     ('04062025KM0005', N'Đầu tháng 6 tại nhà ga', 5, '2025-06-04', '2025-06-14');
 GO
-
->>>>>>> origin/Trung

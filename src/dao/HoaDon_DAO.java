@@ -80,6 +80,205 @@ public class HoaDon_DAO {
         }
         return null;
     }
+    
+ // Tìm theo tên khách hàng
+ public List<HoaDon> timHoaDonTheoTenKhachHang(String tenKhachHang) {
+     List<HoaDon> danhSachHoaDon = new ArrayList<>();
+     if (tenKhachHang == null || tenKhachHang.trim().isEmpty()) {
+         return danhSachHoaDon;
+     }
+     Connection connection = null;
+     PreparedStatement stmt = null;
+     ResultSet rs = null;
+     try {
+         connection = ConnectDB.getConnection();
+         String sql = "SELECT hd.* FROM HoaDon hd " +
+                     "JOIN KhachHang kh ON hd.maKhachHang = kh.maKhachHang " +
+                     "WHERE kh.tenKhachHang LIKE ?";
+         stmt = connection.prepareStatement(sql);
+         stmt.setString(1, "%" + tenKhachHang.trim() + "%");
+         rs = stmt.executeQuery();
+         while (rs.next()) {
+             danhSachHoaDon.add(new HoaDon(
+                 rs.getString("maHoaDon"),
+                 rs.getDate("ngayTaoHoaDon").toLocalDate(),
+                 HoaDon.PhuongThucThanhToan.valueOf(rs.getString("phuongThucThanhToan")),
+                 rs.getDouble("phanTramGiamGia"),
+                 rs.getBigDecimal("tienKhachDua"),
+                 rs.getBigDecimal("thanhTien"),
+                 rs.getBigDecimal("tienTraLai"),
+                 rs.getString("maKhuyenMai"),
+                 rs.getString("maNhanVien"),
+                 rs.getString("maKhachHang")
+             ));
+         }
+     } catch (SQLException e) {
+         System.err.println("Lỗi SQL: " + e.getMessage());
+     } finally {
+         try {
+             if (rs != null) rs.close();
+             if (stmt != null) stmt.close();
+             if (connection != null) connection.close();
+         } catch (SQLException e) {
+             System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+         }
+     }
+     return danhSachHoaDon;
+ }
+
+ // Tìm theo ngày lập
+ public List<HoaDon> timHoaDonTheoNgayTaoHoaDon(LocalDate ngayTaoHoaDon) {
+     List<HoaDon> danhSachHoaDon = new ArrayList<>();
+     if (ngayTaoHoaDon == null) {
+         return danhSachHoaDon;
+     }
+     Connection connection = null;
+     PreparedStatement stmt = null;
+     ResultSet rs = null;
+     try {
+         connection = ConnectDB.getConnection();
+         String sql = "SELECT * FROM HoaDon WHERE ngayTaoHoaDon = ?";
+         stmt = connection.prepareStatement(sql);
+         stmt.setDate(1, java.sql.Date.valueOf(ngayTaoHoaDon));
+         rs = stmt.executeQuery();
+         while (rs.next()) {
+             danhSachHoaDon.add(new HoaDon(
+                 rs.getString("maHoaDon"),
+                 rs.getDate("ngayTaoHoaDon").toLocalDate(),
+                 HoaDon.PhuongThucThanhToan.valueOf(rs.getString("phuongThucThanhToan")),
+                 rs.getDouble("phanTramGiamGia"),
+                 rs.getBigDecimal("tienKhachDua"),
+                 rs.getBigDecimal("thanhTien"),
+                 rs.getBigDecimal("tienTraLai"),
+                 rs.getString("maKhuyenMai"),
+                 rs.getString("maNhanVien"),
+                 rs.getString("maKhachHang")
+             ));
+         }
+     } catch (SQLException e) {
+         System.err.println("Lỗi SQL: " + e.getMessage());
+     } finally {
+         try {
+             if (rs != null) rs.close();
+             if (stmt != null) stmt.close();
+             if (connection != null) connection.close();
+         } catch (SQLException e) {
+             System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+         }
+     }
+     return danhSachHoaDon;
+ }
+
+ // Tìm theo số điện thoại
+ public List<HoaDon> timHoaDonTheoSoDienThoai(String soDienThoai) {
+     List<HoaDon> danhSachHoaDon = new ArrayList<>();
+     if (soDienThoai == null || soDienThoai.trim().isEmpty()) {
+         return danhSachHoaDon;
+     }
+     Connection connection = null;
+     PreparedStatement stmt = null;
+     ResultSet rs = null;
+     try {
+         connection = ConnectDB.getConnection();
+         String sql = "SELECT hd.* FROM HoaDon hd " +
+                     "JOIN KhachHang kh ON hd.maKhachHang = kh.maKhachHang " +
+                     "WHERE kh.soDienThoai LIKE ?";
+         stmt = connection.prepareStatement(sql);
+         stmt.setString(1, "%" + soDienThoai.trim() + "%");
+         rs = stmt.executeQuery();
+         while (rs.next()) {
+             danhSachHoaDon.add(new HoaDon(
+                 rs.getString("maHoaDon"),
+                 rs.getDate("ngayTaoHoaDon").toLocalDate(),
+                 HoaDon.PhuongThucThanhToan.valueOf(rs.getString("phuongThucThanhToan")),
+                 rs.getDouble("phanTramGiamGia"),
+                 rs.getBigDecimal("tienKhachDua"),
+                 rs.getBigDecimal("thanhTien"),
+                 rs.getBigDecimal("tienTraLai"),
+                 rs.getString("maKhuyenMai"),
+                 rs.getString("maNhanVien"),
+                 rs.getString("maKhachHang")
+             ));
+         }
+     } catch (SQLException e) {
+         System.err.println("Lỗi SQL: " + e.getMessage());
+     } finally {
+         try {
+             if (rs != null) rs.close();
+             if (stmt != null) stmt.close();
+             if (connection != null) connection.close();
+         } catch (SQLException e) {
+             System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+         }
+     }
+     return danhSachHoaDon;
+ }
+
+ // Tìm theo cả ba tiêu chí
+ public List<HoaDon> timHoaDonTheoTenKhachHangNgayLapSoDienThoai(String tenKhachHang, 
+                                                                 LocalDate ngayTaoHoaDon, 
+                                                                 String soDienThoai) {
+     List<HoaDon> danhSachHoaDon = new ArrayList<>();
+     Connection connection = null;
+     PreparedStatement stmt = null;
+     ResultSet rs = null;
+     try {
+         connection = ConnectDB.getConnection();
+         StringBuilder sql = new StringBuilder(
+             "SELECT hd.* FROM HoaDon hd " +
+             "JOIN KhachHang kh ON hd.maKhachHang = kh.maKhachHang WHERE 1=1"
+         );
+         List<Object> parameters = new ArrayList<>();
+
+         if (tenKhachHang != null && !tenKhachHang.trim().isEmpty()) {
+             sql.append(" AND kh.tenKhachHang LIKE ?");
+             parameters.add("%" + tenKhachHang.trim() + "%");
+         }
+         if (ngayTaoHoaDon != null) {
+             sql.append(" AND hd.ngayTaoHoaDon = ?");
+             parameters.add(java.sql.Date.valueOf(ngayTaoHoaDon));
+         }
+         if (soDienThoai != null && !soDienThoai.trim().isEmpty()) {
+             sql.append(" AND kh.soDienThoai LIKE ?");
+             parameters.add("%" + soDienThoai.trim() + "%");
+         }
+         if (parameters.isEmpty()) {
+             return danhSachHoaDon;
+         }
+
+         stmt = connection.prepareStatement(sql.toString());
+         for (int i = 0; i < parameters.size(); i++) {
+             stmt.setObject(i + 1, parameters.get(i));
+         }
+         rs = stmt.executeQuery();
+         while (rs.next()) {
+             danhSachHoaDon.add(new HoaDon(
+                 rs.getString("maHoaDon"),
+                 rs.getDate("ngayTaoHoaDon").toLocalDate(),
+                 HoaDon.PhuongThucThanhToan.valueOf(rs.getString("phuongThucThanhToan")),
+                 rs.getDouble("phanTramGiamGia"),
+                 rs.getBigDecimal("tienKhachDua"),
+                 rs.getBigDecimal("thanhTien"),
+                 rs.getBigDecimal("tienTraLai"),
+                 rs.getString("maKhuyenMai"),
+                 rs.getString("maNhanVien"),
+                 rs.getString("maKhachHang")
+             ));
+         }
+     } catch (SQLException e) {
+         System.err.println("Lỗi SQL: " + e.getMessage());
+     } finally {
+         try {
+             if (rs != null) rs.close();
+             if (stmt != null) stmt.close();
+             if (connection != null) connection.close();
+         } catch (SQLException e) {
+             System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+         }
+     }
+     return danhSachHoaDon;
+ }
+
 
     // Lấy danh sách tất cả hóa đơn
     public List<HoaDon> layDanhSachHoaDon() {

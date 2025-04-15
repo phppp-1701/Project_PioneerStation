@@ -1,14 +1,31 @@
 package gui;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import dao.HoaDon_DAO;
+import dao.KhachHang_DAO;
 import dao.NhanVien_DAO;
+import entity.HoaDon;
+import entity.KhachHang;
 import entity.NhanVien;
 import entity.NhanVien.ChucVu;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -49,6 +66,7 @@ public class QuanLyHoaDon_GUI_Controller {
         if (maNhanVien != null) {
             updateNhanVienInfo();
         }
+        
         // Handler cho quản lý chuyến tàu
         lblQuanLyChuyenTau.setOnMouseClicked(event -> {
             System.out.println("Đã nhấp vào Quản lý chuyến tàu");
@@ -196,6 +214,64 @@ public class QuanLyHoaDon_GUI_Controller {
                 e.printStackTrace();
             }
         });
+        
+     // Vô hiệu hóa txtMaHoaDon
+        txtMaHoaDon.setDisable(true);
+        txtMaHoaDon.setEditable(false);
+
+        // Vô hiệu hóa các trường hiển thị (chỉ đọc)
+        txtTenKhachHang.setEditable(false);
+        txtNgayLapHoaDon.setEditable(false);
+        txtLoaiKhachHang.setEditable(false);
+        txtTenNhanVien.setEditable(false);
+        txtKhuyenMai.setEditable(false);
+        txtPTTT.setEditable(false);
+        txtPhanTramGiamGia.setEditable(false);
+        txtTienKhachDua.setEditable(false);
+        txtThanhTien.setEditable(false);
+        txtTienTraLai.setEditable(false);
+
+        // Thiết lập các cột TableView
+        colStt.setCellValueFactory(cellData ->
+            new SimpleStringProperty(String.valueOf(tbDanhSachHoaDon.getItems().indexOf(cellData.getValue()) + 1)));
+        colMaHoaDon.setCellValueFactory(new PropertyValueFactory<>("maHoaDon"));
+        colTenKhachHang.setCellValueFactory(cellData -> {
+            String maKhachHang = cellData.getValue().getMaKhachHang();
+            KhachHang_DAO khachHangDAO = new KhachHang_DAO();
+            KhachHang kh = khachHangDAO.timKhachHangTheoMa(maKhachHang);
+            return new SimpleStringProperty(kh != null ? kh.getTenKhachHang() : "Không tìm thấy");
+        });
+        colNgayLapHoaDon.setCellValueFactory(cellData -> {
+            LocalDate ngay = cellData.getValue().getNgayTaoHoaDon();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return new SimpleStringProperty(ngay != null ? ngay.format(formatter) : "");
+        });
+        colLoaiKhachHang.setCellValueFactory(cellData -> {
+            String maKhachHang = cellData.getValue().getMaKhachHang();
+            KhachHang_DAO khachHangDAO = new KhachHang_DAO();
+            KhachHang kh = khachHangDAO.timKhachHangTheoMa(maKhachHang);
+            return new SimpleStringProperty(kh != null && kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().toString() : "Không xác định");
+        });
+        colTenNhanVien.setCellValueFactory(cellData -> {
+            String maNhanVien = cellData.getValue().getMaNhanVien();
+            NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
+            NhanVien nv = nhanVienDAO.timNhanVienTheoMa(maNhanVien);
+            return new SimpleStringProperty(nv != null ? nv.getTenNhanVien() : "Không tìm thấy");
+        });
+        colPTTT.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getPhuongThucThanhToan() != null ? 
+                cellData.getValue().getPhuongThucThanhToan().toString() : ""));
+        colThanhTien.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getThanhTien() != null ? 
+                cellData.getValue().getThanhTien().toString() : "0"));
+
+        // Sự kiện nhấp chuột vào TableView
+        tbDanhSachHoaDon.setOnMouseClicked(event -> {
+            HoaDon selectedHoaDon = tbDanhSachHoaDon.getSelectionModel().getSelectedItem();
+            if (selectedHoaDon != null) {
+                populateHoaDonFields(selectedHoaDon);
+            }
+        });
     }
 
     public String getMaNhanVien() {
@@ -246,4 +322,165 @@ public class QuanLyHoaDon_GUI_Controller {
             }
         }
     }
+    
+    @FXML
+    private TextField txtTimTenKhachHang;
+    @FXML
+    private DatePicker dpTimNgayLapHoaDon;
+    @FXML
+    private TextField txtTimSoDienThoai;
+    @FXML
+    private Button btnTimHoaDon;
+
+    
+    @FXML
+    private TextField txtMaHoaDon;
+    @FXML
+    private TextField txtTenKhachHang;
+    @FXML
+    private TextField txtNgayLapHoaDon;
+    @FXML
+    private TextField txtLoaiKhachHang;
+    @FXML
+    private TextField txtTenNhanVien;
+    @FXML
+    private TextField txtKhuyenMai;
+    @FXML
+    private TextField txtPTTT;
+    @FXML
+    private TextField txtPhanTramGiamGia;
+    @FXML
+    private TextField txtTienKhachDua;
+    @FXML
+    private TextField txtThanhTien;
+    @FXML
+    private TextField txtTienTraLai;
+
+    @FXML
+    private TableView<HoaDon> tbDanhSachHoaDon;
+    @FXML
+    private TableColumn<HoaDon, String> colStt;
+    @FXML
+    private TableColumn<HoaDon, String> colMaHoaDon;
+    @FXML
+    private TableColumn<HoaDon, String> colTenKhachHang;
+    @FXML
+    private TableColumn<HoaDon, String> colNgayLapHoaDon;
+    @FXML
+    private TableColumn<HoaDon, String> colLoaiKhachHang;
+    @FXML
+    private TableColumn<HoaDon, String> colTenNhanVien;
+    @FXML
+    private TableColumn<HoaDon, String> colPTTT;
+    @FXML
+    private TableColumn<HoaDon, String> colThanhTien;
+
+
+    @FXML
+    private void btnTimHoaDonClicked() {
+        String tenKhachHang = txtTimTenKhachHang.getText().trim();
+        LocalDate ngayTaoHoaDon = dpTimNgayLapHoaDon.getValue();
+        String soDienThoai = txtTimSoDienThoai.getText().trim();
+
+        HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
+        List<HoaDon> danhSachHoaDon;
+
+        // Kiểm tra tiêu chí tìm kiếm
+        if (!tenKhachHang.isEmpty() && ngayTaoHoaDon == null && soDienThoai.isEmpty()) {
+            danhSachHoaDon = hoaDonDAO.timHoaDonTheoTenKhachHang(tenKhachHang);
+        } else if (tenKhachHang.isEmpty() && ngayTaoHoaDon != null && soDienThoai.isEmpty()) {
+            danhSachHoaDon = hoaDonDAO.timHoaDonTheoNgayTaoHoaDon(ngayTaoHoaDon);
+        } else if (tenKhachHang.isEmpty() && ngayTaoHoaDon == null && !soDienThoai.isEmpty()) {
+            danhSachHoaDon = hoaDonDAO.timHoaDonTheoSoDienThoai(soDienThoai);
+        } else if (tenKhachHang.isEmpty() && ngayTaoHoaDon == null && soDienThoai.isEmpty()) {
+            showWarningAlert("Vui lòng nhập ít nhất một tiêu chí tìm kiếm!", "image/canhBao.png");
+            return;
+        } else {
+            danhSachHoaDon = hoaDonDAO.timHoaDonTheoTenKhachHangNgayLapSoDienThoai(
+                tenKhachHang.isEmpty() ? null : tenKhachHang,
+                ngayTaoHoaDon,
+                soDienThoai.isEmpty() ? null : soDienThoai
+            );
+        }
+
+        // Kiểm tra kết quả
+        if (danhSachHoaDon.isEmpty()) {
+            showWarningAlert("Không tìm thấy hóa đơn nào phù hợp!", "image/canhBao.png");
+            tbDanhSachHoaDon.getItems().clear();
+            return;
+        }
+
+        // Hiển thị lên TableView
+        tbDanhSachHoaDon.setItems(FXCollections.observableArrayList(danhSachHoaDon));
+    }
+
+    private void populateHoaDonFields(HoaDon hoaDon) {
+        try {
+            txtMaHoaDon.setText(hoaDon.getMaHoaDon() != null ? hoaDon.getMaHoaDon() : "");
+            
+            // Lấy thông tin khách hàng
+            KhachHang_DAO khachHangDAO = new KhachHang_DAO();
+            KhachHang khachHang = khachHangDAO.timKhachHangTheoMa(hoaDon.getMaKhachHang());
+            txtTenKhachHang.setText(khachHang != null ? khachHang.getTenKhachHang() : "Không tìm thấy");
+            txtLoaiKhachHang.setText(khachHang != null && khachHang.getLoaiThanhVien() != null ? 
+                khachHang.getLoaiThanhVien().toString() : "Không xác định");
+
+            // Ngày tạo hóa đơn
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            txtNgayLapHoaDon.setText(hoaDon.getNgayTaoHoaDon() != null ? 
+                hoaDon.getNgayTaoHoaDon().format(formatter) : "");
+
+            // Lấy thông tin nhân viên
+            NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
+            NhanVien nhanVien = nhanVienDAO.timNhanVienTheoMa(hoaDon.getMaNhanVien());
+            txtTenNhanVien.setText(nhanVien != null ? nhanVien.getTenNhanVien() : "Không tìm thấy");
+
+            txtKhuyenMai.setText(hoaDon.getMaKhuyenMai() != null ? hoaDon.getMaKhuyenMai() : "");
+            txtPTTT.setText(hoaDon.getPhuongThucThanhToan() != null ? 
+                hoaDon.getPhuongThucThanhToan().toString() : "");
+            txtPhanTramGiamGia.setText(hoaDon.getPhanTramGiamGia() != 0 ? 
+                String.valueOf(hoaDon.getPhanTramGiamGia()) : "0");
+            txtTienKhachDua.setText(hoaDon.getTienKhachDua() != null ? 
+                hoaDon.getTienKhachDua().toString() : "0");
+            txtThanhTien.setText(hoaDon.getThanhTien() != null ? 
+                hoaDon.getThanhTien().toString() : "0");
+            txtTienTraLai.setText(hoaDon.getTienTraLai() != null ? 
+                hoaDon.getTienTraLai().toString() : "0");
+        } catch (Exception e) {
+            showErrorAlert("Lỗi khi hiển thị thông tin hóa đơn: " + e.getMessage(), "image/loi.png");
+        }
+    }
+
+    private void showErrorAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void showWarningAlert(String message, String icon) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Cảnh báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        setAlertIcon(alert, icon);
+        alert.showAndWait();
+    }
+
+    private void setAlertIcon(Alert alert, String icon) {
+        File file = new File(icon);
+        if (file.exists()) {
+            try {
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(file.toURI().toString()));
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tải ảnh: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Không tìm thấy file tại: " + file.getAbsolutePath());
+        }
+    }
+    
 }

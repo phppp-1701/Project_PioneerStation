@@ -123,15 +123,13 @@ public class QuanLyChuyenTau_GUI_Controller {
         txtMaChuyenTau.setDisable(true);
         txtMaChuyenTau.setEditable(false);
         cboTenTau_ChuyenTau.setDisable(false);
-        cboLoaiTau_ChuyenTau.setDisable(false);
+        cboLoaiTau_ChuyenTau.setDisable(true);
         cboGaDi_ChuyenTau.setDisable(false);
         cboGaDen_ChuyenTau.setDisable(false);
         dpNgayKhoihanh_ChuyenTau.setDisable(false);
         dpNgayKhoihanh_ChuyenTau.setEditable(true);
-        dpNgayDuKien_ChuyenTau.setDisable(false);
-        dpNgayDuKien_ChuyenTau.setEditable(true);
-        txtGioDuKien_ChuyenTau.setDisable(false);
-        txtGioDuKien_ChuyenTau.setEditable(true);
+        dpNgayDuKien_ChuyenTau.setDisable(true);
+        txtGioDuKien_ChuyenTau.setDisable(true);
         cboGioKhoiHanh_ChuyenTau.setDisable(false);
     }
     
@@ -265,6 +263,16 @@ public class QuanLyChuyenTau_GUI_Controller {
             }
         });
     	
+     // Thêm sự kiện cho cboGaDi_ChuyenTau
+        cboGaDi_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((obs, oldGa, newGa) -> {
+            if (newGa != null) {
+                capNhatDanhSachGaDen(newGa.getMaGa());
+            } else {
+                cboGaDen_ChuyenTau.setItems(FXCollections.observableArrayList());
+                cboGaDen_ChuyenTau.getSelectionModel().clearSelection();
+            }
+        });
+        
      // Khởi tạo cboGioKhoiHanh_ChuyenTau
         cboGioKhoiHanh_ChuyenTau.setItems(FXCollections.observableArrayList(
             "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
@@ -1543,6 +1551,14 @@ public class QuanLyChuyenTau_GUI_Controller {
             return LoaiTau.TN;
         }
         return null; // Hoặc giá trị mặc định nếu cần
+    }
+    
+    private void capNhatDanhSachGaDen(String maGaDi) {
+        TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
+        List<Ga> danhSachGaDen = tuyenTauDAO.getDanhSachGaDenTheoGaDi(maGaDi);
+        System.out.println("Cập nhật ga đến cho maGaDi = " + maGaDi + ": " + danhSachGaDen.size() + " ga");
+        cboGaDen_ChuyenTau.setItems(FXCollections.observableArrayList(danhSachGaDen));
+        cboGaDen_ChuyenTau.getSelectionModel().clearSelection();
     }
     
     @FXML

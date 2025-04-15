@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
         primaryStage = stage; // Lưu trữ stage
-        new QuanLyBanVe_GUI(stage, "2022NV000001");
+        new QuanLyHoaDon_GUI(stage, "2022NV000001");
 //          new DangNhap_GUI(stage);
 //        new ThanhToan_GUI(stage, "2022NV000001", null);
 //        new QuanLyChuyenTau_GUI(stage, "2022NV000001");
