@@ -8,11 +8,11 @@ GO
 -- Tạo bảng KhachHang
 CREATE TABLE KhachHang (
     maKhachHang VARCHAR(20) PRIMARY KEY,
-    tenKhachHang NVARCHAR(100) NOT NULL,
-    CCCD_HoChieu VARCHAR(20) UNIQUE NOT NULL,
-    soDienThoai VARCHAR(15) NOT NULL,
+    tenKhachHang NVARCHAR(100),
+    CCCD_HoChieu VARCHAR(20) ,
+    soDienThoai VARCHAR(15),
     email NVARCHAR(100),
-    loaiThanhVien VARCHAR(10) CHECK (loaiThanhVien IN ('thanThiet', 'vip')),
+    loaiThanhVien VARCHAR(20) CHECK (loaiThanhVien IN ('thanThiet', 'vip','khachVangLai')),
     trangThaiKhachHang VARCHAR(20) CHECK (trangThaiKhachHang IN ('hoatDong','voHieuHoa'))
 );
 GO
@@ -20,6 +20,7 @@ GO
 -- Chèn dữ liệu vào bảng KhachHang (300 khách hàng)
 INSERT INTO KhachHang (maKhachHang, tenKhachHang, CCCD_HoChieu, soDienThoai, email, loaiThanhVien, trangThaiKhachHang)
 VALUES
+('KHVL',null, null, null, null, 'khachVangLai', 'hoatDong'),
 ('2024KH000001', N'Nguyễn Thị Mai Anh', '079123000001', '0912345678', 'nguyenthimai.anh@gmail.com', 'thanThiet', 'hoatDong'),
 ('2024KH000002', N'Trần Văn Bảo', '079123000002', '0987654321', 'tranvan.bao@gmail.com', 'thanThiet', 'hoatDong'),
 ('2024KH000003', N'Lê Thị Cẩm Tú', '079123000003', '0905111222', 'lethicam.tu@gmail.com', 'thanThiet', 'hoatDong'),
@@ -580,10 +581,42 @@ GO
 
 INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, phanTramGiamGia, ngayBatDau, ngayKetThuc)
 VALUES 
-    ('14042025KM0001', N'30/4 - 1/5 tại nhà ga', 10, '2025-04-14', '2025-05-01'),
-    ('19042025KM0002', N'Cuối tuần tháng 4 tại nhà ga', 15, '2025-04-19', '2025-04-27'),
-    ('01052025KM0003', N'Tháng 5 tại nhà ga', 20, '2025-05-01', '2025-05-31'),
-    ('29052025KM0004', N'Quốc tế Thiếu nhi 1/6 tại nhà ga', 25, '2025-05-29', '2025-06-03'),
+    ('14042025KM0001', N'30/4 - 1/5 tại nhà ga', 10, '2025-04-30', '2025-05-01'),
+    ('19042025KM0002', N'Tháng 4 may mắn (14/04 - 20/04)', 15, '2025-04-14', '2025-04-20'),
+    ('01052025KM0003', N'Tri ân tháng 5 (01/05 - 31/05)', 20, '2025-05-01', '2025-05-31'),
+    ('29052025KM0004', N'Quốc tế Thiếu nhi 1/6 tại nhà ga (29/5-3/6)', 25, '2025-05-29', '2025-06-03'),
     ('04062025KM0005', N'Đầu tháng 6 tại nhà ga', 5, '2025-06-04', '2025-06-14');
 GO
 
+CREATE TABLE HoaDon (
+    maHoaDon VARCHAR(20) PRIMARY KEY,
+    ngayTaoHoaDon DATE NOT NULL,
+    phuongThucThanhToan VARCHAR(20) NOT NULL CHECK (phuongThucThanhToan IN ('tienMat', 'atm', 'internetBanking')),
+    phanTramGiamGia DECIMAL(5,2) DEFAULT 0,
+    tienKhachDua DECIMAL(18,2) NOT NULL,
+    thanhTien DECIMAL(18,2) NOT NULL,
+    tienTraLai DECIMAL(18,2) NOT NULL,
+    maKhuyenMai VARCHAR(20),
+    maNhanVien VARCHAR(20) NOT NULL,
+    maKhachHang VARCHAR(20),
+    FOREIGN KEY (maKhuyenMai) REFERENCES KhuyenMai(maKhuyenMai),
+    FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNhanVien),
+    FOREIGN KEY (maKhachHang) REFERENCES KhachHang(maKhachHang)
+);
+go
+
+CREATE TABLE Ve (
+    maVe VARCHAR(50) PRIMARY KEY,
+    ngayTaoVe DATE NOT NULL,
+    trangThaiVe VARCHAR(20) NOT NULL CHECK (trangThaiVe IN ('hoatDong', 'daHuy_Hoan', 'daDoi')),
+    tenKhachHang NVARCHAR(100) NOT NULL,
+    CCCD_HoChieu VARCHAR(20),
+    ngaySinh DATE NOT NULL,
+    loaiKhachHang VARCHAR(20) NOT NULL CHECK (loaiKhachHang IN ('nguoiLon', 'treEm', 'sinhVien', 'nguoiCaoTuoi')),
+    giaVe DECIMAL(18,2) NOT NULL,
+    maHoaDon VARCHAR(20),
+    maChoNgoi VARCHAR(30) NOT NULL,
+    FOREIGN KEY (maHoaDon) REFERENCES HoaDon(maHoaDon),
+    FOREIGN KEY (maChoNgoi) REFERENCES ChoNgoi(maChoNgoi)
+);
+go

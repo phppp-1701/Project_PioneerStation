@@ -467,8 +467,8 @@ public class KhachHang_DAO {
 
         try {
             con = ConnectDB.getConnection();
-            // Sửa thành TOP 1 cho SQL Server
-            String sql = "SELECT TOP 1 maKhachHang FROM KhachHang ORDER BY maKhachHang DESC";
+            // Sửa tên bảng thành KhachHang
+            String sql = "SELECT TOP 1 maKhachHang FROM KhachHang WHERE maKhachHang != 'KHVL' ORDER BY maKhachHang DESC";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
 

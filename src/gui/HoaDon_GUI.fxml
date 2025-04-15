@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="795.0" prefWidth="1316.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HoaDon_GUI_Controller">
+   <children>
+      <Label layoutX="343.0" layoutY="27.0" text="Thanh toán thành công!" textFill="#5aff3c">
+         <font>
+            <Font name="Tahoma" size="59.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="75.0" fitWidth="86.0" layoutX="620.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../image/hoaDonThanhCong.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="192.0" layoutY="182.0" prefHeight="594.0" prefWidth="931.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="594.0" layoutX="-26.0" stroke="TRANSPARENT" strokeType="INSIDE" width="931.0" />
+            <Label layoutX="308.0" layoutY="14.0" text="Hóa đơn giá trị gia tăng" textFill="#000cff">
+               <font>
+                  <Font name="Tahoma" size="30.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblMaHoaDon" layoutX="14.0" layoutY="59.0" text="Mã hóa đơn:">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblNgayTaoHoaDon" layoutX="623.0" layoutY="59.0" text="Ngày tạo hóa đơn:">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="212.0" layoutY="118.0" text="Đơn vị bán hàng:  CÔNG TY CỔ PHẦN ĐƯỜNG SẮT PIONEER STATION">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="212.0" layoutY="143.0" text="Mã số thuế: 0302918465">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="212.0" layoutY="169.0" text="Địa chỉ: Số 45, đường số 12, Phường 5, Quận Gò Vấp, Thành phố Hồ Chí Minh, Việt Nam">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="213.0" layoutY="194.0" text="Số tài khoản: 1903 9780 3710 18">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="488.0" layoutY="194.0" text="Tên tài khoản: CONG TY CO PHAN DUONG SAT PIONEER STATION">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="213.0" layoutY="219.0" text="Tại ngân hàng: Techcombank (Ngân hàng TMCP Kỹ Thương Việt Nam)">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTenKhachHang" layoutX="213.0" layoutY="244.0" text="Họ và tên khách hàng: Nguyễn Văn A ">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblSoDienThoai" layoutX="488.0" layoutY="244.0" text="Số điện thoại: 09xx xxx xxx ">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblEmail" layoutX="213.0" layoutY="270.0" text="Email: abcxyz@gmail.com ">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblLoaiThanhVien" layoutX="488.0" layoutY="270.0" text="Loại thành viên: Khách hàng vãng lai ">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tbDanhSachVe" layoutX="173.0" layoutY="297.0" prefHeight="186.0" prefWidth="630.0">
+              <columns>
+                <TableColumn fx:id="colSTT" prefWidth="32.0" text="STT" />
+                <TableColumn fx:id="colMaVe" prefWidth="100.0" text="Mã vé" />
+                  <TableColumn fx:id="colNgayKhoiHanh" prefWidth="97.60003662109375" text="Ngày khởi hành" />
+                  <TableColumn fx:id="colGioKhoiHanh" prefWidth="91.20001220703125" text="Giờ khởi hành" />
+                  <TableColumn fx:id="colTenDichVu" prefWidth="132.0" text="Tên dịch vụ" />
+                  <TableColumn fx:id="colLoaiKhachHang" prefWidth="100.7999267578125" text="Loại khách hàng" />
+                  <TableColumn fx:id="colGiaVe" minWidth="2.4000244140625" prefWidth="75.2000732421875" text="Giá vé" />
+              </columns>
+            </TableView>
+            <Label layoutX="203.0" layoutY="494.0" text="Khách hàng">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="184.0" layoutY="512.0" text="(Ký và ghi rõ họ tên)">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblKyTenKhachHang" layoutX="189.0" layoutY="571.0" text="Tên khách hàng">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="644.0" layoutY="494.0" text="Người cung cấp dịch vụ">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="666.0" layoutY="512.0" text="(Ký và ghi rõ họ tên)">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutX="636.0" layoutY="527.0" stroke="RED" strokeType="INSIDE" width="154.0" />
+            <Label layoutX="640.0" layoutY="527.0" text="Signature Valid" textFill="RED">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="640.0" layoutY="542.0" prefHeight="15.0" prefWidth="146.0" text="Ký bởi: Công ty cổ phần " textFill="RED">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="640.0" layoutY="558.0" prefHeight="15.0" prefWidth="146.0" text="đường sắt Pioneer Station" textFill="RED">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblNgayKy" layoutX="640.0" layoutY="572.0" prefHeight="15.0" prefWidth="146.0" text="Ngày ký: 02/04/2025" textFill="RED">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblMaNhanVien" layoutX="14.0" layoutY="5.0" text="Mã nhân viên:">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTenNhanVien" layoutX="14.0" layoutY="24.0" text="Tên nhân viên:">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Button fx:id="btnQuayVe" layoutX="1197.0" layoutY="742.0" mnemonicParsing="false" onAction="#quayVeQuanLyBanVe" text="Quay lại">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

@@ -8,6 +8,7 @@ import entity.VeTam.LoaiKhachHang;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -196,50 +197,51 @@ public class Ve_DAO {
             }
         }
     }
+    
+ // Tạo mã vé mới theo mã chỗ ngồi, giờ và ngày tạo vé
+    public String taoMaVeMoiTheoMaChoGioNgay(String maChoNgoi, LocalDate ngayTaoVe, LocalTime gioTaoVe) {
+        // Định dạng ngày: ddMMyy
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyy");
+        String ngayFormat = ngayTaoVe.format(dateFormatter);
 
-    // Tạo mã vé mới theo định dạng ddmmyyVABXXXXDD
-    public String taoMaVeMoi(LocalDate ngayTaoVe, String loaiChuyenTau, String soThuTuChoNgoi) {
-        // Định dạng ngày: ddmmyy
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
-        String ngayFormat = ngayTaoVe.format(formatter);
+        // Định dạng giờ: HHmm
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmm");
+        String gioFormat = gioTaoVe.format(timeFormatter);
 
-        // AB: Loại chuyến tàu (giả sử loaiChuyenTau đã được chuẩn hóa thành 2 ký tự, ví dụ: "SE", "TN")
-        if (loaiChuyenTau == null || loaiChuyenTau.length() != 2) {
-            loaiChuyenTau = "XX"; // Giá trị mặc định nếu không hợp lệ
-        }
-
-        // XXXX: Số tự động phát sinh
-        String soTuDong = taoSoTuDong();
-
-        // DD: Số thứ tự chỗ ngồi (chuẩn hóa thành 2 chữ số)
-        String soChoNgoi = String.format("%02d", Integer.parseInt(soThuTuChoNgoi));
-
-        // Tạo mã vé: ddmmyyVABXXXXDD
-        return ngayFormat + "V" + loaiChuyenTau + soTuDong + soChoNgoi;
+        // Kết hợp: [Mã chỗ ngắn][Ngày][Giờ][Số tự động]
+        // Ví dụ: CN00114102514301234
+        return maChoNgoi + ngayFormat + gioFormat;
     }
-
-    // Phương thức phụ để tạo số tự động XXXX
-    private String taoSoTuDong() {
+    
+ // Read: Tìm danh sách vé theo mã hóa đơn
+    public List<Ve> timVeTheoMaHoaDon(String maHoaDon) {
+        List<Ve> danhSachVe = new ArrayList<>();
         Connection connection = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
             connection = ConnectDB.getConnection();
-            String sql = "SELECT maVe FROM Ve ORDER BY maVe DESC LIMIT 1";
-            stmt = connection.createStatement();
-            rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                String maVeCu = rs.getString("maVe");
-                // Lấy phần XXXX từ mã vé cũ (vị trí từ 8 đến 11)
-                String soCu = maVeCu.substring(8, 12);
-                int soMoi = Integer.parseInt(soCu) + 1;
-                return String.format("%04d", soMoi);
-            } else {
-                return "0001"; // Nếu chưa có vé nào, bắt đầu từ 0001
+            String sql = "SELECT * FROM Ve WHERE maHoaDon = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, maHoaDon);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Ve ve = new Ve(
+                    rs.getString("maVe"),
+                    rs.getDate("ngayTaoVe").toLocalDate(),
+                    TrangThaiVe.valueOf(rs.getString("trangThaiVe")),
+                    rs.getString("tenKhachHang"),
+                    rs.getString("CCCD_HoChieu"),
+                    rs.getDate("ngaySinh") != null ? rs.getDate("ngaySinh").toLocalDate() : null,
+                    LoaiKhachHang.valueOf(rs.getString("loaiKhachHang")),
+                    rs.getBigDecimal("giaVe"),
+                    rs.getString("maHoaDon"),
+                    rs.getString("maChoNgoi")
+                );
+                danhSachVe.add(ve);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return "0001"; // Mặc định nếu có lỗi
         } finally {
             if (rs != null) {
                 try {
@@ -256,5 +258,7 @@ public class Ve_DAO {
                 }
             }
         }
+        return danhSachVe;
     }
+
 }

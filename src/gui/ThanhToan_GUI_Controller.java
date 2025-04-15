@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -17,14 +18,17 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +40,9 @@ import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import entity.ChoNgoi;
 import entity.ChuyenTau;
+import entity.HoaDon;
 import entity.TuyenTau;
+import entity.Ve;
 import entity.Tau;
 import entity.Toa;
 import entity.Toa.LoaiToa;
@@ -45,8 +51,10 @@ import dao.Tau_DAO;
 import dao.ChuyenTau_DAO;
 import dao.Toa_DAO;
 import dao.Ga_DAO;
+import dao.HoaDon_DAO;
 import dao.ChoNgoi_DAO;
 import dao.TuyenTau_DAO;
+import dao.Ve_DAO;
 
 public class ThanhToan_GUI_Controller {
     private String maNhanVien;
@@ -149,6 +157,13 @@ public class ThanhToan_GUI_Controller {
 
     private void updateTienTraLai() {
         try {
+            // Nếu không phải thanh toán tiền mặt, luôn trả về 0
+            if (selectedPhuongThucThanhToan != PhuongThucThanhToan.tienMat) {
+                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                txtTienTraLai.setText(currencyFormatter.format(BigDecimal.ZERO));
+                return;
+            }
+
             String khachDuaText = txtTienKhachDua.getText().replaceAll("[^0-9]", "");
             BigDecimal khachDua = new BigDecimal(khachDuaText.isEmpty() ? "0" : khachDuaText);
 
@@ -165,36 +180,87 @@ public class ThanhToan_GUI_Controller {
     }
     
     public void initializeData() {
-    	// Set up TextFields
+    	// Thêm listener để cập nhật tiền khi chuyển tab thanh toán
+    	tabPanePhuongThucThanhToan.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+    	    if (newTab == tabTienMat) {
+    	        selectedPhuongThucThanhToan = PhuongThucThanhToan.tienMat;
+    	        // Khôi phục giá trị tiền mặt ban đầu nếu có
+    	        if (tienMatBanDau.compareTo(BigDecimal.ZERO) > 0) {
+    	            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    	            txtTienKhachDua.setText(currencyFormatter.format(tienMatBanDau));
+    	            updateTienTraLai();
+    	        }
+    	    } else if (newTab == tabATM) {
+    	        selectedPhuongThucThanhToan = PhuongThucThanhToan.atm;
+    	        // Lưu giá trị tiền mặt hiện tại nếu đang ở tab tiền mặt
+    	        if (oldTab == tabTienMat) {
+    	            try {
+    	                String tienKhachDuaText = txtTienKhachDua.getText().replaceAll("[^0-9]", "");
+    	                tienMatBanDau = new BigDecimal(tienKhachDuaText.isEmpty() ? "0" : tienKhachDuaText);
+    	            } catch (NumberFormatException e) {
+    	                tienMatBanDau = BigDecimal.ZERO;
+    	            }
+    	        }
+    	        // Đặt giá trị thanh toán bằng tổng tiền
+    	        txtTienKhachDua.setText(txtThanhTien.getText());
+    	        txtTienTraLai.setText("0 VNĐ");
+    	    } else if (newTab == tabInternetBanking) {
+    	        selectedPhuongThucThanhToan = PhuongThucThanhToan.internetBanking;
+    	        // Lưu giá trị tiền mặt hiện tại nếu đang ở tab tiền mặt
+    	        if (oldTab == tabTienMat) {
+    	            try {
+    	                String tienKhachDuaText = txtTienKhachDua.getText().replaceAll("[^0-9]", "");
+    	                tienMatBanDau = new BigDecimal(tienKhachDuaText.isEmpty() ? "0" : tienKhachDuaText);
+    	            } catch (NumberFormatException e) {
+    	                tienMatBanDau = BigDecimal.ZERO;
+    	            }
+    	        }
+    	        // Đặt giá trị thanh toán bằng tổng tiền
+    	        txtTienKhachDua.setText(txtThanhTien.getText());
+    	        txtTienTraLai.setText("0 VNĐ");
+    	    }
+    	    System.out.println("Selected PhuongThucThanhToan: " + selectedPhuongThucThanhToan);
+    	});
+    	
+        // Set up TextFields
         txtTienKhachDua.setEditable(true);
         txtTienTraLai.setEditable(false);
-
-        // Vietnamese currency denominations
-        BigDecimal[] denominations = new BigDecimal[] {
-            new BigDecimal("500"),
-            new BigDecimal("1000"),
-            new BigDecimal("2000"),
-            new BigDecimal("5000"),
-            new BigDecimal("10000"),
-            new BigDecimal("20000"),
-            new BigDecimal("50000"),
-            new BigDecimal("100000"),
-            new BigDecimal("200000"),
-            new BigDecimal("500000")
-        };
-
-        // Array of buttons
+        
+        // Khai báo mảng các nút giá
         Button[] giaButtons = new Button[] {
             btnGia1, btnGia2, btnGia3,
             btnGia4, btnGia5, btnGia6,
             btnGia7, btnGia8, btnGia9
         };
 
-        // NumberFormat for VND
+        // Định dạng tiền tệ
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        
+        // Các mệnh giá tiền VND từ nhỏ đến lớn
+        BigDecimal[] allDenominations = new BigDecimal[] {
+            new BigDecimal("10000"),
+            new BigDecimal("20000"),
+            new BigDecimal("50000"),
+            new BigDecimal("100000"),
+            new BigDecimal("200000"),
+            new BigDecimal("500000"),
+            new BigDecimal("1000000"),
+            new BigDecimal("2000000"),
+            new BigDecimal("5000000")
+        };
 
-        // Function to update button denominations based on txtThanhTien
-        Runnable updateDenominations = () -> {
+        // Thiết lập action cho các nút giá cố định
+        for (int i = 0; i < giaButtons.length && i < allDenominations.length; i++) {
+            BigDecimal denom = allDenominations[i];
+            giaButtons[i].setText(currencyFormatter.format(denom));
+            giaButtons[i].setOnAction(event -> {
+                txtTienKhachDua.setText(currencyFormatter.format(denom));
+                updateTienTraLai();
+            });
+        }
+
+        // Hàm cập nhật hiển thị các nút giá
+        Runnable updateDenominationsVisibility = () -> {
             BigDecimal thanhTien;
             try {
                 String thanhTienText = txtThanhTien.getText().replaceAll("[^0-9]", "");
@@ -203,84 +269,49 @@ public class ThanhToan_GUI_Controller {
                 thanhTien = BigDecimal.ZERO;
             }
 
-            // Filter denominations >= thanhTien
-            List<BigDecimal> availableDenominations = new ArrayList<>();
-            for (BigDecimal denom : denominations) {
-                if (denom.compareTo(thanhTien) >= 0) {
-                    availableDenominations.add(denom);
-                }
-            }
-
-            // Update buttons
-            for (int i = 0; i < giaButtons.length; i++) {
-                if (i < availableDenominations.size()) {
-                    BigDecimal denom = availableDenominations.get(i);
-                    giaButtons[i].setText(currencyFormatter.format(denom));
-                    giaButtons[i].setVisible(true);
-                    giaButtons[i].setManaged(true);
-                    // Set action
-                    giaButtons[i].setOnAction(event -> {
-                        txtTienKhachDua.setText(currencyFormatter.format(denom));
-                    });
-                } else {
-                    giaButtons[i].setVisible(false);
-                    giaButtons[i].setManaged(false);
-                }
+            // Hiển thị/ẩn các nút dựa trên tổng tiền
+            for (int i = 0; i < giaButtons.length && i < allDenominations.length; i++) {
+                BigDecimal denom = allDenominations[i];
+                boolean shouldShow = denom.compareTo(thanhTien) >= 0;
+                giaButtons[i].setVisible(shouldShow);
+                giaButtons[i].setManaged(shouldShow);
             }
         };
 
-        // Update denominations when txtThanhTien changes
+        // Thêm listener để cập nhật khi tổng tiền thay đổi
         txtThanhTien.textProperty().addListener((obs, oldValue, newValue) -> {
-            updateDenominations.run();
-            // Also update txtTienTraLai
+            updateDenominationsVisibility.run();
             updateTienTraLai();
         });
 
-        // Update txtTienTraLai when txtTienKhachDua changes
+        // Thêm listener để cập nhật tiền thừa khi tiền khách đưa thay đổi
         txtTienKhachDua.textProperty().addListener((obs, oldValue, newValue) -> {
             updateTienTraLai();
         });
 
-        // Function to update txtTienTraLai
-        Runnable updateTienTraLai = () -> {
-            try {
-                String khachDuaText = txtTienKhachDua.getText().replaceAll("[^0-9]", "");
-                BigDecimal khachDua = new BigDecimal(khachDuaText.isEmpty() ? "0" : khachDuaText);
-
-                String thanhTienText = txtThanhTien.getText().replaceAll("[^0-9]", "");
-                BigDecimal thanhTien = new BigDecimal(thanhTienText.isEmpty() ? "0" : thanhTienText);
-
-                BigDecimal traLai = khachDua.subtract(thanhTien);
-                txtTienTraLai.setText(currencyFormatter.format(traLai));
-            } catch (NumberFormatException e) {
-                txtTienTraLai.setText(currencyFormatter.format(BigDecimal.ZERO));
-            }
-        };
-
-        // Initial update
-        updateDenominations.run();
-    	// Set up TabPane listener for payment method
+        // Các phần còn lại giữ nguyên
         tabPanePhuongThucThanhToan.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab == tabTienMat) {
-                selectedPhuongThucThanhToan = (PhuongThucThanhToan.tienMat);
+                selectedPhuongThucThanhToan = PhuongThucThanhToan.tienMat;
             } else if (newTab == tabATM) {
-                selectedPhuongThucThanhToan = (PhuongThucThanhToan.atm);
+                selectedPhuongThucThanhToan = PhuongThucThanhToan.atm;
             } else if (newTab == tabInternetBanking) {
-                selectedPhuongThucThanhToan = (PhuongThucThanhToan.internetBanking);
+                selectedPhuongThucThanhToan = PhuongThucThanhToan.internetBanking;
             }
-            // Debug log to verify selection
             System.out.println("Selected PhuongThucThanhToan: " + selectedPhuongThucThanhToan);
         });
 
-        // Ensure default selection
+        // Đảm bảo chọn mặc định
         tabPanePhuongThucThanhToan.getSelectionModel().select(tabTienMat);
-    	
+        
+        // Các thiết lập khác giữ nguyên
         txtGiamGia.setEditable(false);
         txtThanhTien.setEditable(false);
         loadKhuyenMaiVaoComboBox();
         cboLoaiKhachHang.setValue(LoaiThanhVien.thanThiet);
         txtMaKhachHang.setEditable(false);
 
+        // Các thiết lập table view giữ nguyên
         colSoThuTu.setCellValueFactory(cellData -> new SimpleIntegerProperty(
                 tbDanhSachKhachHang.getItems().indexOf(cellData.getValue()) + 1).asObject());
         colMaKhachHang.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaKhachHang()));
@@ -350,6 +381,9 @@ public class ThanhToan_GUI_Controller {
         }
 
         updateDiscountAndPrice();
+        
+        // Cập nhật hiển thị các nút giá lần đầu
+        updateDenominationsVisibility.run();
     }
 
     private BigDecimal updateDiscountAndPrice() {
@@ -969,15 +1003,26 @@ public class ThanhToan_GUI_Controller {
 	    }
 	
 	    // Validate txtTienKhachDua vs txtThanhTien
+	    BigDecimal khachDua;
+	    BigDecimal thanhTien;
+	    BigDecimal tienTraLai;
 	    try {
 	        String khachDuaText = txtTienKhachDua.getText().replaceAll("[^0-9]", "");
-	        BigDecimal khachDua = new BigDecimal(khachDuaText.isEmpty() ? "0" : khachDuaText);
+	        khachDua = new BigDecimal(khachDuaText.isEmpty() ? "0" : khachDuaText);
 	
 	        String thanhTienText = txtThanhTien.getText().replaceAll("[^0-9]", "");
-	        BigDecimal thanhTien = new BigDecimal(thanhTienText.isEmpty() ? "0" : thanhTienText);
+	        thanhTien = new BigDecimal(thanhTienText.isEmpty() ? "0" : thanhTienText);
 	
+	        tienTraLai = khachDua.subtract(thanhTien);
 	        if (khachDua.compareTo(thanhTien) < 0) {
 	            showWarningAlert("Tiền khách đưa phải lớn hơn hoặc bằng thành tiền!", "image/canhBao.png");
+	            txtTienKhachDua.requestFocus();
+	            return;
+	        }
+	
+	        // Kiểm tra tiền trả lại không âm (đã bao gồm trong điều kiện trên, nhưng để rõ ràng)
+	        if (tienTraLai.compareTo(BigDecimal.ZERO) < 0) {
+	            showWarningAlert("Tiền trả lại không được âm!", "image/canhBao.png");
 	            txtTienKhachDua.requestFocus();
 	            return;
 	        }
@@ -1107,10 +1152,126 @@ public class ThanhToan_GUI_Controller {
 	        return;
 	    }
 	
-	    // TODO: Proceed with ticket sale logic (e.g., save to database, update ChoNgoi status)
-	    showSuccessAlert("Bán vé thành công! Tổng tiền: " + NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(finalPrice), "image/thanhCong.png");
-	}
+	    // Bắt đầu quá trình bán vé
+	    try {
+	        // Bước 1: Tạo hóa đơn
+	        HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
+	        String maHoaDon = hoaDonDAO.taoMaHoaDonMoi();
+	        KhuyenMai selectedKhuyenMai = cboKhuyenMai.getValue();
+	        String maKhuyenMai = (selectedKhuyenMai != null) ? selectedKhuyenMai.getMaKhuyenMai() : null;
+	        String maKhachHang = ckcKhachVangLai.isSelected() ? null : txtMaKhachHang.getText().trim();
 	
+	        // Tính phần trăm giảm giá từ txtGiamGia
+	        double phanTramGiamGia = 0.0;
+	        String giamGiaText = txtGiamGia.getText();
+	        if (!giamGiaText.equals("0%")) {
+	            String[] parts = giamGiaText.split("=");
+	            if (parts.length > 0) {
+	                String percentageStr = parts[parts.length - 1].trim().replace("%", "");
+	                try {
+	                    phanTramGiamGia = Double.parseDouble(percentageStr);
+	                } catch (NumberFormatException e) {
+	                    phanTramGiamGia = 0.0;
+	                }
+	            }
+	        }
+	
+	        HoaDon hoaDon = new HoaDon(
+	            maHoaDon,
+	            LocalDate.now(),
+	            selectedPhuongThucThanhToan,
+	            phanTramGiamGia,
+	            khachDua,
+	            thanhTien,
+	            tienTraLai,
+	            maKhuyenMai,
+	            maNhanVien,
+	            maKhachHang
+	        );
+	
+	        boolean hoaDonCreated = hoaDonDAO.themHoaDon(hoaDon);
+	        if (!hoaDonCreated) {
+	            showWarningAlert("Lỗi khi tạo hóa đơn!", "image/canhBao.png");
+	            return;
+	        }
+	
+	        // Bước 2: Tạo vé và cập nhật trạng thái chỗ ngồi
+	        Ve_DAO veDAO = new Ve_DAO();
+	        ChoNgoi_DAO choNgoiDAO = new ChoNgoi_DAO();
+	        boolean allTicketsProcessed = true;
+	
+	        for (int i = 0; i < danhSachVeXacNhan.size(); i++) {
+	            VeTam veTam = danhSachVeXacNhan.get(i);
+	            AnchorPane ticketPane = (AnchorPane) pnGioVe.getChildren().get(i);
+	
+	            TextField txtTenKhachHangVe = (TextField) ticketPane.lookup("#tenKhachHang_" + i);
+	            DatePicker dpNgaySinhVe = (DatePicker) ticketPane.lookup("#ngaySinh_" + i);
+	            TextField txtCCCDVe = (TextField) ticketPane.lookup("#cccd_" + i);
+	
+	            String tenKhachHang = txtTenKhachHangVe.getText().trim();
+	            LocalDate ngaySinh = dpNgaySinhVe.getValue();
+	            String cccd = (veTam.getLoaiKhachHang() != LoaiKhachHang.treEm) ? txtCCCDVe.getText().trim() : null;
+	
+	            // Tạo mã vé
+	            ChoNgoi choNgoi = choNgoiDAO.timChoNgoiTheoMaChoNgoi(veTam.getMaChoNgoi());
+	            if (choNgoi == null) {
+	                showWarningAlert("Không tìm thấy thông tin chỗ ngồi cho vé " + (i + 1) + "!", "image/canhBao.png");
+	                allTicketsProcessed = false;
+	                break;
+	            }
+	
+	            String maVe = veDAO.taoMaVeMoiTheoMaChoGioNgay(
+	                veTam.getMaChoNgoi(),
+	                LocalDate.now(),
+	                LocalTime.now()
+	            );
+	
+	            Ve ve = new Ve(
+	                maVe,
+	                LocalDate.now(),
+	                Ve.TrangThaiVe.hoatDong,
+	                tenKhachHang,
+	                cccd,
+	                ngaySinh,
+	                veTam.getLoaiKhachHang(),
+	                veTam.getGiaTien(),
+	                maHoaDon,
+	                veTam.getMaChoNgoi()
+	            );
+	
+	            // Thêm vé vào cơ sở dữ liệu
+	            boolean veCreated = veDAO.themVe(ve);
+	            if (!veCreated) {
+	                showWarningAlert("Lỗi khi tạo vé " + (i + 1) + "!", "image/canhBao.png");
+	                allTicketsProcessed = false;
+	                break;
+	            }
+	
+	            // Cập nhật trạng thái chỗ ngồi thành đã đặt
+	            boolean choNgoiUpdated = choNgoiDAO.capNhatTrangThaiChoNgoi(
+	                veTam.getMaChoNgoi(),
+	                ChoNgoi.TrangThaiChoNgoi.daDat,
+	                choNgoi.getMaChuyenTau()
+	            );
+	            if (!choNgoiUpdated) {
+	                showWarningAlert("Lỗi khi cập nhật trạng thái chỗ ngồi cho vé " + (i + 1) + "!", "image/canhBao.png");
+	                allTicketsProcessed = false;
+	                break;
+	            }
+	        }
+	
+	        if (allTicketsProcessed) {
+	            showSuccessAlert("Bán vé thành công! Tổng tiền: " + NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(finalPrice), "image/thanhCong.png");
+	            Stage stage = (Stage) btnBanVe.getScene().getWindow();
+	            stage.close();
+	            moLaiFormHoaDon(maHoaDon);
+	        }
+	
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        showWarningAlert("Đã xảy ra lỗi trong quá trình bán vé!", "image/canhBao.png");
+	    }
+	}	
 	@FXML
 	private void btnQuayLaiClicked() {
         Stage stage = (Stage) btnQuayLai.getScene().getWindow();
@@ -1212,4 +1373,22 @@ public class ThanhToan_GUI_Controller {
 
     @FXML
     private Button btnGia9;
-}
+    
+    private BigDecimal tienMatBanDau = BigDecimal.ZERO;
+    
+	private void moLaiFormHoaDon(String maHoaDon) {
+	    try {
+	        System.out.println("Mở HoaDon_GUI với maHoaDon: " + maHoaDon);
+	        // Tạo stage mới cho HoaDon_GUI
+	        Stage hoaDonStage = new Stage();
+	        
+	        // Khởi tạo HoaDon_GUI
+	        HoaDon_GUI hoaDonGUI = new HoaDon_GUI(hoaDonStage, maHoaDon);
+	        
+	        // Hiển thị stage
+	        hoaDonStage.show();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        showWarningAlert("Lỗi khi mở giao diện hóa đơn!", "image/canhBao.png");
+	    }
+	}}

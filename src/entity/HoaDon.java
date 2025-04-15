@@ -5,34 +5,60 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class HoaDon {
-	private String maHoaDon;
-	private LocalDate ngayTaoHoaDon;
-	private PhuongThucThanhToan phuongThucThanhToan;
-	public enum PhuongThucThanhToan {
-	    tienMat,
-	    atm,
-	    internetBanking;
+    private String maHoaDon;
+    private LocalDate ngayTaoHoaDon;
+    private PhuongThucThanhToan phuongThucThanhToan;
+    public enum PhuongThucThanhToan {
+        tienMat,
+        atm,
+        internetBanking;
 
-	    @Override
-	    public String toString() {
-	        switch (this) {
-	            case tienMat: return "Tiền mặt";
-	            case atm: return "ATM";
-	            case internetBanking: return "Internet Banking";
-	            default: return name();
-	        }
-	    }
-	}
-	private double phanTramGiamGia;
-	private BigDecimal tienKhachDua;
-	private BigDecimal thanhTien;
-	private BigDecimal tienTraLai;
-	private String maKhuyenMai;
-	private String maNhanVien;
-	
-	public HoaDon() {
-		
-	}
+        @Override
+        public String toString() {
+            switch (this) {
+                case tienMat: return "Tiền mặt";
+                case atm: return "ATM";
+                case internetBanking: return "Internet Banking";
+                default: return name();
+            }
+        }
+    }
+    private double phanTramGiamGia;
+    private BigDecimal tienKhachDua;
+    private BigDecimal thanhTien;
+    private BigDecimal tienTraLai;
+    private String maKhuyenMai;
+    private String maNhanVien;
+    private String maKhachHang; // Thêm trường mới
+    
+    public HoaDon() {
+        
+    }
+
+    // Thêm maKhachHang vào constructor
+    public HoaDon(String maHoaDon, LocalDate ngayTaoHoaDon, PhuongThucThanhToan phuongThucThanhToan,
+            double phanTramGiamGia, BigDecimal tienKhachDua, BigDecimal thanhTien, BigDecimal tienTraLai,
+            String maKhuyenMai, String maNhanVien, String maKhachHang) {
+        this.maHoaDon = maHoaDon;
+        this.ngayTaoHoaDon = ngayTaoHoaDon;
+        this.phuongThucThanhToan = phuongThucThanhToan;
+        this.phanTramGiamGia = phanTramGiamGia;
+        this.tienKhachDua = tienKhachDua;
+        this.thanhTien = thanhTien;
+        this.tienTraLai = tienTraLai;
+        this.maKhuyenMai = maKhuyenMai;
+        this.maNhanVien = maNhanVien;
+        this.maKhachHang = maKhachHang;
+    }
+
+    // Thêm getter và setter cho maKhachHang
+    public String getMaKhachHang() {
+        return maKhachHang;
+    }
+
+    public void setMaKhachHang(String maKhachHang) {
+        this.maKhachHang = maKhachHang;
+    }
 
 	public String getMaHoaDon() {
 		return maHoaDon;
@@ -90,21 +116,6 @@ public class HoaDon {
 		this.tienTraLai = tienTraLai;
 	}
 
-	public HoaDon(String maHoaDon, LocalDate ngayTaoHoaDon, PhuongThucThanhToan phuongThucThanhToan,
-			double phanTramGiamGia, BigDecimal tienKhachDua, BigDecimal thanhTien, BigDecimal tienTraLai,
-			String maKhuyenMai, String maNhanVien) {
-		super();
-		this.maHoaDon = maHoaDon;
-		this.ngayTaoHoaDon = ngayTaoHoaDon;
-		this.phuongThucThanhToan = phuongThucThanhToan;
-		this.phanTramGiamGia = phanTramGiamGia;
-		this.tienKhachDua = tienKhachDua;
-		this.thanhTien = thanhTien;
-		this.tienTraLai = tienTraLai;
-		this.maKhuyenMai = maKhuyenMai;
-		this.maNhanVien = maNhanVien;
-	}
-	
 	public String getMaKhuyenMai() {
 		return maKhuyenMai;
 	}
@@ -137,5 +148,6 @@ public class HoaDon {
 		HoaDon other = (HoaDon) obj;
 		return Objects.equals(maHoaDon, other.maHoaDon);
 	}
-	
+
+
 }
