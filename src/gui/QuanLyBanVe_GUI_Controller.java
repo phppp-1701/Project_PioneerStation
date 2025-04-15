@@ -59,6 +59,9 @@ public class QuanLyBanVe_GUI_Controller {
     private String maNhanVien;
 
     @FXML
+    private AnchorPane pnHome;
+    
+    @FXML
     private Label lblQuanLyVe;
     
     @FXML
@@ -83,6 +86,9 @@ public class QuanLyBanVe_GUI_Controller {
     private Button btnThemVe;
     
     @FXML
+    private Label lblDangXuat;
+    
+    @FXML
     private Button btnTiepTheo;
     
     private List<VeTam> danhSachVeTam = new ArrayList<VeTam>();
@@ -90,6 +96,45 @@ public class QuanLyBanVe_GUI_Controller {
     private List<VeTam> danhSachVeXacNhan = new ArrayList<>();
     
     public void initialize() {
+    	
+    	// Thêm sự kiện nhấp chuột cho lblDangXuat với xác nhận
+        lblDangXuat.setOnMouseClicked(event -> {
+            // Tạo hộp thoại xác nhận
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Xác nhận đăng xuất");
+            alert.setHeaderText("Bạn có chắc chắn muốn đăng xuất?");
+            alert.setContentText("Chọn OK để đăng xuất và quay lại màn hình đăng nhập.");
+         // Thêm icon cho Alert
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            File iconFile = new File("image/hoi.png");
+            if (iconFile.exists()) {
+                Image icon = new Image(iconFile.toURI().toString());
+                alertStage.getIcons().add(icon);
+            } else {
+                System.err.println("Không tìm thấy file icon: " + iconFile.getAbsolutePath());
+            }
+            // Hiển thị hộp thoại và chờ phản hồi
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    System.out.println("Người dùng xác nhận đăng xuất");
+                    try {
+                        // Tạo Stage mới cho DangNhap_GUI
+                        Stage loginStage = new Stage();
+                        new DangNhap_GUI(loginStage);
+
+                        // Đóng cửa sổ hiện tại
+                        Stage currentStage = (Stage) pnHome.getScene().getWindow();
+                        currentStage.close();
+                    } catch (Exception e) {
+                        System.err.println("Lỗi khi mở DangNhap_GUI: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Người dùng hủy đăng xuất");
+                }
+            });
+        });
+    	
         btnTiepTheo.setDisable(true);
         cboLoaiKhachHang.setItems(FXCollections.observableArrayList(VeTam.LoaiKhachHang.values()));
         cboLoaiKhachHang.setConverter(new StringConverter<VeTam.LoaiKhachHang>() {

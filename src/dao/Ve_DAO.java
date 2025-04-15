@@ -260,5 +260,100 @@ public class Ve_DAO {
         }
         return danhSachVe;
     }
+    
+ // Read: Tìm danh sách vé theo tên khách hàng (tìm kiếm tương đối)
+    public List<Ve> timVeTheoTenKhachHang(String tenKhachHang) {
+        List<Ve> danhSachVe = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            connection = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Ve WHERE tenKhachHang LIKE ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, "%" + tenKhachHang + "%"); // Tìm kiếm tương đối
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Ve ve = new Ve(
+                    rs.getString("maVe"),
+                    rs.getDate("ngayTaoVe").toLocalDate(),
+                    TrangThaiVe.valueOf(rs.getString("trangThaiVe")),
+                    rs.getString("tenKhachHang"),
+                    rs.getString("CCCD_HoChieu"),
+                    rs.getDate("ngaySinh") != null ? rs.getDate("ngaySinh").toLocalDate() : null,
+                    LoaiKhachHang.valueOf(rs.getString("loaiKhachHang")),
+                    rs.getBigDecimal("giaVe"),
+                    rs.getString("maHoaDon"),
+                    rs.getString("maChoNgoi")
+                );
+                danhSachVe.add(ve);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return danhSachVe;
+    }
 
+ // Read: Tìm danh sách vé theo ngày tạo vé
+    public List<Ve> timVeTheoNgayTao(LocalDate ngayTaoVe) {
+        List<Ve> danhSachVe = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            connection = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Ve WHERE ngayTaoVe = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(ngayTaoVe));
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Ve ve = new Ve(
+                    rs.getString("maVe"),
+                    rs.getDate("ngayTaoVe").toLocalDate(),
+                    TrangThaiVe.valueOf(rs.getString("trangThaiVe")),
+                    rs.getString("tenKhachHang"),
+                    rs.getString("CCCD_HoChieu"),
+                    rs.getDate("ngaySinh") != null ? rs.getDate("ngaySinh").toLocalDate() : null,
+                    LoaiKhachHang.valueOf(rs.getString("loaiKhachHang")),
+                    rs.getBigDecimal("giaVe"),
+                    rs.getString("maHoaDon"),
+                    rs.getString("maChoNgoi")
+                );
+                danhSachVe.add(ve);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return danhSachVe;
+    }
 }
