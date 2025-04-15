@@ -376,7 +376,7 @@
                   <Font name="Tahoma Bold" size="16.0" />
                </font>
             </Label>
-            <TableView layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
+            <TableView fx:id="tbDanhSachVe" layoutY="60.0" prefHeight="198.0" prefWidth="730.0">
                <columns>
                   <TableColumn prefWidth="36.79998779296875" text="STT" />
                   <TableColumn prefWidth="104.0" text="Mã vé" />
