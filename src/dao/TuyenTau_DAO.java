@@ -244,4 +244,36 @@ public class TuyenTau_DAO {
         }
         return maGaDen;
     }
+    
+    public String getMaTuyenTheoGa(String maGaDi, String maGaDen) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String maTuyen = null;
+
+        try {
+            conn = ConnectDB.getConnection();
+            String sql = "SELECT maTuyen FROM TuyenTau WHERE maGaDi = ? AND maGaDen = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, maGaDi);
+            pstmt.setString(2, maGaDen);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                maTuyen = rs.getString("maTuyen");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return maTuyen;
+    }
 }

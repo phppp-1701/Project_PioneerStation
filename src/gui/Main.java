@@ -15,6 +15,8 @@ public class Main extends Application {
         new QuanLyBanVe_GUI(stage, "2022NV000001");
 //          new DangNhap_GUI(stage);
 //        new ThanhToan_GUI(stage, "2022NV000001", null);
+//        new QuanLyChuyenTau_GUI(stage, "2022NV000001");
+//        new DangNhap_GUI(stage);
         primaryStage.show();
     }
 

@@ -2,6 +2,9 @@ package dao;
 
 import connectDB.ConnectDB;
 import entity.ChoNgoi;
+import entity.Tau.LoaiTau;
+import entity.Toa.LoaiToa;
+
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -159,6 +162,44 @@ public class ChoNgoi_DAO {
             closeResources(rs, stmt);
         }
         return dsChoNgoi;
+    }
+    
+    public double tinhGiaCho(LoaiTau loaiTau, LoaiToa loaiToa) {
+        if (loaiTau == LoaiTau.SE) {
+            if (loaiToa == LoaiToa.ngoiMemDieuHoa) {
+                return 500000.00;
+            } else if (loaiToa == LoaiToa.giuongNamDieuHoa) {
+                return 800000.00;
+            }
+        } else if (loaiTau == LoaiTau.TN) {
+            if (loaiToa == LoaiToa.ngoiMemDieuHoa) {
+                return 400000.00;
+            } else if (loaiToa == LoaiToa.gheCungDieuHoa) {
+                return 300000.00;
+            }
+        }
+        return 0.0; // Trường hợp lỗi
+    }
+    
+    public boolean themChoNgoi(String maChuyenTau, String maToa, int soCho, LoaiToa loaiToa, int soThuTuToa, double giaCho) {
+        String sql = "INSERT INTO ChoNgoi (maChoNgoi, tenChoNgoi, trangThai, maToa, maChuyenTau, giaCho) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        	String maChoNgoi = String.format("%sT%02dCN%02d", maChuyenTau, soThuTuToa, soCho);
+            String tenChoNgoi = String.format("%02d", soCho);
+            stmt.setString(1, maChoNgoi);
+            stmt.setString(2, tenChoNgoi);
+            stmt.setString(3, "chuaDat");
+            stmt.setString(4, maToa);
+            stmt.setString(5, maChuyenTau);
+            stmt.setDouble(6, giaCho);
+            int rows = stmt.executeUpdate();
+            System.out.println("Thêm chỗ ngồi: maChoNgoi = " + maChoNgoi + ", maToa = " + maToa + ", maChuyenTau = " + maChuyenTau + ", rows = " + rows);
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi thêm chỗ ngồi: maChuyenTau = " + maChuyenTau + ", maToa = " + maToa + ", lỗi: " + e.getMessage());
+            return false;
+        }
     }
     
     /**
