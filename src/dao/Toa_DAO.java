@@ -12,7 +12,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Toa_DAO {
-    // Phương thức cập nhật thông tin toa theo tên và mã tàu
+    /**
+     * Tìm toa theo mã toa
+     * @param maToa Mã toa cần tìm
+     * @return Đối tượng Toa nếu tìm thấy, null nếu không tìm thấy
+     */
+    public Toa getToaByMaToa(String maToa) throws SQLException {
+        Connection con = ConnectDB.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Toa toa = null;
+
+        try {
+            String sql = "SELECT * FROM Toa WHERE maToa = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, maToa);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                toa = new Toa(
+                    rs.getString("maToa"),
+                    rs.getString("tenToa"),
+                    LoaiToa.valueOf(rs.getString("loaiToa")),
+                    TrangThaiToa.valueOf(rs.getString("trangThai")),
+                    rs.getString("maTau")
+                );
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        }
+
+        return toa;
+    }
+
+    /**
+     * Cập nhật thông tin toa theo tên và mã tàu
+     * @param toa Đối tượng toa cần cập nhật
+     * @return true nếu cập nhật thành công, false nếu thất bại
+     */
     public boolean updateToa(Toa toa) throws SQLException {
         Connection con = ConnectDB.getConnection();
         PreparedStatement stmt = null;
@@ -31,6 +69,12 @@ public class Toa_DAO {
         }
     }
 
+    /**
+     * Tạo số lượng toa mới cho một tàu
+     * @param soLuong Số lượng toa cần tạo
+     * @param maTau Mã tàu mà các toa thuộc về
+     * @return true nếu tạo thành công, false nếu thất bại
+     */
     public boolean taoToaTheoSoLuong(int soLuong, String maTau) throws SQLException {
         Connection con = ConnectDB.getConnection();
         PreparedStatement stmt = null;
@@ -75,7 +119,11 @@ public class Toa_DAO {
         }
     }
 
-    // Phương thức phụ trợ để lấy danh sách toa theo mã tàu (nếu cần)
+    /**
+     * Lấy danh sách toa theo mã tàu
+     * @param maTau Mã tàu
+     * @return Danh sách các toa thuộc tàu
+     */
     public List<Toa> getToaByMaTau(String maTau) throws SQLException {
         List<Toa> danhSachToa = new ArrayList<>();
         Connection con = ConnectDB.getConnection();
@@ -106,7 +154,11 @@ public class Toa_DAO {
         }
     }
 
-    // Phương thức mới: Lấy số lượng toa theo mã tàu
+    /**
+     * Lấy số lượng toa theo mã tàu
+     * @param maTau Mã tàu
+     * @return Số lượng toa của tàu
+     */
     public int laySoLuongToaTheoMaTau(String maTau) throws SQLException {
         Connection con = ConnectDB.getConnection();
         PreparedStatement stmt = null;

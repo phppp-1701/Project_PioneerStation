@@ -15,7 +15,8 @@ public class KhachHang {
 	// Các thuộc tính enum:
 	public enum LoaiThanhVien {
 	    thanThiet("Thân thiết"), 
-	    vip("VIP");
+	    vip("VIP"),
+	    khachVangLai("Khách vãng lai");
 	    
 	    private String displayName;
 	    

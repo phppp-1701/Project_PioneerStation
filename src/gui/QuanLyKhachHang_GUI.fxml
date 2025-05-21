@@ -304,11 +304,6 @@
             </TableView>
          </children>
       </AnchorPane>
-      <Button fx:id="btnXuatDanhSach" layoutX="1215.0" layoutY="318.0" mnemonicParsing="false" onAction="#btnXuatDanhSachClicked" styleClass="btn-xuatDanhSach" text="Xuất danh sách" textFill="WHITE">
-         <font>
-            <Font name="Tahoma" size="16.0" />
-         </font>
-      </Button>
       <Button fx:id="btnThemKhachHang" layoutX="1290.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnThemKhachHangClicked" prefHeight="31.0" prefWidth="171.0" styleClass="btn-themKhachHang" text="Thêm khách hàng" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />

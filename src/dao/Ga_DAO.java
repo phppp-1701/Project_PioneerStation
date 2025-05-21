@@ -18,6 +18,32 @@ public class Ga_DAO {
     }
 
     /**
+     * Tìm kiếm ga theo mã
+     * @param maGa Mã ga cần tìm
+     * @return Đối tượng Ga nếu tìm thấy, null nếu không tìm thấy
+     */
+    public Ga timGaTheoMa(String maGa) {
+        Ga ga = null;
+        try (Connection con = ConnectDB.getConnection()) {
+            String sql = "SELECT * FROM Ga WHERE maGa = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maGa);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                ga = new Ga(
+                    rs.getString("maGa"),
+                    rs.getString("tenGa"),
+                    rs.getString("diaChi")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ga;
+    }
+
+    /**
      * Tìm kiếm ga theo tên (tìm kiếm tương đối)
      * @param tenGa Tên ga cần tìm (có thể là một phần của tên)
      * @return Danh sách các ga phù hợp
@@ -145,6 +171,11 @@ public class Ga_DAO {
         ConnectDB.getInstance().disconnect();
     }
     
+    /**
+     * Tìm tên ga theo mã
+     * @param maGa Mã ga cần tìm
+     * @return Tên ga nếu tìm thấy, null nếu không tìm thấy
+     */
     public String timTenGaTheoMa(String maGa) {
         String tenGa = null;
         try (Connection con = ConnectDB.getConnection()) {

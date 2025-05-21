@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -166,7 +167,7 @@
             <Font name="Tahoma" size="16.0" />
          </font>
       </CheckBox>
-      <Button layoutX="955.0" layoutY="135.0" mnemonicParsing="false" prefWidth="90.0" styleClass="btn-tim" text="Tìm" textFill="WHITE">
+      <Button fx:id="btnTim" layoutX="955.0" layoutY="135.0" mnemonicParsing="false" onAction="#btnTimClicked" prefWidth="90.0" styleClass="btn-tim" text="Tìm" textFill="WHITE">
          <font>
             <Font name="Tahoma" size="16.0" />
          </font>
@@ -189,173 +190,7 @@
       </Label>
       <ScrollPane layoutX="250.0" layoutY="222.0" prefHeight="200.0" prefWidth="655.0" styleClass="menu-danhSachChuyenTau">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="1292.0">
-               <children>
-                  <Pane layoutX="14.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaDaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font></Label>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="174.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="334.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="494.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="654.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="814.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="974.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="1134.0" layoutY="14.0" prefHeight="160.0" prefWidth="160.0">
-                     <children>
-                        <ImageView fitHeight="110.0" fitWidth="94.0" layoutX="33.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-chuyenTau">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_TauLuaChuaChon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="14.0" layoutY="6.0" text="Mã tàu: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="120.0" text="Giờ khởi hành: ">
-                           <font>
-                              <Font name="Tahoma" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="14.0" layoutY="138.0" text="Số chỗ:" />
-                     </children>
-                  </Pane>
-               </children>
-            </AnchorPane>
+          <AnchorPane fx:id="pnChuyenTau" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="1292.0" />
         </content>
       </ScrollPane>
       <AnchorPane layoutX="907.0" layoutY="222.0" prefHeight="137.0" prefWidth="146.0">
@@ -386,81 +221,9 @@
       </Label>
       <ScrollPane layoutX="250.0" layoutY="473.0" prefHeight="95.0" prefWidth="655.0" styleClass="menu-danhSachToa">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="90.0" prefWidth="1600.0">
+          <AnchorPane fx:id="pnToa" minHeight="0.0" minWidth="0.0" prefHeight="90.0" prefWidth="100.0">
                <children>
-                  <Pane layoutX="8.0" layoutY="1.0" prefHeight="80.0" prefWidth="66.0">
-                     <children>
-                        <ImageView fitHeight="70.0" fitWidth="70.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" scaleX="-1.0">
-                           <image>
-                              <Image url="@../../image/QuanLyBanVe_ToaTauLai.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="90.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 01: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="280.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 02: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="470.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 03: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="660.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 04: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="850.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 05: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="1030.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 06: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="1220.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 07: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
-                  <Pane layoutX="1410.0" layoutY="1.0" prefHeight="80.0" prefWidth="180.0" styleClass="pn-toa">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="12.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-toa" width="180.0" />
-                        <Label layoutX="7.0" layoutY="14.0" text="Toa 08: Ghế mềm điều hòa" />
-                        <Label layoutX="7.0" layoutY="32.0" text="Trống: 23 chỗ" />
-                        <Label layoutX="7.0" layoutY="50.0" text="Giá: 880k - 990k" />
-                     </children>
-                  </Pane>
+                  <Pane layoutX="8.0" layoutY="1.0" prefHeight="80.0" prefWidth="66.0" />
                </children>
             </AnchorPane>
         </content>
@@ -472,328 +235,35 @@
       </Label>
       <AnchorPane layoutX="250.0" layoutY="610.0" prefHeight="175.0" prefWidth="655.0" styleClass="pn-choNgoi">
          <children>
-            <AnchorPane layoutX="14.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="49.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="49.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="49.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="49.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="49.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="84.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="84.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="84.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="84.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="84.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="119.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="119.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="119.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="119.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="119.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="154.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="154.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="154.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="154.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="154.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="189.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="189.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="189.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="189.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="189.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="224.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="224.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="224.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="224.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="224.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="261.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="261.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="261.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="261.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="261.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="294.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="294.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="294.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="294.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="294.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="329.0" layoutY="5.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="01" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="329.0" layoutY="40.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="02" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="329.0" layoutY="75.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="03" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="329.0" layoutY="110.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="04" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="329.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccdaf5" height="25.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rec-ChoNgoi" width="25.0" />
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="05" />
-               </children>
-            </AnchorPane>
-            <CheckBox layoutX="381.0" layoutY="9.0" mnemonicParsing="false" text="Chọn theo dãy">
+            <AnchorPane layoutX="329.0" layoutY="145.0" prefHeight="25.0" prefWidth="25.0" />
+            <CheckBox fx:id="ckcChonTheoDay" layoutX="381.0" layoutY="9.0" mnemonicParsing="false" text="Chọn theo dãy">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
             </CheckBox>
-            <Button id="btnChonTatCa" fx:id="btnChonTatCa" layoutX="381.0" layoutY="41.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="93.0" styleClass="btn-chonTatCa" text="Chọn tất cả" textFill="WHITE" />
-            <Button id="btnBoChonTatCa" fx:id="btnBoChonTatCa" layoutX="482.0" layoutY="41.0" mnemonicParsing="false" prefHeight="25.0" styleClass="btn-boChonTatCa" text="Bỏ chọn tất cả" textFill="WHITE">
+            <Button id="btnChonTatCa" fx:id="btnChonTatCa" layoutX="381.0" layoutY="41.0" mnemonicParsing="false" onAction="#btnChonTatCaClicked" prefHeight="26.0" prefWidth="93.0" styleClass="btn-chonTatCa" text="Chọn tất cả" textFill="WHITE" />
+            <Button id="btnBoChonTatCa" fx:id="btnBoChonTatCa" layoutX="482.0" layoutY="41.0" mnemonicParsing="false" onAction="#btnBoChonTatCaClicked" prefHeight="25.0" styleClass="btn-boChonTatCa" text="Bỏ chọn tất cả" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
             </Button>
-            <Button layoutX="431.0" layoutY="109.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="94.0" styleClass="btn-themVe" text="Thêm vé" textFill="WHITE">
+            <Button fx:id="btnThemVe" layoutX="481.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnThemVeClicked" prefHeight="26.0" prefWidth="94.0" styleClass="btn-themVe" text="Thêm vé" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="12.0" />
                </font>
             </Button>
-            <ComboBox id="cboLoaiKhach" fx:id="cboLoaiKhach" layoutX="381.0" layoutY="75.0" prefHeight="26.0" prefWidth="194.0" />
+            <ComboBox id="cboLoaiKhach" fx:id="cboLoaiKhachHang" layoutX="381.0" layoutY="75.0" prefHeight="26.0" prefWidth="194.0" />
             <ImageView fitHeight="20.0" fitWidth="22.0" layoutX="490.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/TroGiupIcon.png" />
                </image>
             </ImageView>
+            <AnchorPane fx:id="pnChoNgoi" layoutY="8.0" prefHeight="160.0" prefWidth="370.0" />
+            <TextField fx:id="txtGiaTamTinh" layoutX="381.0" layoutY="109.0" prefHeight="26.0" prefWidth="194.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </TextField>
          </children></AnchorPane>
       <AnchorPane layoutX="907.0" layoutY="610.0" prefHeight="175.0" prefWidth="146.0">
          <children>
@@ -803,8 +273,8 @@
                   <Font name="Tahoma" size="10.0" />
                </font>
             </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="22.0" layoutX="14.0" layoutY="79.0" stroke="BLACK" strokeType="INSIDE" width="22.0" />
-            <Label layoutX="40.0" layoutY="82.0" text="Đang chọn">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2e7d32" height="22.0" layoutX="14.0" layoutY="97.0" stroke="BLACK" strokeType="INSIDE" width="22.0" />
+            <Label layoutX="40.0" layoutY="102.0" text="Đang trong giỏ vé">
                <font>
                   <Font name="Tahoma" size="10.0" />
                </font>
@@ -814,8 +284,14 @@
                   <Font name="Tahoma Bold" size="12.0" />
                </font>
             </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#992b15" height="22.0" layoutX="14.0" layoutY="120.0" stroke="BLACK" strokeType="INSIDE" width="22.0" />
-            <Label layoutX="40.0" layoutY="125.0" text="Đã đặt">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#992b15" height="22.0" layoutX="14.0" layoutY="127.0" stroke="BLACK" strokeType="INSIDE" width="22.0" />
+            <Label layoutX="41.0" layoutY="132.0" text="Đã đặt">
+               <font>
+                  <Font name="Tahoma" size="10.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="ORANGE" height="22.0" layoutX="14.0" layoutY="66.0" stroke="BLACK" strokeType="INSIDE" width="22.0" />
+            <Label layoutX="40.0" layoutY="71.0" text="Đang chọn">
                <font>
                   <Font name="Tahoma" size="10.0" />
                </font>
@@ -829,9 +305,9 @@
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
-            <ScrollPane layoutY="60.0" prefHeight="419.0" prefWidth="471.0" styleClass="scr-GioVe">
+            <ScrollPane layoutY="60.0" prefHeight="419.0" prefWidth="471.0" style="-fx-background-color: #FFFFFF;" styleClass="scr-GioVe">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="470.0" style="-fx-background-color: #FFFFFF;" />
+                <AnchorPane fx:id="pnGioVe" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="470.0" />
               </content>
             </ScrollPane>
          </children>
@@ -839,7 +315,7 @@
       <AnchorPane layoutX="1070.0" layoutY="609.0" prefHeight="175.0" prefWidth="471.0" styleClass="pn-TongTienTamTinh">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="175.0" stroke="#dcdada" strokeType="INSIDE" width="471.0" />
-            <Button layoutX="357.0" layoutY="125.0" mnemonicParsing="false" styleClass="btn-tiepTheo" text="Tiếp theo" textFill="WHITE">
+            <Button fx:id="btnTiepTheo" layoutX="357.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnTiepTheoClicked" styleClass="btn-tiepTheo" text="Tiếp theo" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="18.0" />
                </font>
@@ -849,16 +325,26 @@
                   <Font name="Tahoma Bold" size="18.0" />
                </font>
             </Label>
-            <Label id="lblTongSoVe" fx:id="lblTongSoVe" layoutX="14.0" layoutY="49.0" text="Tổng số vé: ">
+            <Label id="lblTongSoVe" fx:id="lblTongSoVe" layoutX="14.0" layoutY="60.0" text="Tổng số vé: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
-            <Label id="lblTongTienTamTinh" fx:id="lblTongTienTamTinh" layoutX="14.0" layoutY="78.0" text="Tổng tiền tạm tính: ">
+            <Label id="lblTongTienTamTinh" fx:id="lblTongTienTamTinh" layoutX="14.0" layoutY="98.0" text="Tổng tiền tạm tính: ">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
+            <TextField fx:id="txtTongSoVe" layoutX="92.0" layoutY="55.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtTongTienTamTinh" layoutX="139.0" layoutY="93.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </TextField>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="pnNhanVien" layoutX="1305.0" layoutY="28.0" prefHeight="70.0" prefWidth="234.0">

@@ -6,14 +6,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import connectDB.ConnectDB;
 import dao.NhanVien_DAO;
 import dao.Tau_DAO;
 import dao.Toa_DAO;
+import dao.ChoNgoi_DAO;
 import dao.ChuyenTau_DAO;
 import dao.Ga_DAO;
 import dao.TuyenTau_DAO;
@@ -22,6 +25,7 @@ import entity.Tau;
 import entity.Tau.LoaiTau;
 import entity.Tau.TrangThaiTau;
 import entity.Toa;
+import entity.Toa.LoaiToa;
 import entity.ChuyenTau;
 import entity.Ga;
 import javafx.collections.FXCollections;
@@ -115,31 +119,165 @@ public class QuanLyChuyenTau_GUI_Controller {
     @FXML
     private Label lblTrangChu;
     
- // Phương thức để cập nhật trạng thái của các thành phần
-    private void updateFieldsState(boolean isMaChuyenTauEmpty) {
-        // Nếu txtMaChuyenTau rỗng, disable và không cho chỉnh sửa các thành phần
-        txtTenTau_ChuyenTau.setDisable(isMaChuyenTauEmpty);
-        txtTenTau_ChuyenTau.setEditable(!isMaChuyenTauEmpty);
+    private void updateFieldsState(boolean isEmpty) {
+        txtMaChuyenTau.setDisable(true);
+        txtMaChuyenTau.setEditable(false);
+        cboTenTau_ChuyenTau.setDisable(false);
+        cboLoaiTau_ChuyenTau.setDisable(false);
+        cboGaDi_ChuyenTau.setDisable(false);
+        cboGaDen_ChuyenTau.setDisable(false);
+        dpNgayKhoihanh_ChuyenTau.setDisable(false);
+        dpNgayKhoihanh_ChuyenTau.setEditable(true);
+        dpNgayDuKien_ChuyenTau.setDisable(false);
+        dpNgayDuKien_ChuyenTau.setEditable(true);
+        txtGioDuKien_ChuyenTau.setDisable(false);
+        txtGioDuKien_ChuyenTau.setEditable(true);
+        cboGioKhoiHanh_ChuyenTau.setDisable(false);
+    }
+    
+    private void populateChuyenTauFields(ChuyenTau chuyenTau) {
+        try {
+            // Lấy thông tin tàu
+            Tau_DAO tau_DAO = new Tau_DAO();
+            Tau tau = tau_DAO.timTauTheoMa(chuyenTau.getMaTau());
+            if (tau != null) {
+                cboTenTau_ChuyenTau.setValue(tau.getTenTau());
+                cboLoaiTau_ChuyenTau.setValue(tau.getLoaiTau());
+            } else {
+                cboTenTau_ChuyenTau.setValue(null);
+                cboLoaiTau_ChuyenTau.setValue(null);
+            }
+            txtMaChuyenTau.setText(chuyenTau.getMaChuyenTau());
+            // Lấy thông tin ga
+            TuyenTau_DAO tuyenTau_DAO = new TuyenTau_DAO();
 
-        cboLoaiTau_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+            // Ga đi
+            String maGaDi = tuyenTau_DAO.getMaGaDiTheoMaTuyen(chuyenTau.getMaTuyen());
+            Ga gaDi = null;
+            if (maGaDi != null) {
+                gaDi = cboGaDi_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getMaGa().equals(maGaDi))
+                        .findFirst()
+                        .orElse(null);
+            }
+            cboGaDi_ChuyenTau.setValue(gaDi);
 
-        cboGaDi_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+            // Ga đến
+            String maGaDen = tuyenTau_DAO.getMaGaDenTheoMaTuyen(chuyenTau.getMaTuyen());
+            Ga gaDen = null;
+            if (maGaDen != null) {
+                gaDen = cboGaDen_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getMaGa().equals(maGaDen))
+                        .findFirst()
+                        .orElse(null);
+            }
+            cboGaDen_ChuyenTau.setValue(gaDen);
 
-        cboGaDen_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+            // Ngày khởi hành và ngày dự kiến
+            dpNgayKhoihanh_ChuyenTau.setValue(chuyenTau.getNgayKhoiHanh());
+            dpNgayDuKien_ChuyenTau.setValue(chuyenTau.getNgayDuKien());
 
-        dpNgayKhoihanh_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+            // Giờ dự kiến
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            txtGioDuKien_ChuyenTau.setText(chuyenTau.getGioDuKien().format(timeFormatter));
 
-        dpNgayDuKien_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+            // Khởi tạo cboGioKhoiHanh_ChuyenTau nếu chưa có giá trị
+            if (cboGioKhoiHanh_ChuyenTau.getItems().isEmpty()) {
+            	cboGioKhoiHanh_ChuyenTau.setItems(FXCollections.observableArrayList(
+            	        "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
+            	        "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
+            	        "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"
+            	    ));
+            }
+            String gioKhoiHanh = chuyenTau.getGioKhoiHanh().format(timeFormatter);
+            cboGioKhoiHanh_ChuyenTau.setValue(gioKhoiHanh);
 
-        txtGioDuKien_ChuyenTau.setDisable(isMaChuyenTauEmpty);
-        txtGioDuKien_ChuyenTau.setEditable(!isMaChuyenTauEmpty);
+            // Kích hoạt các trường nếu cần (nếu bạn có logic vô hiệu hóa trước đó)
+            updateFieldsState(false);
 
-        cboGioKhoiHanh_ChuyenTau.setDisable(isMaChuyenTauEmpty);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi khi hiển thị thông tin chuyến tàu: " + e.getMessage(), "image/loi.png");
+        }
     }
     
     @FXML
     public void initialize() {
+    	// Thêm sự kiện nhấp chuột cho tbDanhSachChuyenTau
+        tbDanhSachChuyenTau.setOnMouseClicked(event -> {
+            ChuyenTau selectedChuyenTau = tbDanhSachChuyenTau.getSelectionModel().getSelectedItem();
+            if (selectedChuyenTau != null) {
+                // Gọi phương thức để điền dữ liệu vào các trường
+                populateChuyenTauFields(selectedChuyenTau);
+            }
+        });
+        cboTenTau_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                LoaiTau loaiTau = determineLoaiTau(newValue);
+                cboLoaiTau_ChuyenTau.setValue(loaiTau);
+                cboLoaiTau_ChuyenTau.setEditable(loaiTau != null);
+                updateNgayGioDuKienPreview();
+            } else {
+                cboLoaiTau_ChuyenTau.setValue(null);
+                cboLoaiTau_ChuyenTau.setEditable(false);
+                dpNgayDuKien_ChuyenTau.setValue(null);
+                txtGioDuKien_ChuyenTau.setText("");
+            }
+        });
+
+        // Khởi tạo cboGaDi_ChuyenTau và cboGaDen_ChuyenTau với tất cả các ga
+        Ga_DAO ga_DAO = new Ga_DAO();
+        TuyenTau_DAO tuyenTau_dao = new TuyenTau_DAO();
+        List<Ga> tatCaGa = ga_DAO.timGaTheoTen(""); // Lấy tất cả các ga
+        ObservableList<Ga> danhSachTatCaGa = FXCollections.observableArrayList(tatCaGa);
+        cboGaDi_ChuyenTau.setItems(danhSachTatCaGa);
+        cboGaDen_ChuyenTau.setItems(danhSachTatCaGa);
+
+        // Thiết lập StringConverter để hiển thị tên ga trong cboGaDi_ChuyenTau
+        cboGaDi_ChuyenTau.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return cboGaDi_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getTenGa().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        // Thiết lập StringConverter để hiển thị tên ga trong cboGaDen_ChuyenTau
+        cboGaDen_ChuyenTau.setConverter(new StringConverter<Ga>() {
+            @Override
+            public String toString(Ga ga) {
+                return ga != null ? ga.getTenGa() : "";
+            }
+
+            @Override
+            public Ga fromString(String string) {
+                return cboGaDen_ChuyenTau.getItems().stream()
+                        .filter(ga -> ga.getTenGa().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     	
+     // Khởi tạo cboGioKhoiHanh_ChuyenTau
+        cboGioKhoiHanh_ChuyenTau.setItems(FXCollections.observableArrayList(
+            "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
+            "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
+            "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"
+        ));
+        cboGioKhoiHanh_ChuyenTau.setDisable(false);
+        cboTenTau_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> updateNgayGioDuKienPreview());
+        cboGaDi_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> updateNgayGioDuKienPreview());
+        cboGaDen_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> updateNgayGioDuKienPreview());
+        dpNgayKhoihanh_ChuyenTau.valueProperty().addListener((obs, old, newVal) -> updateNgayGioDuKienPreview());
+        cboGioKhoiHanh_ChuyenTau.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> updateNgayGioDuKienPreview());
+        
     	// Khởi tạo cboTimLoaiTau với các giá trị từ enum LoaiTau
         ObservableList<LoaiTau> loaiTauList = FXCollections.observableArrayList(LoaiTau.values());
         cboTimLoaiTau.setItems(loaiTauList);
@@ -155,14 +293,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         txtMaChuyenTau.textProperty().addListener((observable, oldValue, newValue) -> {
             updateFieldsState(newValue.trim().isEmpty());
         });
-    	
-    	// Khởi tạo Ga_DAO và TuyenTau_DAO
-        Ga_DAO ga_DAO = new Ga_DAO();
-        TuyenTau_DAO tuyenTau_DAO = new TuyenTau_DAO();
 
-        // Lấy danh sách tất cả các ga
-        List<Ga> tatCaGa = ga_DAO.timGaTheoTen(""); // Truy vấn với "" để lấy tất cả ga
-        ObservableList<Ga> danhSachTatCaGa = FXCollections.observableArrayList(tatCaGa);
 
         // Thiết lập hiển thị tên ga cho cboTimGaDi và cboTimGaDen
         cboTimGaDi.setConverter(new StringConverter<Ga>() {
@@ -203,7 +334,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         cboTimGaDi.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Lấy danh sách ga đến dựa trên ga đi
-                List<Ga> danhSachGaDen = tuyenTau_DAO.getDanhSachGaDenTheoGaDi(newValue.getMaGa());
+                List<Ga> danhSachGaDen = tuyenTau_dao.getDanhSachGaDenTheoGaDi(newValue.getMaGa());
                 ObservableList<Ga> danhSachGaDenObservable = FXCollections.observableArrayList(danhSachGaDen);
                 cboTimGaDen.setItems(danhSachGaDenObservable);
 
@@ -221,7 +352,7 @@ public class QuanLyChuyenTau_GUI_Controller {
         cboTimGaDen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Lấy danh sách ga đi dựa trên ga đến
-                List<Ga> danhSachGaDi = tuyenTau_DAO.getDanhSachGaDiTheoGaDen(newValue.getMaGa());
+                List<Ga> danhSachGaDi = tuyenTau_dao.getDanhSachGaDiTheoGaDen(newValue.getMaGa());
                 ObservableList<Ga> danhSachGaDiObservable = FXCollections.observableArrayList(danhSachGaDi);
                 cboTimGaDi.setItems(danhSachGaDiObservable);
 
@@ -310,6 +441,7 @@ public class QuanLyChuyenTau_GUI_Controller {
 
         // Khởi tạo giá trị ban đầu cho cboSoLuongToa
         updateSoLuongToa(cboLoaiTau.getValue());
+        napDanhSachTenTau();
         
      // Sự kiện khi nhấp vào một tàu trong TableView
         tbDanhSachTau.setOnMouseClicked(event -> {
@@ -1220,8 +1352,9 @@ public class QuanLyChuyenTau_GUI_Controller {
         }
     }
     
+    
     @FXML
-    private TextField txtTenTau_ChuyenTau;
+    private ComboBox<String> cboTenTau_ChuyenTau;
     
     @FXML
     private ComboBox<LoaiTau> cboLoaiTau_ChuyenTau;
@@ -1343,6 +1476,316 @@ public class QuanLyChuyenTau_GUI_Controller {
         // Đặt dữ liệu vào TableView
         tbDanhSachChuyenTau.setItems(data);
     }
+    
+    private void napDanhSachTenTau() {
+        Tau_DAO tau_DAO = new Tau_DAO();
+        List<String> danhSachTenTau = tau_DAO.getTatCaTenTau(); // Gọi DAO để lấy tên tàu
+        cboTenTau_ChuyenTau.setItems(FXCollections.observableArrayList(danhSachTenTau));
+    }
+    
+    private void updateNgayGioDuKienPreview() {
+        try {
+            String tenTau = cboTenTau_ChuyenTau.getValue();
+            Ga gaDi = cboGaDi_ChuyenTau.getValue();
+            Ga gaDen = cboGaDen_ChuyenTau.getValue();
+            LocalDate ngayKhoiHanh = dpNgayKhoihanh_ChuyenTau.getValue();
+            String gioKhoiHanhStr = cboGioKhoiHanh_ChuyenTau.getValue();
+
+            if (tenTau == null || gaDi == null || gaDen == null || ngayKhoiHanh == null || gioKhoiHanhStr == null) {
+                dpNgayDuKien_ChuyenTau.setValue(null);
+                txtGioDuKien_ChuyenTau.setText("");
+                return;
+            }
+
+            LoaiTau loaiTau = determineLoaiTau(tenTau);
+            if (loaiTau == null) {
+                dpNgayDuKien_ChuyenTau.setValue(null);
+                txtGioDuKien_ChuyenTau.setText("");
+                return;
+            }
+
+            Tau_DAO tauDAO = new Tau_DAO();
+            Tau tau = tauDAO.timTauTheoTenVaLoai(tenTau, loaiTau);
+            if (tau == null) {
+                dpNgayDuKien_ChuyenTau.setValue(null);
+                txtGioDuKien_ChuyenTau.setText("");
+                return;
+            }
+
+            TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
+            String maTuyen = tuyenTauDAO.getMaTuyenTheoGa(gaDi.getMaGa(), gaDen.getMaGa());
+            if (maTuyen == null) {
+                dpNgayDuKien_ChuyenTau.setValue(null);
+                txtGioDuKien_ChuyenTau.setText("");
+                return;
+            }
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime gioKhoiHanh = LocalTime.parse(gioKhoiHanhStr, timeFormatter);
+
+            ChuyenTau tempChuyenTau = new ChuyenTau("TEMP", tau.getMaTau(), maTuyen, ngayKhoiHanh, gioKhoiHanh);
+            dpNgayDuKien_ChuyenTau.setValue(tempChuyenTau.getNgayDuKien());
+            txtGioDuKien_ChuyenTau.setText(tempChuyenTau.getGioDuKien() != null ?
+                tempChuyenTau.getGioDuKien().format(timeFormatter) : "");
+        } catch (Exception e) {
+            dpNgayDuKien_ChuyenTau.setValue(null);
+            txtGioDuKien_ChuyenTau.setText("");
+        }
+    }
+    
+    private LoaiTau determineLoaiTau(String tenTau) {
+        if (tenTau == null) {
+            return null;
+        }
+        if (tenTau.startsWith("SE")) {
+            return LoaiTau.SE;
+        } else if (tenTau.startsWith("TN")) {
+            return LoaiTau.TN;
+        }
+        return null; // Hoặc giá trị mặc định nếu cần
+    }
+    
+    @FXML
+    private Button btnThemChuyenTau;
+    
+    @SuppressWarnings("unlikely-arg-type")
+    @FXML
+    private void btnThemChuyenTauClicked() {
+        if (!txtMaChuyenTau.getText().trim().isEmpty()) {
+            showWarningAlert("Vui lòng nhấn 'Làm rỗng' để thêm chuyến tàu mới!", "image/canhBao.png");
+            return;
+        }
+
+        try {
+            String tenTau = cboTenTau_ChuyenTau.getValue();
+            LoaiTau loaiTau = cboLoaiTau_ChuyenTau.getValue();
+            Ga gaDi = cboGaDi_ChuyenTau.getValue();
+            Ga gaDen = cboGaDen_ChuyenTau.getValue();
+            LocalDate ngayKhoiHanh = dpNgayKhoihanh_ChuyenTau.getValue();
+            String gioKhoiHanhStr = cboGioKhoiHanh_ChuyenTau.getValue();
+
+            if (tenTau == null || loaiTau == null || gaDi == null || gaDen == null ||
+                ngayKhoiHanh == null || gioKhoiHanhStr == null) {
+                showWarningAlert("Vui lòng điền đầy đủ thông tin chuyến tàu!", "image/canhBao.png");
+                return;
+            }
+
+            if (gaDi.getMaGa().equals(gaDen.getMaGa())) {
+                showWarningAlert("Ga đi và ga đến không được trùng nhau!", "image/canhBao.png");
+                return;
+            }
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime gioKhoiHanh;
+            try {
+                gioKhoiHanh = LocalTime.parse(gioKhoiHanhStr, timeFormatter);
+            } catch (DateTimeParseException e) {
+                showWarningAlert("Định dạng giờ khởi hành không hợp lệ!", "image/canhBao.png");
+                return;
+            }
+
+            ChuyenTau_DAO chuyenTauDAO = new ChuyenTau_DAO();
+            if (!chuyenTauDAO.kiemTraKhoangCachThoiGianChuyenTau(tenTau, ngayKhoiHanh, gioKhoiHanh, null)) {
+                showWarningAlert("Giờ khởi hành phải cách ít nhất 24 giờ so với chuyến tàu cùng tàu!", "image/canhBao.png");
+                return;
+            }
+
+            TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
+            String maTuyen = tuyenTauDAO.getMaTuyenTheoGa(gaDi.getMaGa(), gaDen.getMaGa());
+            if (maTuyen == null) {
+                showWarningAlert("Không tìm thấy tuyến tàu!", "image/canhBao.png");
+                return;
+            }
+
+            Tau_DAO tauDAO = new Tau_DAO();
+            Tau tau = tauDAO.timTauTheoTenVaLoai(tenTau, loaiTau);
+            if (tau == null) {
+                showWarningAlert("Không tìm thấy tàu phù hợp!", "image/canhBao.png");
+                return;
+            }
+            System.out.println("maTau: " + tau.getMaTau());
+
+            String maChuyenTauMoi = chuyenTauDAO.taoMaChuyenTauMoi(tenTau, ngayKhoiHanh, gioKhoiHanh);
+            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTauMoi, tau.getMaTau(), maTuyen, ngayKhoiHanh, gioKhoiHanh);
+
+            if (chuyenTau.getNgayDuKien() == null || chuyenTau.getGioDuKien() == null) {
+                showWarningAlert("Không thể tính ngày/giờ dự kiến!", "image/canhBao.png");
+                return;
+            }
+
+            if (chuyenTauDAO.themChuyenTau(chuyenTau)) {
+                Toa_DAO toaDAO = new Toa_DAO();
+                ChoNgoi_DAO choNgoiDAO = new ChoNgoi_DAO();
+                List<Toa> danhSachToa;
+                try {
+                    danhSachToa = toaDAO.getToaByMaTau(tau.getMaTau());
+                } catch (SQLException e) {
+                    showErrorAlert("Lỗi khi lấy danh sách toa: " + e.getMessage(), "image/loi.png");
+                    return;
+                }
+                if (danhSachToa.isEmpty()) {
+                    showErrorAlert("Không tìm thấy toa nào cho tàu " + tenTau + "!", "image/loi.png");
+                    return;
+                }
+                System.out.println("Danh sách toa: " + danhSachToa.size() + " toa");
+
+                int soThuTuToa = 1;
+                boolean allChoNgoiAdded = true;
+                for (Toa toa : danhSachToa) {
+                    int soChoToiDa = 0;
+                    LoaiToa loaiToa = toa.getLoaiToa();
+                    System.out.println("Xử lý toa: " + toa.getMaToa() + ", loaiToa: " + loaiToa.getDisplayName());
+                    if (loaiTau == LoaiTau.SE) {
+                        if (loaiToa == LoaiToa.ngoiMemDieuHoa) {
+                            soChoToiDa = 50;
+                        } else if (loaiToa == LoaiToa.giuongNamDieuHoa) {
+                            soChoToiDa = 35;
+                        }
+                    } else if (loaiTau == LoaiTau.TN) {
+                        if (loaiToa == LoaiToa.ngoiMemDieuHoa) {
+                            soChoToiDa = 40;
+                        } else if (loaiToa == LoaiToa.gheCungDieuHoa) {
+                            soChoToiDa = 50;
+                        }
+                    }
+
+                    double giaCho = choNgoiDAO.tinhGiaCho(loaiTau, loaiToa);
+                    if (giaCho == 0.0) {
+                        showErrorAlert("Lỗi: Không xác định được giá chỗ cho toa " + loaiToa.getDisplayName() + "!", "image/loi.png");
+                        allChoNgoiAdded = false;
+                        break;
+                    }
+
+                    for (int soCho = 1; soCho <= soChoToiDa; soCho++) {
+                        boolean success = choNgoiDAO.themChoNgoi(maChuyenTauMoi, toa.getMaToa(), soCho, loaiToa, soThuTuToa, giaCho);
+                        if (!success) {
+                            allChoNgoiAdded = false;
+                            System.err.println("Thất bại khi thêm chỗ ngồi: maToa = " + toa.getMaToa() + ", soCho = " + soCho);
+                            showErrorAlert("Lỗi khi thêm chỗ ngồi cho toa " + loaiToa.getDisplayName() + "!", "image/loi.png");
+                            break;
+                        }
+                    }
+                    if (!allChoNgoiAdded) {
+                        break;
+                    }
+                    soThuTuToa++;
+                }
+
+                if (allChoNgoiAdded) {
+                    showInformationAlert("Thêm chuyến tàu và chỗ ngồi thành công! Mã chuyến: " + maChuyenTauMoi, "image/thanhCong.png");
+                    btnLamRongChuyenTauClicked();
+                    tbDanhSachChuyenTau.getItems().add(chuyenTau);
+                } else {
+                    showErrorAlert("Thêm chuyến tàu thành công nhưng không thêm được chỗ ngồi!", "image/loi.png");
+                }
+            } else {
+                showErrorAlert("Thêm chuyến tàu thất bại!", "image/loi.png");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi: " + e.getMessage(), "image/loi.png");
+        }
+    }
+    
+    @FXML
+    private Button btnCapNhatChuyenTau;
+    
+    @FXML
+    private void btnCapNhatChuyenTauClicked() {
+        String maChuyenTau = txtMaChuyenTau.getText().trim();
+        if (maChuyenTau.isEmpty()) {
+            showWarningAlert("Vui lòng chọn chuyến tàu!", "image/canhBao.png");
+            return;
+        }
+        try {
+            String tenTau = cboTenTau_ChuyenTau.getValue();
+            LoaiTau loaiTau = cboLoaiTau_ChuyenTau.getValue();
+            Ga gaDi = cboGaDi_ChuyenTau.getValue();
+            Ga gaDen = cboGaDen_ChuyenTau.getValue();
+            LocalDate ngayKhoiHanh = dpNgayKhoihanh_ChuyenTau.getValue();
+            String gioKhoiHanhStr = cboGioKhoiHanh_ChuyenTau.getValue();
+
+            if (tenTau == null || loaiTau == null || gaDi == null || gaDen == null ||
+                ngayKhoiHanh == null || gioKhoiHanhStr == null) {
+                showWarningAlert("Điền đầy đủ thông tin!", "image/canhBao.png");
+                return;
+            }
+
+            if (gaDi.getMaGa().equals(gaDen.getMaGa())) {
+                showWarningAlert("Ga đi và đến không được trùng!", "image/canhBao.png");
+                return;
+            }
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime gioKhoiHanh;
+            try {
+                gioKhoiHanh = LocalTime.parse(gioKhoiHanhStr, timeFormatter);
+            } catch (DateTimeParseException e) {
+                showWarningAlert("Định dạng giờ không hợp lệ!", "image/canhBao.png");
+                return;
+            }
+
+            // Kiểm tra khoảng cách thời gian
+            ChuyenTau_DAO chuyenTauDAO = new ChuyenTau_DAO();
+            if (!chuyenTauDAO.kiemTraKhoangCachThoiGianChuyenTau(tenTau, ngayKhoiHanh, gioKhoiHanh, null)) {
+                showWarningAlert("Giờ khởi hành phải cách ít nhất 24 giờ so với chuyến tàu cùng tên!", "image/canhBao.png");
+                return;
+            }
+
+            Tau_DAO tauDAO = new Tau_DAO();
+            Tau tau = tauDAO.timTauTheoTenVaLoai(tenTau, loaiTau);
+            if (tau == null) {
+                showWarningAlert("Không tìm thấy tàu!", "image/canhBao.png");
+                return;
+            }
+
+            TuyenTau_DAO tuyenTauDAO = new TuyenTau_DAO();
+            String maTuyen = tuyenTauDAO.getMaTuyenTheoGa(gaDi.getMaGa(), gaDen.getMaGa());
+            if (maTuyen == null) {
+                showWarningAlert("Không tìm thấy tuyến tàu!", "image/canhBao.png");
+                return;
+            }
+
+            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, tau.getMaTau(), maTuyen, ngayKhoiHanh, gioKhoiHanh);
+            if (chuyenTau.getNgayDuKien() == null || chuyenTau.getGioDuKien() == null) {
+                showWarningAlert("Không thể tính ngày/giờ dự kiến!", "image/canhBao.png");
+                return;
+            }
+
+            if (chuyenTauDAO.capNhatChuyenTau(chuyenTau)) {
+                showInformationAlert("Cập nhật thành công! Mã: " + maChuyenTau, "image/thanhCong.png");
+                btnLamRongChuyenTauClicked();
+                ObservableList<ChuyenTau> items = tbDanhSachChuyenTau.getItems();
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).getMaChuyenTau().equals(maChuyenTau)) {
+                        items.set(i, chuyenTau);
+                        break;
+                    }
+                }
+            } else {
+                showErrorAlert("Cập nhật thất bại!", "image/loi.png");
+            }
+        } catch (Exception e) {
+            showErrorAlert("Lỗi: " + e.getMessage(), "image/loi.png");
+        }
+    }
+    
+    @FXML 
+    private Button btnLamRongChuyenTau;
+    
+    @FXML
+    private void btnLamRongChuyenTauClicked() {
+        txtMaChuyenTau.setText("");
+        cboTenTau_ChuyenTau.setValue(null);
+        cboLoaiTau_ChuyenTau.setValue(null);
+        cboGaDi_ChuyenTau.setValue(null);
+        cboGaDen_ChuyenTau.setValue(null);
+        dpNgayKhoihanh_ChuyenTau.setValue(null);
+        dpNgayDuKien_ChuyenTau.setValue(null);
+        txtGioDuKien_ChuyenTau.setText("");
+        cboGioKhoiHanh_ChuyenTau.setValue(null);
+    }
+    
     
     @FXML
     private TableView<ChuyenTau> tbDanhSachChuyenTau;
